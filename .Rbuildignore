@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
+^meta$
 ^\.travis\.yml$
 README\.md
