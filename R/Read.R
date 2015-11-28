@@ -42,9 +42,7 @@ read.bed <- function(filename, genome, stranded = F){
                             strand = bed[,6],
                             type = bed$type,
                             seqlengths = seqlengths
-    }
-
-    else {
+    } else {
         gR <- GenomicRanges::GRanges(seqnames = bed[,1],
                                      ranges = IRanges::IRanges(
                                          start = bed[,2],
