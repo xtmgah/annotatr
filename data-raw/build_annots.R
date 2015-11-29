@@ -102,7 +102,7 @@ for(file in kg_files) {
     gr_data = GenomicRanges::GRanges(
       seqnames = tmp_data$chrom,
       ranges = IRanges::IRanges(start = tmp_data$start+1, end = tmp_data$end),
-      strand = '*',
+      strand = tmp_data$strand,
       transcriptID = tmp_data$transcriptID,
       seqlengths = seqlengths
     )
