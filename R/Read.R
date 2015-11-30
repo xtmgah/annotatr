@@ -1,16 +1,17 @@
+#' @export
 read.bed <- function(filename, genome, stranded = F){
     if (!file.exists(filename)){
         stop(paste("In read.bed(filename, genome, stranded): filename",
                    filename, " not found"))
     }
 
-    if (! genome in c('hg19','hg38','mm9','mm10')){
+    if (! genome %in% c('hg19','hg38','mm9','mm10')){
         stop("in read.bed(filename, genome, stranded): Invalid Genome")
     }
 
-    bed <- readr::read.table(filename, sep = "\t", header = F, stringsAsFactors = F)
+    bed <- read.table(filename, sep = "\t", header = F, stringsAsFactors = F)
 
-    if (!grepl("chr", bed[,1])){
+    if (!all(grepl("chr", bed[,1]))){
         stop("in read.bed(filename, genome, stranded): file not in
         correct format, missing chr numbers")
     }
@@ -41,7 +42,7 @@ read.bed <- function(filename, genome, stranded = F){
                             end = bed[,3]),
                             strand = bed[,6],
                             type = bed$type,
-                            seqlengths = seqlengths
+                            seqlengths = seqlengths)
     } else {
         gR <- GenomicRanges::GRanges(seqnames = bed[,1],
                                      ranges = IRanges::IRanges(
@@ -49,10 +50,11 @@ read.bed <- function(filename, genome, stranded = F){
                                          end = bed[,3]),
                                         strand = '*',
                                      type = bed$type,
-                                     seqlengths = seqlengths
+                                     seqlengths = seqlengths)
     }
 
-    gR <- genomicRanges::trim(gR)
+    gR <- GenomicRanges::trim(gR)
+    gR
 }
 
 
