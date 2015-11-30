@@ -30,16 +30,15 @@ for(file in cpg_files) {
 
   # Get tmp data
     tmp_data = read.table(file, sep='\t', header=F, stringsAsFactors=F)
-    colnames(tmp_data) = c('chrom','start','end','type')
+    colnames(tmp_data) = c('chrom','start','end')
 
   # Construct GRanges object
   # NOTE: GRanges objects are 1-based start and end while the input data is
   # 0-based start and 1-based end. Hence the addition of 1 to start.
     gr_data = GenomicRanges::GRanges(
       seqnames = tmp_data$chrom,
-      ranges = IRanges::IRanges(start = tmp_data$start+1, end = tmp_data$end),
+      ranges = IRanges::IRanges(start = tmp_data$start, end = tmp_data$end),
       strand = '*',
-      type = tmp_data$type,
       seqlengths = seqlengths
     )
 

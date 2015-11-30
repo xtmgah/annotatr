@@ -18,39 +18,32 @@ do
   echo Processing ${genome} CpG islands
   awk -v OFS='\t' 'NR > 1 {print $2, $3, $4}' <(gunzip -c ${genome}_cpg_islands.txt.gz) \
   | sort -T . -k1,1 -k2,2n \
-  | awk -v OFS='\t' '{print $1, $2, $3, "cpg_island"}' \
-  > tmp_${genome}_cpg_islands.txt
+  | awk -v OFS='\t' '{print $1, $2, $3}' \
+  > rcpgtmp_${genome}_cpg_islands.txt
 
   # Process CpG shores
   echo Processing ${genome} CpG shores
   bedtools subtract \
-    -a <(bedtools flank -b 2000 -i tmp_${genome}_cpg_islands.txt -g ${genome}.chrom.sizes.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
-    -b tmp_${genome}_cpg_islands.txt \
-  | awk -v OFS='\t' '{print $1, $2, $3, "cpg_shore"}' \
-  > tmp_${genome}_cpg_shores.txt
+    -a <(bedtools flank -b 2000 -i rcpgtmp_${genome}_cpg_islands.txt -g ${genome}.chrom.sizes.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
+    -b rcpgtmp_${genome}_cpg_islands.txt \
+  | awk -v OFS='\t' '{print $1, $2, $3}' \
+  > rcpgtmp_${genome}_cpg_shores.txt
 
   # Process CpG shelves
   echo Processing ${genome} CpG shelves
   bedtools subtract \
-    -a <(bedtools flank -b 2000 -i tmp_${genome}_cpg_shores.txt -g ${genome}.chrom.sizes.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
-    -b <(cat tmp_${genome}_cpg_islands.txt tmp_${genome}_cpg_shores.txt | sort -T . -k1,1 -k2,2n) \
-  | awk -v OFS='\t' '{print $1, $2, $3, "cpg_shelf"}' \
-  > tmp_${genome}_cpg_shelves.txt
+    -a <(bedtools flank -b 2000 -i rcpgtmp_${genome}_cpg_shores.txt -g ${genome}.chrom.sizes.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
+    -b <(cat rcpgtmp_${genome}_cpg_islands.txt rcpgtmp_${genome}_cpg_shores.txt | sort -T . -k1,1 -k2,2n) \
+  | awk -v OFS='\t' '{print $1, $2, $3}' \
+  > rcpgtmp_${genome}_cpg_shelves.txt
 
   # Process inter CpG annotations
   echo Processing ${genome} interCGI
   bedtools complement \
-    -i <(cat tmp_${genome}_cpg_islands.txt tmp_${genome}_cpg_shores.txt tmp_${genome}_cpg_shelves.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
+    -i <(cat rcpgtmp_${genome}_cpg_islands.txt rcpgtmp_${genome}_cpg_shores.txt rcpgtmp_${genome}_cpg_shelves.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
     -g <(sort -k1,1 -k2,2n ${genome}.chrom.sizes.txt) \
-  | awk -v OFS='\t' '$2 != $3 {print $1, $2, $3, "inter_cgi"}' \
-  > tmp_${genome}_cpg_inter.txt
-
-  # Combine and sort the annotations
-  echo Combining and sorting ${genome} CpG annotations
-  cat tmp_${genome}_{cpg_islands,cpg_shores,cpg_shelves,cpg_inter}.txt \
-  | sort -k1,1 -k2,2n \
-  > rcpgtmp_${genome}_cpg_annotations.txt
-  rm tmp_${genome}_{cpg_islands,cpg_shores,cpg_shelves,cpg_inter}.txt
+  | awk -v OFS='\t' '$2 != $3 {print $1, $2, $3}' \
+  > rcpgtmp_${genome}_cpg_inter.txt
 
   ################################################################
   # knownGenes
@@ -210,7 +203,7 @@ for genome in {'hg19','hg38','mm9','mm10'}
     cat tmp_${genome}_${annot}_{pos,neg}_strand_knownGenes.txt \
     | sort -T . -k1,1 -k2,2n \
     | awk -v OFS='\t' '$2 < $3 {print $0}' \
-    > rkgtmp_${genome}_${annot}_knownGenes.txt
+    > rkgtmp_${genome}_knownGenes_${annot}.txt
     rm tmp_${genome}_${annot}_{pos,neg}_strand_knownGenes.txt
   done
 done
