@@ -35,7 +35,7 @@ read.bed <- function(filename, genome, stranded = F){
 
     # Get chromosome sizes from data/
     size_code = sprintf('%s_chrom_sizes', genome)
-    data(list = size_code, package = "annotatr")
+    data(list = size_code, package = "annotatr", envir = environment())
     seqlengths = get(size_code)
 
     if(stranded){
