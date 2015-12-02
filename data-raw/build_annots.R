@@ -51,7 +51,7 @@ for(file in cpg_files) {
 
   # Write the GRanges object to ../data/
   # Make sure the name of the object is specific to the object like chipenrich
-  save(list=c(object_name), file=rdata_file)
+  save(list=c(object_name), file=rdata_file, compress='xz')
   file.remove(file)
 
   # Write roxygen2 documentation for dataset to ../R/annotatr_data.R
@@ -116,7 +116,7 @@ for(file in kg_files) {
 
   # Write the GRanges object to ../data/
   # Make sure the name of the object is specific to the object like chipenrich
-  save(list=c(object_name), file=rdata_file)
+  save(list=c(object_name), file=rdata_file, compress='xz')
   file.remove(file)
 
   # Write roxygen2 documentation for dataset to ../R/annotatr_data.R
