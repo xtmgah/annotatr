@@ -1,4 +1,4 @@
-context('Test all annotations can be loaded')
+context('Test annotations can be loaded')
 
 # There are 70 total things for ls() including annot and annots
 test_that('All datasets successfully loaded',{
