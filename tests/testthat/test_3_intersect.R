@@ -1,0 +1,63 @@
+context('Test intersect_annotations() function')
+
+test_that('Test error thrown for non-GRanges regions object.',{
+  bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
+  annotations = c('hg19_cpg_islands')
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+
+  expect_error(
+    intersect_annotations(
+    regions = bed,
+    annotations = annotations,
+    genome = 'hg20',
+    ignore.strand = T,
+    "GRanges")
+  )
+})
+
+test_that('Test error thrown for unsupported genome.',{
+  bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
+  annotations = c('hg19_cpg_islands')
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+
+  expect_error(
+    intersect_annotations(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg20',
+    ignore.strand = T,
+    "unsupported genome")
+  )
+})
+
+test_that('Test error thrown for unsupported annotation.',{
+  bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
+  annotations = c('hg19_cpg_islands','big_willy_style')
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+
+  expect_error(
+    intersect_annotations(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg19',
+    ignore.strand = T,
+    "big_willy_style")
+  )
+})
+
+test_that('Test correct number of intersections.',{
+  bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
+  annotations = c('hg19_cpg_islands','hg19_cpg_shores','hg19_knownGenes_promoters')
+
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+
+  i = intersect_annotations(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg19',
+    ignore.strand = T)
+
+  lengths = sapply(i, length)
+
+  expect_equal( sum(lengths) , expected = 3)
+})
