@@ -19,7 +19,7 @@ for(genome in genomes) {
   rdata_file = sprintf('../data/%s_chrom_sizes.RData', genome)
   assign(object_name, seqlengths)
 
-  save(list=c(object_name), file=rdata_file)
+  save(list=c(object_name), file=rdata_file, compress='xz')
 
   # Write roxygen2 documentation for chrom_sizes to ../R/annotatr_genomes_doc.R
   man = c(
