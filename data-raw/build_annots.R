@@ -41,6 +41,7 @@ for(file in cpg_files) {
       strand = '*',
       seqlengths = seqlengths
     )
+    GenomeInfoDb::genome(gr_data) = genome
 
   # Trim just in case
     gr_data_trimmed = GenomicRanges::trim(gr_data)
@@ -105,6 +106,7 @@ for(file in kg_files) {
       transcriptID = tmp_data$transcriptID,
       seqlengths = seqlengths
     )
+    GenomeInfoDb::genome(gr_data) = genome
 
   # Trim just in case
     gr_data_trimmed = GenomicRanges::trim(gr_data)

@@ -1,5 +1,5 @@
 #' @export
-read.bed <- function(filename, genome, stranded = F){
+read_bed <- function(filename, genome, stranded = F){
     if (!file.exists(filename)){
         stop(paste("In read.bed(filename, genome, stranded): file:",
             filename, "not found."))
@@ -56,6 +56,7 @@ read.bed <- function(filename, genome, stranded = F){
             type = bed$type,
             seqlengths = seqlengths)
     }
+    GenomeInfoDb::genome(gR) = genome
 
     gR <- GenomicRanges::trim(gR)
     gR
