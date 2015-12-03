@@ -45,7 +45,7 @@ test_that('Test error thrown for unsupported annotation.',{
   )
 })
 
-test_that('Test correct number of intersections.',{
+test_that('Test correct intersections.',{
   bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
   annotations = c('hg19_cpg_islands','hg19_cpg_shores','hg19_knownGenes_promoters')
 
@@ -57,7 +57,7 @@ test_that('Test correct number of intersections.',{
     genome = 'hg19',
     ignore.strand = T)
 
-  lengths = sapply(i, length)
+  query_hits = sapply(i, function(a){a@queryHits})
 
-  expect_equal( sum(lengths) , expected = 3)
+  expect_equal( all(query_hits == c(3,2,1)) , expected = TRUE)
 })
