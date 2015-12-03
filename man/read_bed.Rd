@@ -4,7 +4,7 @@
 \alias{read_bed}
 \title{Read a bed file into Genomic Ranges object}
 \usage{
-read_bed(filename, genome, stranded = F)
+read_bed(filename, genome, stranded = FALSE)
 }
 \arguments{
 \item{filename}{Path to the file with data table. File must exist and be in correct format}
@@ -23,7 +23,7 @@ If valid, reads file data into a GenomicRanges object and prints object.
 }
 \examples{
 filename1 = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
-read_bed(filename = filename1, genome = 'hg19', stranded = F)
+read_bed(filename = filename1, genome = 'hg19', stranded = FALSE)
 
 
 }

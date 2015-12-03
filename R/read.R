@@ -12,11 +12,11 @@
 #'
 #' @examples
 #' filename1 = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
-#' read_bed(filename = filename1, genome = 'hg19', stranded = F)
+#' read_bed(filename = filename1, genome = 'hg19', stranded = FALSE)
 #'
 #'
 #' @export
-read_bed <- function(filename, genome, stranded = F){
+read_bed <- function(filename, genome, stranded = FALSE){
     if (!file.exists(filename)){
         stop(paste("In read_bed(filename, genome, stranded): filename",
                    filename, " not found"))
@@ -26,7 +26,7 @@ read_bed <- function(filename, genome, stranded = F){
         stop("in read_bed(filename, genome, stranded): Invalid Genome")
     }
 
-    bed <- read.table(filename, sep = "\t", header = F, stringsAsFactors = F)
+    bed <- read.table(filename, sep = "\t", header = FALSE, stringsAsFactors = FALSE)
 
     if (!all(grepl("chr", bed[,1]))){
         stop("in read_bed(filename, genome, stranded): file not in
