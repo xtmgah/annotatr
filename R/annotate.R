@@ -31,11 +31,11 @@ tabulate_intersections = function(regions, intersections) {
     stop('Error in tabulate_intersections(...): regions object is not GRanges.')
   }
 
-  if(class(i) != "list") {
+  if(class(intersections) != "list") {
     stop('Error in tabulate_intersections(...): intersections must be a list.')
   }
 
-  if(unique(sapply(i, class)) != "Hits") {
+  if(unique(sapply(intersections, class)) != "Hits") {
     stop('Error in tabulate_intersections(...): intersections must be a list of Hits objects.')
   }
 
