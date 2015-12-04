@@ -6,7 +6,7 @@
 #' elements of the annotation data (subject).
 #'
 #' @param regions The GRanges object of the user-data returned by read.bed().
-#' @param annotations A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basic_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailed_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions.
+#' @param annotations A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basic_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailed_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basic_genes and detailed_genes annotations cannot be done at the same time.
 #' @param genome One of the genomes in supported_genomes(). Should match argument used in read.bed().
 #' @param ignore.strand A boolean indicating whether strandedness should be respected in findOverlaps().
 #'
@@ -56,16 +56,25 @@ intersect_annotations = function(regions, annotations, genome, ignore.strand) {
       paste(unsupported, collapse=', ')))
   }
 
+  # Do not allow basic_genes and detailed_genes at the same time
+  if('basic_genes' %in% annotations && 'detailed_genes' %in% annotations) {
+    stop('Error in intersect_annotations(...): please choose between basic_genes and detailed_genes annotations.')
+  }
+
   # Check for shortcut annotation accessors 'cpgs', 'basic_genes', or 'detailed_genes'
   # and create the right annotations based on the genome
-  if(annotations == 'cpgs') {
-    annotations = paste(genome, 'cpg', c('islands','shores','shelves','inter'), sep='_')
-  } else if (annotations == 'basic_genes') {
-    annotations = paste(genome, 'knownGenes', c('1to5kb','promoters','5UTRs','exons','introns','3UTRs'), sep='_')
-  } else if (annotations == 'detailed_genes') {
-    annotations = paste(genome, 'knownGenes',
-      c('1to5kb','promoters','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','exons3UTRs','introns3UTRs'), sep='_')
+  new_annotations = c()
+  if('cpgs' %in% annotations) {
+    new_annotations = paste(genome, 'cpg', c('islands','shores','shelves','inter'), sep='_')
   }
+  if ('basic_genes' %in% annotations) {
+    new_annotations = c(new_annotations, paste(genome, 'knownGenes', c('1to5kb','promoters','5UTRs','exons','introns','3UTRs'), sep='_'))
+  }
+  if ('detailed_genes' %in% annotations) {
+    new_annotations = c(new_annotations, paste(genome, 'knownGenes',
+      c('1to5kb','promoters','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','exons3UTRs','introns3UTRs'), sep='_'))
+  }
+  annotations = new_annotations
 
   # Collect the annotation objects into a GRangesList
   data(list = annotations, package = 'annotatr')

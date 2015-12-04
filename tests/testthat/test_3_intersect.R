@@ -45,6 +45,37 @@ test_that('Test error thrown for unsupported annotation.',{
   )
 })
 
+test_that('Test error thrown for basic_genes and detailed_genes.',{
+  bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
+  annotations = c('basic_genes', 'detailed_genes')
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+
+  expect_error(
+    intersect_annotations(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg19',
+    ignore.strand = T,
+    "please choose between")
+  )
+})
+
+test_that('Test dual annotation shortcut.',{
+  bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
+  annotations = c('basic_genes','cpgs')
+
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+
+  i = intersect_annotations(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg19',
+    ignore.strand = T)
+
+  expect_equal( length(i) , expected = 10)
+})
+
+
 test_that('Test correct intersections.',{
   bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
   annotations = c('hg19_cpg_islands','hg19_cpg_shores','hg19_knownGenes_promoters')
