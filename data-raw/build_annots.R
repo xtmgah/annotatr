@@ -30,7 +30,7 @@ for(file in cpg_files) {
 
   # Get tmp data
     tmp_data = read.table(file, sep='\t', header=F, stringsAsFactors=F)
-    colnames(tmp_data) = c('chrom','start','end')
+    colnames(tmp_data) = c('chrom','start','end','ID')
 
   # Construct GRanges object
   # NOTE: GRanges objects are 1-based start and end while the input data is
@@ -39,6 +39,7 @@ for(file in cpg_files) {
       seqnames = tmp_data$chrom,
       ranges = IRanges::IRanges(start = tmp_data$start, end = tmp_data$end),
       strand = '*',
+      ID = tmp_data$ID,
       seqlengths = seqlengths
     )
     GenomeInfoDb::genome(gr_data) = genome
@@ -94,7 +95,7 @@ for(file in kg_files) {
 
   # Get tmp data
     tmp_data = read.table(file, sep='\t', header=F, stringsAsFactors=F)
-    colnames(tmp_data) = c('chrom','start','end','transcriptID','strand')
+    colnames(tmp_data) = c('chrom','start','end','strand','ID')
 
   # Construct GRanges object
   # NOTE: GRanges objects are 1-based start and end while the input data is
@@ -103,7 +104,7 @@ for(file in kg_files) {
       seqnames = tmp_data$chrom,
       ranges = IRanges::IRanges(start = tmp_data$start+1, end = tmp_data$end),
       strand = tmp_data$strand,
-      transcriptID = tmp_data$transcriptID,
+      ID = tmp_data$ID,
       seqlengths = seqlengths
     )
     GenomeInfoDb::genome(gr_data) = genome
