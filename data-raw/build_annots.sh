@@ -18,7 +18,7 @@ do
   echo Processing ${genome} CpG islands
   awk -v OFS='\t' 'NR > 1 {print $2, $3, $4}' <(gunzip -c ${genome}_cpg_islands.txt.gz) \
   | sort -T . -k1,1 -k2,2n \
-  | awk -v OFS='\t' '{print $1, $2, $3}' \
+  | awk -v OFS='\t' '{print $1, $2, $3, "island:"NR}' \
   > rcpgtmp_${genome}_cpg_islands.txt
 
   # Process CpG shores
@@ -26,7 +26,7 @@ do
   bedtools subtract \
     -a <(bedtools flank -b 2000 -i rcpgtmp_${genome}_cpg_islands.txt -g ${genome}.chrom.sizes.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
     -b rcpgtmp_${genome}_cpg_islands.txt \
-  | awk -v OFS='\t' '{print $1, $2, $3}' \
+  | awk -v OFS='\t' '{print $1, $2, $3, "shore:"NR}' \
   > rcpgtmp_${genome}_cpg_shores.txt
 
   # Process CpG shelves
@@ -34,7 +34,7 @@ do
   bedtools subtract \
     -a <(bedtools flank -b 2000 -i rcpgtmp_${genome}_cpg_shores.txt -g ${genome}.chrom.sizes.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
     -b <(cat rcpgtmp_${genome}_cpg_islands.txt rcpgtmp_${genome}_cpg_shores.txt | sort -T . -k1,1 -k2,2n) \
-  | awk -v OFS='\t' '{print $1, $2, $3}' \
+  | awk -v OFS='\t' '{print $1, $2, $3, "shelf:"NR}' \
   > rcpgtmp_${genome}_cpg_shelves.txt
 
   # Process inter CpG annotations
@@ -42,7 +42,7 @@ do
   bedtools complement \
     -i <(cat rcpgtmp_${genome}_cpg_islands.txt rcpgtmp_${genome}_cpg_shores.txt rcpgtmp_${genome}_cpg_shelves.txt | sort -T . -k1,1 -k2,2n | bedtools merge) \
     -g <(sort -k1,1 -k2,2n ${genome}.chrom.sizes.txt) \
-  | awk -v OFS='\t' '$2 != $3 {print $1, $2, $3}' \
+  | awk -v OFS='\t' '$2 != $3 {print $1, $2, $3, "inter:"NR}' \
   > rcpgtmp_${genome}_cpg_inter.txt
 
   ################################################################
@@ -98,6 +98,7 @@ do
         -i <(awk -v OFS='\t' '{print $2, $4, $4, $1, $3}' tmp_${genome}_coding_${strand}_strand_knownGenes.txt) \
         -g ${genome}.chrom.sizes.txt \
       | sort -T . -k1,1 -k2,2n \
+      | awk -v OFS='\t' '$2 < $3 {print $0}' \
       > tmp_${genome}_promoters_${strand}_strand_knownGenes.txt
 
       # Pull out region > 1Kb and <= 5Kb upstream of TSS
@@ -108,6 +109,7 @@ do
         -i <(awk -v OFS='\t' '{print $1, $2, $2, $4, $5}' tmp_${genome}_promoters_${strand}_strand_knownGenes.txt) \
         -g ${genome}.chrom.sizes.txt \
       | sort -T . -k1,1 -k2,2n \
+      | awk -v OFS='\t' '$2 < $3 {print $0}' \
       > tmp_${genome}_1to5kb_${strand}_strand_knownGenes.txt
     else
       # Pull out 5'UTRs, when they exist, from knownGenes
@@ -132,6 +134,7 @@ do
         -i <(awk -v OFS='\t' '{print $2, $5, $5, $1, $3}' tmp_${genome}_coding_${strand}_strand_knownGenes.txt) \
         -g ${genome}.chrom.sizes.txt \
       | sort -T . -k1,1 -k2,2n \
+      | awk -v OFS='\t' '$2 < $3 {print $0}' \
       > tmp_${genome}_promoters_${strand}_strand_knownGenes.txt
 
       # Pull out region > 1Kb and <= 5Kb upstream of TSS
@@ -142,6 +145,7 @@ do
         -i <(awk -v OFS='\t' '{print $1, $3, $3, $4, $5}' tmp_${genome}_promoters_${strand}_strand_knownGenes.txt) \
         -g ${genome}.chrom.sizes.txt \
       | sort -T . -k1,1 -k2,2n \
+      | awk -v OFS='\t' '$2 < $3 {print $0}' \
       > tmp_${genome}_1to5kb_${strand}_strand_knownGenes.txt
     fi
 
@@ -200,7 +204,21 @@ for genome in {'hg19','hg38','mm9','mm10'}
   for annot in {'1to5kb','promoters','5UTRs','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','CDSs','exons','introns','3UTRs','exons3UTRs','introns3UTRs'}
   do
     echo Combining ${genome} ${annot} across strands
-    cat tmp_${genome}_${annot}_{pos,neg}_strand_knownGenes.txt \
+    # Collapse, over all transcripts, features with identical coordinates
+    # This is convoluted, but need to preserve strand
+    cat \
+      <(bedtools groupby \
+        -i tmp_${genome}_${annot}_pos_strand_knownGenes.txt \
+        -g 1-3 \
+        -c 4 \
+        -o collapse \
+      | awk -v OFS='\t' '{print $1, $2, $3, "+", $4}') \
+      <(bedtools groupby \
+        -i tmp_${genome}_${annot}_neg_strand_knownGenes.txt \
+        -g 1-3 \
+        -c 4 \
+        -o collapse \
+      | awk -v OFS='\t' '{print $1, $2, $3, "-", $4}') \
     | sort -T . -k1,1 -k2,2n \
     | awk -v OFS='\t' '$2 < $3 {print $0}' \
     > rkgtmp_${genome}_knownGenes_${annot}.txt
