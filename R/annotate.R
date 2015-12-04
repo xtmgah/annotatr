@@ -58,13 +58,14 @@ tabulate_intersections = function(regions, intersections) {
       annot_end = end(a_sub),
       annot_strand = as.character(strand(a_sub)),
       annot_type = n,
+      annot_id = a_sub$ID,
       stringsAsFactors=F
     )
   })
 
   # Combine and sort the list of data.frames into a single data.frame
   tab = Reduce(rbind, tab_list)
-  tab = tab[order(tab$data_chrom, tab$data_start, decreasing=F),]
+  tab = tab[order(tab$data_chrom, tab$data_start, tab$data_end, tab$annot_start, decreasing=F),]
 
   return(tab)
 }
