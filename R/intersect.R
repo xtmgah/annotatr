@@ -81,6 +81,8 @@ intersect_annotations = function(regions, annotations, genome, ignore.strand) {
 
   # Perform the intersections in an lapply (consider using mclapply)
   overlaps = lapply(annotations, function(annot){
+    message(sprintf('Annotating %s', annot))
+    
     GenomicRanges::findOverlaps(regions, get(annot), ignore.strand = ignore.strand)
   })
   names(overlaps) = annotations
