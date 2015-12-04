@@ -2,29 +2,28 @@
 % Please edit documentation in R/read.R
 \name{read_bed}
 \alias{read_bed}
-\title{Read a bed file into Genomic Ranges object}
+\title{Convert a bed file into a GenomicRanges object}
 \usage{
 read_bed(filename, genome, stranded = FALSE)
 }
 \arguments{
-\item{filename}{Path to the file with data table. File must exist and be in correct format}
+\item{filename}{Path to the file with data. File must exist and be in correct format.}
 
 \item{genome}{Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'}
 
-\item{stranded}{Logical variable. If True, strand attribute of GenomicRanges object is drawn from 6th column of bed file}
+\item{stranded}{Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file.}
 }
 \value{
-A GenomicRanges object with ranges determined by genome and bed file
+A GenomicRanges object with ranges determined by genome and bed file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique.
 }
 \description{
-\code{read_bed} Reads in data table from file, checks to see if follows the appropriate
+\code{read_bed} Reads in data table from file, checks to see if it follows the appropriate
 BED (Browser Extensible Data) format and if genome is valid.
-If valid, reads file data into a GenomicRanges object and prints object.
+If valid, reads file data into a GenomicRanges object.
 }
 \examples{
-filename1 = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
-read_bed(filename = filename1, genome = 'hg19', stranded = FALSE)
-
+file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
+read_bed(filename = file, genome = 'hg19', stranded = FALSE)
 
 }
 
