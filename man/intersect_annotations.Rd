@@ -25,7 +25,7 @@ Hits object indicating which elements of the user-data (query) intersect which
 elements of the annotation data (subject).
 }
 \examples{
-A very simple example with only 3 genomic regions
+# A very simple example with only 3 genomic regions
 bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
 annotations = c('hg19_cpg_islands','hg19_cpg_shores','hg19_knownGenes_promoters')
 
@@ -37,7 +37,7 @@ i = intersect_annotations(
   genome = 'hg19',
   ignore.strand = TRUE)
 
-A more complicated example using Gm12878 Pol2 ChIP-seq from ENCODE and an annotation shortcut
+# A more complicated example using Gm12878 Pol2 ChIP-seq from ENCODE and an annotation shortcut
 bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
 annotations = c('basic_genes')
 
