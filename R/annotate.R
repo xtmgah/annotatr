@@ -62,7 +62,9 @@ tabulate_intersections = function(regions, intersections) {
     )
   })
 
+  # Combine and sort the list of data.frames into a single data.frame
   tab = Reduce(rbind, tab_list)
+  tab = tab[order(tab$data_chrom, tab$data_start, decreasing=F),]
 
   return(tab)
 }
