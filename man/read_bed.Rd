@@ -4,7 +4,7 @@
 \alias{read_bed}
 \title{Convert a bed file into a GenomicRanges object}
 \usage{
-read_bed(filename, genome, stranded = FALSE)
+read_bed(filename, genome, stranded = FALSE, use.score = FALSE)
 }
 \arguments{
 \item{filename}{Path to the file with data. File must exist and be in correct format.}
@@ -12,6 +12,8 @@ read_bed(filename, genome, stranded = FALSE)
 \item{genome}{Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'}
 
 \item{stranded}{Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file.}
+
+\item{use.score}{Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file.}
 }
 \value{
 A GenomicRanges object with ranges determined by genome and bed file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique.
@@ -23,7 +25,7 @@ If valid, reads file data into a GenomicRanges object.
 }
 \examples{
 file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
-read_bed(filename = file, genome = 'hg19', stranded = FALSE)
+read_bed(filename = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 
 }
 
