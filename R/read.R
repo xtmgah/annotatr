@@ -57,7 +57,6 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 seqnames = bed[,1],
                 ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
                 strand = bed[,6],
-                type = bed$type,
                 score = bed[,5],
                 seqlengths = seqlengths)
         } else{
@@ -65,7 +64,6 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 seqnames = bed[,1],
                 ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
                 strand = bed[,6],
-                type = bed$type,
                 seqlengths = seqlengths)
         }
     } else {
@@ -74,7 +72,6 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 seqnames = bed[,1],
                 ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
                 strand = '*',
-                type = bed$type,
                 score = bed[,5],
                 seqlengths = seqlengths)
         } else{
@@ -82,7 +79,6 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 seqnames = bed[,1],
                 ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
                 strand = '*',
-                type = bed$type,
                 seqlengths = seqlengths)
         }
     }
