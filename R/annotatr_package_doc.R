@@ -9,4 +9,5 @@
 #' @import ggplot2
 #' @import IRanges
 #' @import methods
+#' @import readr
 NULL

@@ -26,7 +26,7 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
         stop("in read_bed(filename, genome, stranded): Invalid Genome")
     }
 
-    bed <- read.table(filename, sep = "\t", header = FALSE, stringsAsFactors = FALSE)
+    bed <- readr::read_tsv(file = filename, col_names = FALSE)
 
     if (!all(grepl("chr", bed[,1]))){
         stop("in read_bed(filename, genome, stranded): file not in
@@ -48,7 +48,7 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
     seqlengths = get(size_code)
 
     if(stranded){
-        if(bed[1,6] != "+" | bed[1,6] != "-") {
+        if(length(setdiff( unique(bed[,6]), c("+","-") ) > 0)) {
             stop("In read_bed(filename, genome, stranded): with stranded = T,
                  strand column should contain +/- only.")
         }
