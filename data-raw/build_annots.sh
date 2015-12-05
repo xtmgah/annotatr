@@ -160,6 +160,19 @@ done
 # Process exons and introns
 Rscript build_annots_exint.R
 
+for genome in {'hg19','hg38','mm9','mm10'}
+do
+  for strand in {'pos','neg'}
+  do
+    echo Sorting ${genome} introns/exons on ${strand} strand
+    sort -T . -k1,1 -k2,2n tmp_${genome}_exons_${strand}_strand_knownGenes.txt > tmp_${genome}_exons_${strand}_strand_sorted.txt
+    mv tmp_${genome}_exons_${strand}_strand_sorted.txt tmp_${genome}_exons_${strand}_strand_knownGenes.txt
+
+    sort -T . -k1,1 -k2,2n tmp_${genome}_introns_${strand}_strand_knownGenes.txt > tmp_${genome}_introns_${strand}_strand_sorted.txt
+    mv tmp_${genome}_introns_${strand}_strand_sorted.txt tmp_${genome}_introns_${strand}_strand_knownGenes.txt
+  done
+done
+
 # More finely process exons and introns
 for genome in {'hg19','hg38','mm9','mm10'}
 do
@@ -170,6 +183,7 @@ do
     do
       ########################################################
       # Capture exons UTRs
+      # See figure in meta for clarification of cases
       # exonStart exonEnd utrStart utrEnd
       #    2         3       7        8
       echo Processing ${genome} ${strand} ${annot}-exons
@@ -177,14 +191,16 @@ do
         -a tmp_${genome}_exons_${strand}_strand_knownGenes.txt \
         -b tmp_${genome}_${annot}_${strand}_strand_knownGenes.txt \
       | awk -v OFS='\t' \
-        '$4 == $9 && $2 <= $7 && $3 <  $8 {print $1, $7, $3, $4, $5} \
+        '$4 == $9 && $2 <= $7 && $3 > $7 && $3 <  $8 {print $1, $7, $3, $4, $5} \
          $4 == $9 && $2 <= $7 && $3 >= $8 {print $1, $7, $8, $4, $5} \
          $4 == $9 && $2 >  $7 && $3 <  $8 {print $1, $2, $3, $4, $5} \
-         $4 == $9 && $2 >  $7 && $3 >= $8 {print $1, $2, $8, $4, $5}'\
+         $4 == $9 && $2 >  $7 && $2 < $8 && $3 >= $8 {print $1, $2, $8, $4, $5}'\
       | sort -T . -k1,1 -k2,2n \
       > tmp_${genome}_exons${annot}_${strand}_strand_knownGenes.txt
 
       # Capture introns in UTRs
+      # By definition, the cdsStart/cdsEnd cannot be in an intron
+      # nor can the txStart/txEnd be in an intron.
       # intronStart intronEnd utrStart utrEnd
       #      2          3        7       8
       echo Processing ${genome} ${strand} ${annot}-introns
