@@ -52,7 +52,6 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
             stop("In read_bed(filename, genome, stranded): with stranded = T,
                  strand column should contain +/- only.")
         }
-        
         if(use.score) {
             gR <- GenomicRanges::GRanges(
                 seqnames = bed[,1],
@@ -69,26 +68,28 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 type = bed$type,
                 seqlengths = seqlengths)
         }
-        GenomeInfoDb::genome(gR) = genome
-        } else {
-            if(use.score) {
-                gR <- GenomicRanges::GRanges(
-                    seqnames = bed[,1],
-                    ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
-                    strand = '*',
-                    type = bed$type,
-                    score = bed[,5],
-                    seqlengths = seqlengths)
-            } else{
-                gR <- GenomicRanges::GRanges(
-                    seqnames = bed[,1],
-                    ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
-                    strand = '*',
-                    type = bed$type,
-                    seqlengths = seqlengths)
-            }
+    } else {
+        if(use.score) {
+            gR <- GenomicRanges::GRanges(
+                seqnames = bed[,1],
+                ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
+                strand = '*',
+                type = bed$type,
+                score = bed[,5],
+                seqlengths = seqlengths)
+        } else{
+            gR <- GenomicRanges::GRanges(
+                seqnames = bed[,1],
+                ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
+                strand = '*',
+                type = bed$type,
+                seqlengths = seqlengths)
         }
+    }
+    # Assign the genome metadata
+    GenomeInfoDb::genome(gR) = genome
 
+    # Ensure the ranges do not exceed the chromosome lengths for the genome
     gR <- GenomicRanges::trim(gR)
 
     # Check if gR is sorted and sort it if it isn't
@@ -104,4 +105,3 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
 
     gR
 }
-
