@@ -9,7 +9,7 @@ intersect_annotations(regions, annotations, genome, ignore.strand)
 \arguments{
 \item{regions}{The GRanges object of the user-data returned by read.bed().}
 
-\item{annotations}{A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basic_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, CDS, and 3UTR knownGene regions. The "detailed_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions.}
+\item{annotations}{A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basic_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailed_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basic_genes and detailed_genes annotations cannot be done at the same time.}
 
 \item{genome}{One of the genomes in supported_genomes(). Should match argument used in read.bed().}
 
@@ -25,8 +25,21 @@ Hits object indicating which elements of the user-data (query) intersect which
 elements of the annotation data (subject).
 }
 \examples{
+# A very simple example with only 3 genomic regions
 bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
 annotations = c('hg19_cpg_islands','hg19_cpg_shores','hg19_knownGenes_promoters')
+
+d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE)
+
+i = intersect_annotations(
+  regions = d,
+  annotations = annotations,
+  genome = 'hg19',
+  ignore.strand = TRUE)
+
+# A more complicated example using Gm12878 Pol2 ChIP-seq from ENCODE and an annotation shortcut
+bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
+annotations = c('basic_genes')
 
 d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE)
 

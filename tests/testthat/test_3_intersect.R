@@ -45,7 +45,38 @@ test_that('Test error thrown for unsupported annotation.',{
   )
 })
 
-test_that('Test correct number of intersections.',{
+test_that('Test error thrown for basic_genes and detailed_genes.',{
+  bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
+  annotations = c('basic_genes', 'detailed_genes')
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+
+  expect_error(
+    intersect_annotations(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg19',
+    ignore.strand = T,
+    "please choose between")
+  )
+})
+
+test_that('Test dual annotation shortcut.',{
+  bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
+  annotations = c('basic_genes','cpgs')
+
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+
+  i = intersect_annotations(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg19',
+    ignore.strand = T)
+
+  expect_equal( length(i) , expected = 10)
+})
+
+
+test_that('Test correct intersections.',{
   bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
   annotations = c('hg19_cpg_islands','hg19_cpg_shores','hg19_knownGenes_promoters')
 
@@ -57,7 +88,7 @@ test_that('Test correct number of intersections.',{
     genome = 'hg19',
     ignore.strand = T)
 
-  lengths = sapply(i, length)
+  query_hits = sapply(i, function(a){a@queryHits})
 
-  expect_equal( sum(lengths) , expected = 3)
+  expect_equal( all(query_hits == c(3,2,1)) , expected = TRUE)
 })
