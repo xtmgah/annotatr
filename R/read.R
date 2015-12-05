@@ -7,15 +7,16 @@
 #' @param filename Path to the file with data. File must exist and be in correct format.
 #' @param genome Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'
 #' @param stranded Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file.
+#' @param use.score Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file.
 #'
 #' @return A GenomicRanges object with ranges determined by genome and bed file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique.
 #'
 #' @examples
 #' file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
-#' read_bed(filename = file, genome = 'hg19', stranded = FALSE)
+#' read_bed(filename = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 #'
 #' @export
-read_bed <- function(filename, genome, stranded = FALSE){
+read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
     if (!file.exists(filename)){
         stop(paste("In read_bed(filename, genome, stranded): filename",
                    filename, " not found"))
@@ -34,12 +35,12 @@ read_bed <- function(filename, genome, stranded = FALSE){
 
     if (typeof(head(bed[,2])) != "integer"){
         stop("in read_bed(filename, genome, stranded): file not in
-             correct format, second column not numeric")
+             correct format, second column not integer")
     }
 
     if (typeof(head(bed[,3]))!= "integer"){
         stop("in read_bed(filename, genome, stranded): file not in
-             correct format, third column not numeric")
+             correct format, third column not integer")
     }
 
     size_code = sprintf('%s_chrom_sizes', genome)
@@ -51,23 +52,42 @@ read_bed <- function(filename, genome, stranded = FALSE){
             stop("In read_bed(filename, genome, stranded): with stranded = T,
                  strand column should contain +/- only.")
         }
-
-        gR <- GenomicRanges::GRanges(
-          seqnames = bed[,1],
-          ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
-          strand = bed[,6],
-          type = bed$type,
-          seqlengths = seqlengths)
+        
+        if(use.score) {
+            gR <- GenomicRanges::GRanges(
+                seqnames = bed[,1],
+                ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
+                strand = bed[,6],
+                type = bed$type,
+                score = bed[,5],
+                seqlengths = seqlengths)
+        } else{
+            gR <- GenomicRanges::GRanges(
+                seqnames = bed[,1],
+                ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
+                strand = bed[,6],
+                type = bed$type,
+                seqlengths = seqlengths)
+        }
         GenomeInfoDb::genome(gR) = genome
-    } else {
-        gR <- GenomicRanges::GRanges(
-            seqnames = bed[,1],
-            ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
-            strand = '*',
-            type = bed$type,
-            seqlengths = seqlengths)
-        GenomeInfoDb::genome(gR) = genome
-    }
+        } else {
+            if(use.score) {
+                gR <- GenomicRanges::GRanges(
+                    seqnames = bed[,1],
+                    ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
+                    strand = '*',
+                    type = bed$type,
+                    score = bed[,5],
+                    seqlengths = seqlengths)
+            } else{
+                gR <- GenomicRanges::GRanges(
+                    seqnames = bed[,1],
+                    ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
+                    strand = '*',
+                    type = bed$type,
+                    seqlengths = seqlengths)
+            }
+        }
 
     gR <- GenomicRanges::trim(gR)
 
@@ -76,7 +96,7 @@ read_bed <- function(filename, genome, stranded = FALSE){
     # Might have to do with the is.circular column being NA...
     # "In is.na(x) : is.na() applied to non-(list or vector) of type 'S4'"
     if(suppressWarnings(is.unsorted(gR))) {
-      gR <- sort(gR)
+        gR <- sort(gR)
     }
 
     # Enforce uniqueness of regions
@@ -84,3 +104,4 @@ read_bed <- function(filename, genome, stranded = FALSE){
 
     gR
 }
+
