@@ -1,10 +1,10 @@
 context('Test annotation functions')
 
-test_that('Test tabulate_intersections().',{
+test_that('Test tabulate_intersections() without score',{
   bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
   annotations = c('basic_genes','cpgs')
 
-  d = read_bed(filename = bed, genome = 'hg19', stranded = F)
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = FALSE)
 
   i = intersect_annotations(
     regions = d,
@@ -14,7 +14,8 @@ test_that('Test tabulate_intersections().',{
 
   t = tabulate_intersections(
     regions = d,
-    intersections = i)
+    intersections = i,
+    use.score = FALSE)
 
   # Get number of annotations from i and t and make sure they're the same
   i_lengths = sort(sapply(i, length))

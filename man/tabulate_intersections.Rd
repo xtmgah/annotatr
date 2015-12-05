@@ -4,10 +4,14 @@
 \alias{tabulate_intersections}
 \title{A function to create tabular output of regions intersected with annotations}
 \usage{
-tabulate_intersections(regions, intersections)
+tabulate_intersections(regions, intersections, use.score = FALSE)
 }
 \arguments{
+\item{regions}{A GenomicRanges object output from \code{read_bed()}.}
+
 \item{intersections}{A list of Hits objects from \code{intersect_annotations()}.}
+
+\item{use.score}{Logical variable. Include the "score" for each genomic region in the tabulated results. Score can mean a variety of things, e.g. percent methylation of a CpG/region or fold-change of a ChIP-seq peak.}
 }
 \value{
 A table with columns from the GenomicRanges object for the regions and corresponding annotations
@@ -19,7 +23,7 @@ Given output from \code{intersect_annotations()}, create a table for output whic
 bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
 annotations = c('basic_genes')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE)
+d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 
 i = intersect_annotations(
   regions = d,
@@ -29,7 +33,8 @@ i = intersect_annotations(
 
 t = tabulate_intersections(
   regions = d,
-  intersections = i)
+  intersections = i,
+  use.score = FALSE)
 
 }
 
