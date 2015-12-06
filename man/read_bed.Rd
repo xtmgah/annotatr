@@ -16,12 +16,10 @@ read_bed(filename, genome, stranded = FALSE, use.score = FALSE)
 \item{use.score}{Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file.}
 }
 \value{
-A GenomicRanges object with ranges determined by genome and bed file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique.
+A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{regionName} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
 }
 \description{
-\code{read_bed} Reads in data table from file, checks to see if it follows the appropriate
-BED (Browser Extensible Data) format and if genome is valid.
-If valid, reads file data into a GenomicRanges object.
+\code{read_bed} reads in data from a BED6 file, checks to see if it follows the appropriate BED (Browser Extensible Data) format, and checks validity of genome. If valid, reads file data into a GenomicRanges object. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
 }
 \examples{
 file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
