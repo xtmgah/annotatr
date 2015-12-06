@@ -1,15 +1,13 @@
 #' Convert a bed file into a GenomicRanges object
 #'
-#' \code{read_bed} Reads in data table from file, checks to see if it follows the appropriate
-#' BED (Browser Extensible Data) format and if genome is valid.
-#' If valid, reads file data into a GenomicRanges object.
+#' \code{read_bed} reads in data from a BED6 file, checks to see if it follows the appropriate BED (Browser Extensible Data) format, and checks validity of genome. If valid, reads file data into a GenomicRanges object. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
 #'
 #' @param filename Path to the file with data. File must exist and be in correct format.
 #' @param genome Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'
 #' @param stranded Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file.
 #' @param use.score Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file.
 #'
-#' @return A GenomicRanges object with ranges determined by genome and bed file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique.
+#' @return A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{regionName} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
 #'
 #' @examples
 #' file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
@@ -57,6 +55,7 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 seqnames = bed[,1],
                 ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
                 strand = bed[,6],
+                regionName = bed[,4],
                 score = bed[,5],
                 seqlengths = seqlengths)
         } else{
@@ -64,6 +63,7 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 seqnames = bed[,1],
                 ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
                 strand = bed[,6],
+                regionName = bed[,4],
                 seqlengths = seqlengths)
         }
     } else {
@@ -72,6 +72,7 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 seqnames = bed[,1],
                 ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
                 strand = '*',
+                regionName = bed[,4],
                 score = bed[,5],
                 seqlengths = seqlengths)
         } else{
@@ -79,6 +80,7 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
                 seqnames = bed[,1],
                 ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
                 strand = '*',
+                regionName = bed[,4],
                 seqlengths = seqlengths)
         }
     }
@@ -93,6 +95,7 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
     # Might have to do with the is.circular column being NA...
     # "In is.na(x) : is.na() applied to non-(list or vector) of type 'S4'"
     if(suppressWarnings(is.unsorted(gR))) {
+        # NOTE: The "natural order" for the elements of a GenomicRanges object is to order them (a) first by sequence level, (b) then by strand, (c) then by start, (d) and finally by width. This way, the space of genomic ranges is totally ordered.
         gR <- sort(gR)
     }
 
