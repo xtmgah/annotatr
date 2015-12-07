@@ -26,17 +26,17 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
 
     bed <- readr::read_tsv(file = filename, col_names = FALSE)
 
-    if (!all(grepl("chr", bed[,1]))){
+    if (!all(grepl("chr", bed[[1]]))){
         stop("in read_bed(filename, genome, stranded): file not in
              correct format, missing chr numbers")
     }
 
-    if (typeof(head(bed[,2])) != "integer"){
+    if (typeof(head(bed[[2]])) != "integer"){
         stop("in read_bed(filename, genome, stranded): file not in
              correct format, second column not integer")
     }
 
-    if (typeof(head(bed[,3]))!= "integer"){
+    if (typeof(head(bed[[3]]))!= "integer"){
         stop("in read_bed(filename, genome, stranded): file not in
              correct format, third column not integer")
     }
@@ -46,41 +46,41 @@ read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
     seqlengths = get(size_code)
 
     if(stranded){
-        if(length(setdiff( unique(bed[,6]), c("+","-") ) > 0)) {
+        if(length(base::setdiff( unique(bed[[6]]), c("+","-") ) > 0)) {
             stop("In read_bed(filename, genome, stranded): with stranded = T,
                  strand column should contain +/- only.")
         }
         if(use.score) {
             gR <- GenomicRanges::GRanges(
-                seqnames = bed[,1],
-                ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
-                strand = bed[,6],
-                regionName = bed[,4],
-                score = bed[,5],
+                seqnames = bed[[1]],
+                ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
+                strand = bed[[6]],
+                regionName = bed[[4]],
+                score = bed[[5]],
                 seqlengths = seqlengths)
         } else{
             gR <- GenomicRanges::GRanges(
-                seqnames = bed[,1],
-                ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
-                strand = bed[,6],
-                regionName = bed[,4],
+                seqnames = bed[[1]],
+                ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
+                strand = bed[[6]],
+                regionName = bed[[4]],
                 seqlengths = seqlengths)
         }
     } else {
         if(use.score) {
             gR <- GenomicRanges::GRanges(
-                seqnames = bed[,1],
-                ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
+                seqnames = bed[[1]],
+                ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
                 strand = '*',
-                regionName = bed[,4],
-                score = bed[,5],
+                regionName = bed[[4]],
+                score = bed[[5]],
                 seqlengths = seqlengths)
         } else{
             gR <- GenomicRanges::GRanges(
-                seqnames = bed[,1],
-                ranges = IRanges::IRanges(start = bed[,2], end = bed[,3]),
+                seqnames = bed[[1]],
+                ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
                 strand = '*',
-                regionName = bed[,4],
+                regionName = bed[[4]],
                 seqlengths = seqlengths)
         }
     }
