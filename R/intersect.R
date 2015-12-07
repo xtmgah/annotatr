@@ -50,7 +50,7 @@ intersect_annotations = function(regions, annotations, genome, ignore.strand) {
 
   # Check that the annotations are supported, tell the user which are unsupported
   if(!all(annotations %in% c(supported_annotations(),'cpgs','basic_genes','detailed_genes'))) {
-    unsupported = setdiff(annotations, c(supported_annotations(),'cpgs','basic_genes','detailed_genes'))
+    unsupported = base::setdiff(annotations, c(supported_annotations(),'cpgs','basic_genes','detailed_genes'))
 
     stop(sprintf('Error in intersect_annotations(...): "%s" is(are) not supported. See supported_annotations().',
       paste(unsupported, collapse=', ')))
