@@ -5,6 +5,7 @@
 #' @docType package
 #' @name annotatr
 #'
+#' @import dplyr
 #' @import GenomicRanges
 #' @import ggplot2
 #' @import IRanges
