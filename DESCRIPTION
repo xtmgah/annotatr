@@ -14,7 +14,6 @@ Description: Given a set of genomic sites/regions (e.g. ChIP-seq peaks, CpGs,
 Depends:
     R (>= 3.2.2)
 Imports:
-    dplyr,
     GenomeInfoDb,
     GenomicRanges,
     ggplot2,
