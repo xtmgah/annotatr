@@ -61,7 +61,7 @@ test_that('Test error thrown for basic_genes and detailed_genes in intersect_ann
 })
 
 test_that('Test dual annotation shortcut in intersect_annotations()',{
-  bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
+  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
   annotations = c('basic_genes','cpgs')
 
   d = read_bed(filename = bed, genome = 'hg19', stranded = F)
@@ -94,7 +94,7 @@ test_that('Test correct intersections in intersect_annotations()',{
 })
 
 test_that('Test annotate_intersections() works',{
-  bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
+  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
   annotations = c('basic_genes','cpgs')
 
   d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = FALSE)

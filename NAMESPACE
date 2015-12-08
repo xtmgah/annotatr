@@ -3,6 +3,8 @@
 export(annotate_intersections)
 export(intersect_annotations)
 export(read_bed)
+export(summarize_name)
+export(summarize_score)
 export(supported_annotations)
 export(supported_genomes)
 import(GenomicRanges)
