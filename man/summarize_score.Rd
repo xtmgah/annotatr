@@ -20,13 +20,13 @@ Given a dplyr::tbl_df of annotated regions, summarize scores over (annot_type, a
 bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 annotations = c('basic_genes','cpgs')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
+d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = intersect_annotations(
   regions = d,
   annotations = annotations,
   genome = 'hg19',
-  ignore.strand = T)
+  ignore.strand = TRUE)
 
 t = annotate_intersections(
   regions = d,

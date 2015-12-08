@@ -11,13 +11,13 @@
 #' bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 #' annotations = c('basic_genes','cpgs')
 #'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
+#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
 #' i = intersect_annotations(
 #'   regions = d,
 #'   annotations = annotations,
 #'   genome = 'hg19',
-#'   ignore.strand = T)
+#'   ignore.strand = TRUE)
 #'
 #' t = annotate_intersections(
 #'   regions = d,
@@ -56,13 +56,13 @@ summarize_score = function(annotated_regions) {
 #' bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
 #' annotations = c('basic_genes','cpgs')
 #'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
+#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
 #' i = intersect_annotations(
 #'   regions = d,
 #'   annotations = annotations,
 #'   genome = 'hg19',
-#'   ignore.strand = T)
+#'   ignore.strand = TRUE)
 #'
 #' t = annotate_intersections(
 #'   regions = d,
