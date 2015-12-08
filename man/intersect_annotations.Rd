@@ -7,11 +7,11 @@
 intersect_annotations(regions, annotations, genome, ignore.strand)
 }
 \arguments{
-\item{regions}{The GRanges object of the user-data returned by read.bed().}
+\item{regions}{The GRanges object of the user-data returned by read_bed().}
 
 \item{annotations}{A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basic_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailed_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basic_genes and detailed_genes annotations cannot be done at the same time.}
 
-\item{genome}{One of the genomes in supported_genomes(). Should match argument used in read.bed().}
+\item{genome}{One of the genomes in supported_genomes(). Should match argument used in read_bed()().}
 
 \item{ignore.strand}{A boolean indicating whether strandedness should be respected in findOverlaps().}
 }
@@ -19,7 +19,7 @@ intersect_annotations(regions, annotations, genome, ignore.strand)
 A list of Hits objects giving the indices of objects overlapping in query and subject for each annotation.
 }
 \description{
-Given a GRanges object constructed from user supplied data with read.bed(),
+Given a GRanges object constructed from user supplied data with read_bed()(),
 and desired annotation overlaps, use GenomicRanges::findOverlaps() to return a
 Hits object indicating which elements of the user-data (query) intersect which
 elements of the annotation data (subject).

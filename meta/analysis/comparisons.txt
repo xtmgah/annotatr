@@ -1,0 +1,5 @@
+                ~164K		~4M			~25.4M		# annots		# of ints in ~4M	# of ints in ~25.4M
+annotatr			  7s			1:53m		9:10m		  810,087		  6.5M			        41.6M
+annotatr+dplyr	5s			49s			2:55m		  810,087		  6.5M			        41.6M
+chippeakanno		14s			6:10m		35m  		  23,056		  2.6M	            11M
+mint                            1:59m
