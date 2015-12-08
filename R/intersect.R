@@ -142,44 +142,42 @@ annotate_intersections = function(regions, intersections, use.score = FALSE) {
 
     if(!use.score) {
       # Create the data.frame
-      df = data.frame(
+      df = dplyr::tbl_df(data.frame(
         data_chrom = as.character(seqnames(r_sub)),
         data_start = start(r_sub),
         data_end = end(r_sub),
         data_strand = as.character(strand(r_sub)),
         data_name = r_sub$regionName,
-        annot_chrom = as.character(seqnames(a_sub)),
         annot_start = start(a_sub),
         annot_end = end(a_sub),
         annot_strand = as.character(strand(a_sub)),
         annot_type = n,
         annot_id = a_sub$ID,
         stringsAsFactors=F
-      )
+      ))
     } else {
       # Create the data.frame
-      df = data.frame(
+      df = dplyr::tbl_df(data.frame(
         data_chrom = as.character(seqnames(r_sub)),
         data_start = start(r_sub),
         data_end = end(r_sub),
         data_strand = as.character(strand(r_sub)),
         data_score = r_sub$score,
         data_name = r_sub$regionName,
-        annot_chrom = as.character(seqnames(a_sub)),
         annot_start = start(a_sub),
         annot_end = end(a_sub),
         annot_strand = as.character(strand(a_sub)),
         annot_type = n,
         annot_id = a_sub$ID,
         stringsAsFactors=F
-      )
+      ))
     }
   })
 
   # Combine and sort the list of data.frames into a single data.frame
   message('Combining and sorting tabulations across annotations')
-  tab = Reduce(rbind, tab_list)
-  tab = tab[order(tab$data_chrom, tab$data_start, tab$data_end, tab$annot_start, decreasing=F),]
+  tab = dplyr::bind_rows(tab_list)
+  tab = arrange(tab, data_chrom, data_start, data_end, annot_start)
 
   return(tab)
 }
