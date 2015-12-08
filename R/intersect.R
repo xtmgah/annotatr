@@ -132,31 +132,17 @@ annotate_intersections = function(regions, intersections, use.score = FALSE) {
     stop('Error in annotate_intersections(...): intersections must be a list of Hits objects.')
   }
 
-  # In the future, we could think about changing this to mclapply to speed it up
-  tab_list = lapply(names(intersections), function(n){
-    message(sprintf('Tabulating %s', n))
+  # Think about using mclapply instead of lapply to speed up. May cause some
+  # memory issues or overhead.
+  if(use.score) {
+    tab_list = lapply(names(intersections), function(n){
+      message(sprintf('Tabulating %s with score', n))
 
-    # Get subsets of
-    r_sub = regions[intersections[[n]]@queryHits]
-    a_sub = get(n)[intersections[[n]]@subjectHits]
+      # Get subsets of
+      r_sub = regions[intersections[[n]]@queryHits]
+      a_sub = get(n)[intersections[[n]]@subjectHits]
 
-    if(!use.score) {
-      # Create the data.frame
-      df = dplyr::tbl_df(data.frame(
-        data_chrom = as.character(seqnames(r_sub)),
-        data_start = start(r_sub),
-        data_end = end(r_sub),
-        data_strand = as.character(strand(r_sub)),
-        data_name = r_sub$regionName,
-        annot_start = start(a_sub),
-        annot_end = end(a_sub),
-        annot_strand = as.character(strand(a_sub)),
-        annot_type = n,
-        annot_id = a_sub$ID,
-        stringsAsFactors=F
-      ))
-    } else {
-      # Create the data.frame
+      # Create the dplyr::tbl_df with score
       df = dplyr::tbl_df(data.frame(
         data_chrom = as.character(seqnames(r_sub)),
         data_start = start(r_sub),
@@ -171,13 +157,37 @@ annotate_intersections = function(regions, intersections, use.score = FALSE) {
         annot_id = a_sub$ID,
         stringsAsFactors=F
       ))
-    }
-  })
+    })
+  } else {
+    tab_list = lapply(names(intersections), function(n){
+      message(sprintf('Tabulating %s without score', n))
+
+      # Get subsets of
+      r_sub = regions[intersections[[n]]@queryHits]
+      a_sub = get(n)[intersections[[n]]@subjectHits]
+
+      # Create the dplyr::tbl_df without score
+      df = dplyr::tbl_df(data.frame(
+        data_chrom = as.character(seqnames(r_sub)),
+        data_start = start(r_sub),
+        data_end = end(r_sub),
+        data_strand = as.character(strand(r_sub)),
+        data_name = r_sub$regionName,
+        annot_start = start(a_sub),
+        annot_end = end(a_sub),
+        annot_strand = as.character(strand(a_sub)),
+        annot_type = n,
+        annot_id = a_sub$ID,
+        stringsAsFactors=F
+      ))
+    })
+  }
 
   # Combine and sort the list of data.frames into a single data.frame
-  message('Combining and sorting tabulations across annotations')
+  message('Combining annotations')
   tab = dplyr::bind_rows(tab_list)
-  tab = arrange(tab, data_chrom, data_start, data_end, annot_start)
+  message('Sorting annotations')
+  tab = dplyr::arrange(tab, data_chrom, data_start, data_end, annot_start)
 
   return(tab)
 }
