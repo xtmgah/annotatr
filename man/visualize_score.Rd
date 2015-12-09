@@ -38,10 +38,20 @@ t = annotate_intersections(
 
 s = summarize_score(t)
 
-cpgs_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter')
+cpgs_order = c(
+  'hg19_cpg_islands',
+  'hg19_cpg_shores',
+  'hg19_cpg_shelves',
+  'hg19_cpg_inter')
 v_cpgs = visualize_score(s, cpgs_order)
 
-genes_order = c('1to5kb','promoters','5UTRs','exons','introns','3UTRs')
+genes_order = c(
+  'hg19_knownGenes_1to5kb',
+  'hg19_knownGenes_promoters',
+  'hg19_knownGenes_5UTRs',
+  'hg19_knownGenes_exons',
+  'hg19_knownGenes_introns',
+  'hg19_knownGenes_3UTRs')
 v_genes = visualize_score(s, genes_order)
 
 ########################################################################
@@ -64,10 +74,20 @@ t = annotate_intersections(
 
 s = summarize_score(t)
 
-cpgs_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter')
+cpgs_order = c(
+  'hg19_cpg_islands',
+  'hg19_cpg_shores',
+  'hg19_cpg_shelves',
+  'hg19_cpg_inter')
 v_cpgs = visualize_score(s, cpgs_order)
 
-genes_order = c('1to5kb','promoters','5UTRs','exons','introns','3UTRs')
+genes_order = c(
+  'hg19_knownGenes_1to5kb',
+  'hg19_knownGenes_promoters',
+  'hg19_knownGenes_5UTRs',
+  'hg19_knownGenes_exons',
+  'hg19_knownGenes_introns',
+  'hg19_knownGenes_3UTRs')
 v_genes = visualize_score(s, genes_order)
 
 }
