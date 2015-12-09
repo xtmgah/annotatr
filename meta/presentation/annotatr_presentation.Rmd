@@ -1,5 +1,5 @@
 ---
-title: "annotatr: Making sense of genomic regions"
+title: "`annotatr`: Making sense of genomic regions"
 author: Raymond Cavalcante and Hani Habra
 date: 12/10/2015
 output:
@@ -11,7 +11,7 @@ output:
 ## Motivation
 
 - Many high-throughput genomic experiments give genomic regions as results.
-    - ChIP-seq gives regions that represent protein binding in the genome.
+    - ChIP-seq gives regions that represent transcription factor (TF) along the genome.
     - Genome-wide association studies (GWAS) give single nucleotide polymorphisms (SNPs) associated with phenotypes.
     - Bisulfite sequencing (BS-seq) gives percent methylation of CpGs.
     - hMeDIP-seq gives qualitative regions of methylation.
@@ -20,22 +20,121 @@ output:
 
 - **What genomic features do these sites or regions intersect?**
     - Is that SNP in an exon?
-    - Does that transcription factor primarily bind at promoters?
+    - Does that TF primarily bind at promoters?
     - Is methylation lower in CpG dense regions?
     - Is there more differential methylation in exons or introns?
 
-## annotatr
+# Implementation of `annotatr`
 
-- An R package that takes a file representing genomic regions and intersects them with genomic annotations and then summarizes and visualizes the intersections.
+## `annotatr`
 
-## Implementation
+- An R package that gives genomic context to regions of interest.
+    - We developed the package in five modules.
+        - Annotation
+        - Read
+        - Intersect
+        - Summarize
+        - Visualize
 
-## Implementation 2
+## Annotation
 
-## An Example (CpG methylation rates)
+- `bedtools`, `awk`, and `R` to make annotations for hg19, hg38, mm9, and mm10.
+    - UCSC CpG annotations (islands, shelves, shores, inter).
+    - UCSC knownGenes annotations (basic and detailed).
 
-## An Example (Differential methylation in regions)
+![knownGene annotations](annotatr_knownGene.jpeg)
 
-## An Example (Methylation Classifications in regions)
+## Read and Intersect
 
-## Benchmarking
+- Reading (`read_bed()`)
+    - We chose to read files with `readr::read_tsv()` over `base::read.table()` for speedup.
+        - **Insert benchmark here.**
+    - `BED6` files representing regions transformed into `GenomicRanges`.
+- Intersecting (`intersect_annotations()` and `annotate_intersections()`)
+    - User-selected annotations are retrieved from `data/` and `GenomicRanges::findOverlaps()` returns all intersections.
+    - Collate intersections with original data to return table for output.
+    - Big speedups with `dplyr::bind_rows()` and `dplyr::arrange()` over `base` functions.
+
+## Summarize and Visualize
+
+- Summarize collated intersections with `dplyr::summarize()`, `dplyr::group_by()`.
+    - Way faster than `base::split()` + `lapply()`.
+- Visualize the results with `ggplot2`.
+    - Can examine a data column across annotations.
+    - Can examine a categorical column across annotations.
+
+# Two Case Studies
+
+## C1: CpG Methylation Rates in HNSCC Samples
+
+- Head and Neck Squamous Cell Carcinoma (HNSCC) and Human Papilloma Virus (HPV) integration investigation at the UM Hospital.
+- What is the methylation environment like in different genomic contexts?
+- Still processing samples, but here's what `annotatr` can do with one.
+
+## C1: Patient Methylation Over CpG Annots.
+
+<div class="centered">
+  ![cpg_perc_meth](2607_mc_hmc_perc_meth_cpgs.png)
+</div>
+
+## C1: Patient Methylation Over Basic Gene Annots.
+
+<div class="centered">
+  ![cpg_perc_meth](2607_mc_hmc_perc_meth_basic_genes.png)
+</div>
+
+## C2: Differential Methylation in Mutant vs Normal
+
+- We looked at the location of regions of differential methylation in CpG and knownGene annotations.
+- The IDH2 mutant prevents methylated CpGs from undergoing the demethylation pathway.
+- The NBM is the normal bone marrow.
+
+## C2: Visualizing Classifiers Across Annotations
+
+<div class="columns-2">
+  ![cpg_perc_meth](IDH2mut_v_NBM_cpgs_counts.png)
+
+  ![cpg_perc_meth](IDH2mut_v_NBM_cpgs_props.png)
+</div>
+
+# Performance
+
+## Benchmarking with `microbenchmark`
+
+- `ChIPpeakAnno` is an R package that does something similar, but does not have the same visualization options, and enforces a rule of one annotation per region.
+- Comparison of annotation of "small" file of 164K regions.
+```{r, echo=FALSE}
+  bench = read.table('../analysis/microbench_small_results.txt', header=T, sep='\t', quote='\"')
+  bench = split(bench, bench$expr)
+  names(bench) = c('ChIPpeakAnno','annotatr')
+  final = t(sapply(bench, function(b){summary((b$time)*10^-9)}))
+  print(final)
+```
+- Comparison of annotation of "medium" file of 4M regions.
+```{r, echo=FALSE}
+  bench = read.table('../analysis/microbench_medium_results.txt', header=T, sep='\t', quote='\"')
+  bench = split(bench, bench$expr)
+  names(bench) = c('ChIPpeakAnno','annotatr')
+  final = t(sapply(bench, function(b){summary((b$time)*10^-9)}))
+  print(final)
+```
+
+## Benchmarking with a stopwatch
+
+- Did one comparison of annotation of "large" file with 25M regions.
+    - `ChIPpeakAnno` took ~35 minutes.
+    - `annotatr` took ~3 minutes.
+    - `bedtools` took ~2 minutes.
+- Wow, that rules!
+
+## Summary
+
+- We implemented `annotatr`, an R package that intersects genomic regions with genomic annotations.
+    - Reports **all** intersections instead of enforcing a prioritization.
+    - Visualizes continuous scores or discrete classifications over annotations.
+    - **Fast**.
+    - Also a fun opportunity to play with `roxygen2` and `testthat`.
+- Package source at [http://www.github.com/rcavalcante/annotatr](http://www.github.com/rcavalcante/annotatr).
+    - Install with `devtools::install_github('rcavalcante/annotatr')`.
+
+## Questions?
