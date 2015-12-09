@@ -136,4 +136,10 @@ output:
 - Package source at [http://www.github.com/rcavalcante/annotatr](http://www.github.com/rcavalcante/annotatr).
     - Install with `devtools::install_github('rcavalcante/annotatr')`.
 
+## Future Development
+
+- Tweak some of the figures to clean up labels, etc.
+- Add more annotations (e.g. enhancers, first intron, first exon).
+- Allow users to provide their own annotations.
+
 ## Questions?
