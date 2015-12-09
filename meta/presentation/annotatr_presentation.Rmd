@@ -47,8 +47,8 @@ output:
 ## Read and Intersect
 
 - Reading (`read_bed()`)
-    - We chose to read files with `readr::read_tsv()` over `base::read.table()` for speedup.
-    - `BED6` files representing regions transformed into `GenomicRanges`.
+    - We found `readr::read_tsv()` is much faster than `base::read.table()`.
+    - Users give `BED6` files representing regions transformed into `GenomicRanges`.
 - Intersecting (`intersect_annotations()` and `annotate_intersections()`)
     - User-selected annotations are retrieved from `data/` and `GenomicRanges::findOverlaps()` returns all intersections.
     - Collate intersections with original data to return table for output.
@@ -56,8 +56,8 @@ output:
 
 ## Summarize and Visualize
 
-- Summarize collated intersections with `dplyr::summarize()`, `dplyr::group_by()`.
-    - Way faster than `base::split()` + `lapply()`.
+- Summarize collated intersections with `dplyr::summarize()` and `dplyr::group_by()`.
+    - Much faster than `base::split()` + `lapply()`.
 - Visualize the results with `ggplot2`.
     - Can examine a data column across annotations.
     - Can examine a categorical column across annotations.
@@ -85,8 +85,9 @@ output:
 ## C2: Differential Methylation in Mutant vs Normal
 
 - We looked at the location of regions of differential methylation in CpG and knownGene annotations.
-- The IDH2 mutant prevents methylated CpGs from undergoing the demethylation pathway.
-- The NBM is the normal bone marrow.
+- The IDH2 mutant prevents methylated CpGs from undergoing the de-methylation pathway. The NBM is the normal bone marrow.
+    - DM up means hyper-methylated in IDH2mut.
+    - DM down means hypo-methylated in IDH2mut.
 
 ## C2: Visualizing Classifiers Across Annotations
 
@@ -132,7 +133,7 @@ output:
     - Reports **all** intersections instead of enforcing a prioritization.
     - Visualizes continuous scores or discrete classifications over annotations.
     - **Fast**.
-    - Also a fun opportunity to play with `roxygen2` and `testthat`.
+    - Results in summary tables and visualizations that help give context to data, and help develop / answer new questions.
 - Package source at [http://www.github.com/rcavalcante/annotatr](http://www.github.com/rcavalcante/annotatr).
     - Install with `devtools::install_github('rcavalcante/annotatr')`.
 

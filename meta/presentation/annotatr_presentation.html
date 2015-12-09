@@ -158,8 +158,8 @@
 <li>Reading (<code>read_bed()</code>)
 
 <ul>
-<li>We chose to read files with <code>readr::read_tsv()</code> over <code>base::read.table()</code> for speedup.</li>
-<li><code>BED6</code> files representing regions transformed into <code>GenomicRanges</code>.</li>
+<li>We found <code>readr::read_tsv()</code> is much faster than <code>base::read.table()</code>.</li>
+<li>Users give <code>BED6</code> files representing regions transformed into <code>GenomicRanges</code>.</li>
 </ul></li>
 <li>Intersecting (<code>intersect_annotations()</code> and <code>annotate_intersections()</code>)
 
@@ -173,10 +173,10 @@
 </article></slide><slide class=''><hgroup><h2>Summarize and Visualize</h2></hgroup><article  id="summarize-and-visualize">
 
 <ul>
-<li>Summarize collated intersections with <code>dplyr::summarize()</code>, <code>dplyr::group_by()</code>.
+<li>Summarize collated intersections with <code>dplyr::summarize()</code> and <code>dplyr::group_by()</code>.
 
 <ul>
-<li>Way faster than <code>base::split()</code> + <code>lapply()</code>.</li>
+<li>Much faster than <code>base::split()</code> + <code>lapply()</code>.</li>
 </ul></li>
 <li>Visualize the results with <code>ggplot2</code>.
 
@@ -210,8 +210,12 @@
 
 <ul>
 <li>We looked at the location of regions of differential methylation in CpG and knownGene annotations.</li>
-<li>The IDH2 mutant prevents methylated CpGs from undergoing the demethylation pathway.</li>
-<li>The NBM is the normal bone marrow.</li>
+<li>The IDH2 mutant prevents methylated CpGs from undergoing the de-methylation pathway. The NBM is the normal bone marrow.
+
+<ul>
+<li>DM up means hyper-methylated in IDH2mut.</li>
+<li>DM down means hypo-methylated in IDH2mut.</li>
+</ul></li>
 </ul>
 
 </article></slide><slide class=''><hgroup><h2>C2: Visualizing Classifiers Across Annotations</h2></hgroup><article  id="c2-visualizing-classifiers-across-annotations">
@@ -264,7 +268,7 @@
 <li>Reports <strong>all</strong> intersections instead of enforcing a prioritization.</li>
 <li>Visualizes continuous scores or discrete classifications over annotations.</li>
 <li><strong>Fast</strong>.</li>
-<li>Also a fun opportunity to play with <code>roxygen2</code> and <code>testthat</code>.</li>
+<li>Results in summary tables and visualizations that help give context to data, and help develop / answer new questions.</li>
 </ul></li>
 <li>Package source at <a href='http://www.github.com/rcavalcante/annotatr' title=''>http://www.github.com/rcavalcante/annotatr</a>.
 
