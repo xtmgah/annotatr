@@ -1,0 +1,41 @@
+---
+title: "annotatr: Making sense of genomic regions"
+author: Raymond Cavalcante and Hani Habra
+date: 12/10/2015
+output:
+  ioslides_presentation:
+    widescreen: true
+    transition: 0.01
+---
+
+## Motivation
+
+- Many high-throughput genomic experiments give genomic regions as results.
+    - ChIP-seq gives regions that represent protein binding in the genome.
+    - Genome-wide association studies (GWAS) give single nucleotide polymorphisms (SNPs) associated with phenotypes.
+    - Bisulfite sequencing (BS-seq) gives percent methylation of CpGs.
+    - hMeDIP-seq gives qualitative regions of methylation.
+
+## Natural Questions About Genomic Regions
+
+- **What genomic features do these sites or regions intersect?**
+    - Is that SNP in an exon?
+    - Does that transcription factor primarily bind at promoters?
+    - Is methylation lower in CpG dense regions?
+    - Is there more differential methylation in exons or introns?
+
+## annotatr
+
+- An R package that takes a file representing genomic regions and intersects them with genomic annotations and then summarizes and visualizes the intersections.
+
+## Implementation
+
+## Implementation 2
+
+## An Example (CpG methylation rates)
+
+## An Example (Differential methylation in regions)
+
+## An Example (Methylation Classifications in regions)
+
+## Benchmarking
