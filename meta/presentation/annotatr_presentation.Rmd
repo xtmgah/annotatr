@@ -48,7 +48,6 @@ output:
 
 - Reading (`read_bed()`)
     - We chose to read files with `readr::read_tsv()` over `base::read.table()` for speedup.
-        - **Insert benchmark here.**
     - `BED6` files representing regions transformed into `GenomicRanges`.
 - Intersecting (`intersect_annotations()` and `annotate_intersections()`)
     - User-selected annotations are retrieved from `data/` and `GenomicRanges::findOverlaps()` returns all intersections.
