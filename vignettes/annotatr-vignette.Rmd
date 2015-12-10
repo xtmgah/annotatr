@@ -50,6 +50,10 @@ The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter 
 
 The `stranded` parameter in `read_bed()` indicates whether the regions have strand information. The `use.score` parameter incorporates the `score` column from the BED6 file into the `GenomicRanges` object if TRUE, and not if FALSE.
 
+```{r, echo=FALSE}
+suppressWarnings(devtools::load_all())
+```
+
 ```{r}
 # This file in inst/extdata represents differentially methylated
 # regions between two conditions. The name column is the DM
