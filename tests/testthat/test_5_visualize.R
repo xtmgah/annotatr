@@ -12,18 +12,14 @@ test_that('Test visualize_score() on signalValue from ChIP-seq data', {
 
   d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
-  i = intersect_annotations(
+  i = annotate_regions(
     regions = d,
     annotations = annotations,
     genome = 'hg19',
-    ignore.strand = T)
-
-  t = annotate_intersections(
-    regions = d,
-    intersections = i,
+    ignore.strand = T,
     use.score = TRUE)
 
-  s = summarize_score(t)
+  s = summarize_score(i)
 
   cpgs_order = c(
     'hg19_cpg_islands',
@@ -59,18 +55,14 @@ test_that('Test visualize_score() on methylation data', {
 
   d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
-  i = intersect_annotations(
+  i = annotate_regions(
     regions = d,
     annotations = annotations,
     genome = 'hg19',
-    ignore.strand = T)
-
-  t = annotate_intersections(
-    regions = d,
-    intersections = i,
+    ignore.strand = T,
     use.score = TRUE)
 
-  s = summarize_score(t)
+  s = summarize_score(i)
 
   cpgs_order = c(
     'hg19_cpg_islands',
@@ -104,18 +96,14 @@ test_that('Test visualize_name() on classification data', {
 
   d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
-  i = intersect_annotations(
+  i = annotate_regions(
     regions = d,
     annotations = annotations,
     genome = 'hg19',
-    ignore.strand = T)
-
-  t = annotate_intersections(
-    regions = d,
-    intersections = i,
+    ignore.strand = T,
     use.score = TRUE)
 
-  s = summarize_name(t)
+  s = summarize_name(i)
 
   cpgs_order = c(
     'hg19_cpg_islands',

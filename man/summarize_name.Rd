@@ -22,18 +22,14 @@ annotations = c('basic_genes','cpgs')
 
 d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
-i = intersect_annotations(
+i = annotate_regions(
   regions = d,
   annotations = annotations,
   genome = 'hg19',
-  ignore.strand = TRUE)
-
-t = annotate_intersections(
-  regions = d,
-  intersections = i,
+  ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_name(t)
+s = summarize_name(i)
 
 }
 

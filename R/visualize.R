@@ -1,11 +1,11 @@
 #' Visualize score distributions over annotations
 #'
-#' Given a dplyr::tbl_df of aggregated scores, visualize the distribution of scores over the annotation types.
+#' Given a \code{dplyr::tbl_df} of score aggregated annotations (from \code{summarize_score()}), visualize the distribution of scores over the annotation types.
 #'
-#' @param aggregated_scores The tbl_df result of \code{summarize_score()}.
+#' @param summarized_scores The \code{tbl_df} result of \code{summarize_score()}.
 #' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.
 #'
-#' @return A ggplot object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
+#' @return A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 #'
 #' @examples
 #' ########################################################################
@@ -15,18 +15,14 @@
 #'
 #' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
-#' i = intersect_annotations(
+#' i = annotate_regions(
 #'   regions = d,
 #'   annotations = annotations,
 #'   genome = 'hg19',
-#'   ignore.strand = TRUE)
-#'
-#' t = annotate_intersections(
-#'   regions = d,
-#'   intersections = i,
+#'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_score(t)
+#' s = summarize_score(i)
 #'
 #' cpgs_order = c(
 #'   'hg19_cpg_islands',
@@ -51,18 +47,14 @@
 #'
 #' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
-#' i = intersect_annotations(
+#' i = annotate_regions(
 #'   regions = d,
 #'   annotations = annotations,
 #'   genome = 'hg19',
-#'   ignore.strand = TRUE)
-#'
-#' t = annotate_intersections(
-#'   regions = d,
-#'   intersections = i,
+#'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_score(t)
+#' s = summarize_score(i)
 #'
 #' cpgs_order = c(
 #'   'hg19_cpg_islands',
@@ -114,16 +106,16 @@ visualize_score = function(summarized_scores, annotation_order) {
   return(plot)
 }
 
-#' Summarize scores over annotations
+#' Visualize scores over annotations
 #'
-#' Given a dplyr::tbl_df of annotated regions, summarize names over (annot_type, data_name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
+#' Given a \code{dplyr::tbl_df} of name aggregated annotations (from \code{summarize_name()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
 #'
-#' @param annotated_regions The tbl_df result of \code{annotate_intersections()}.
+#' @param summarized_names The \code{tbl_df} result of \code{summarize_name()}.
 #' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.
-#' @param data_name_order A character vector which doubles as the subset of data_name's desired for visualization as well as the ordering.
-#' @param fill A boolean indicating whether \code{ggplot::geom_bar(..., position='fill')} or not. When TRUE, the barplot is normalized across the categories on the x-axis, and when FALSE, the barplot reflects counts of the categories on the x-axis.
+#' @param data_order A character vector which doubles as the subset of data_name's desired for visualization as well as the ordering.
+#' @param fill A boolean indicating whether \code{ggplot::geom_bar(..., position='fill')} or not. When TRUE, the barplot is normalized across the categories on the x-axis, and when FALSE, the barplot reflects counts of the categories on the x-axis. Default is FALSE.
 #'
-#' @return A tbl_df of the counts of (annot_type, data_name) pairs.
+#' @return A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 #'
 #' @examples
 #' # An example of differentially methylated regions classified as DM up, DM down, or no DM
@@ -132,18 +124,14 @@ visualize_score = function(summarized_scores, annotation_order) {
 #'
 #' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
-#' i = intersect_annotations(
+#' i = annotate_regions(
 #'   regions = d,
 #'   annotations = annotations,
 #'   genome = 'hg19',
-#'   ignore.strand = TRUE)
-#'
-#' t = annotate_intersections(
-#'   regions = d,
-#'   intersections = i,
+#'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_name(t)
+#' s = summarize_name(i)
 #'
 #' cpgs_order = c(
 #'   'hg19_cpg_islands',

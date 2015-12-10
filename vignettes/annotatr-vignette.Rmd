@@ -8,6 +8,7 @@ output:
     toc_depth: 3
     number_section: true
     fig_caption: yes
+    highlight: haddock
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -70,32 +71,26 @@ regions = read_bed(
 print(regions)
 ```
 
-## Intersecting Regions with Annotations
+## Annotating Regions
 
 Users may select their annotations a la carte by using the accessors listed with `supported_annotations()`, or by shortcuts. The `cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `basic_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `detailed_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `basic_genes` and `detailed_genes` shortcuts may not be used at the same time.
 
-A genome must be specified in `intersect_annotations()`, and should naturally match that used in `read_bed()`. The `ignore.strand` parameter is passed directly to the same parameter in `GenomicRanges::findOverlaps()`. If TRUE, overlaps are found regardless of strand information, and if FALSE, overlaps must have the same strand.
-
-The `use.score` parameter of `annotate_intersections()` retrieves information carries along information from the `score` column if TRUE, and not if FALSE.
+A genome must be specified in `annotate_regions()`, and should naturally match that used in `read_bed()`. The `ignore.strand` parameter is passed directly to the same parameter in `GenomicRanges::findOverlaps()`. If TRUE, overlaps are found regardless of strand information, and if FALSE, overlaps must have the same strand. The `use.score` parameter carries along information from the `score` column if TRUE, and not if FALSE.
 
 ```{r}
-# Describe the annotations
+# Select annotations for intersection with regions
 annots = c('cpgs','basic_genes')
 # Intersect the regions we read in with the annotations
-intersections = intersect_annotations(
+annotated_regions = annotate_regions(
   regions = regions,
   annotations = annots,
   genome = 'hg19',
-  ignore.strand = TRUE)
-# A list of Hits objects is returned, here is the first item.
-print(intersections[1])
-# We next annotate the intersections
-annotated_intersections = annotate_intersections(
-  regions = regions,
-  intersections = intersections,
+  ignore.strand = TRUE,
   use.score = TRUE)
 # A dplyr::tbl_df object is returned
-print(annotated_intersections)
+# NOTE: tbl_df has a special print method that displays
+# a tidy version of the tbl_df.
+print(annotated_regions)
 ```
 
 ## Summarizing Over Annotations
@@ -105,13 +100,13 @@ The dataset used in the running example actually has a classification (DMup, DMd
 ```{r}
 # Take the mean of the score column across all regions
 # occurring in an annotation.
-score_summarized_intersections = summarize_score(annotated_intersections)
-print(score_summarized_intersections)
+score_summarized_annotations = summarize_score(annotated_regions)
+print(score_summarized_annotations)
 
 # Count the occurrences of classifications in the name
 # column across the annotations.
-name_summarized_intersections = summarize_name(annotated_intersections)
-print(name_summarized_intersections)
+name_summarized_annotations = summarize_name(annotated_regions)
+print(name_summarized_annotations)
 ```
 
 ## Visualizing Over Annotations
@@ -128,7 +123,7 @@ cpgs_order = c(
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
 visualize_score_cpgs = visualize_score(
-  summarized_scores = score_summarized_intersections,
+  summarized_scores = score_summarized_annotations,
   annotation_order = cpgs_order)
 print(visualize_score_cpgs)
 ```
@@ -145,7 +140,7 @@ genes_order = c(
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
 visualize_score_genes = visualize_score(
-  summarized_scores = score_summarized_intersections,
+  summarized_scores = score_summarized_annotations,
   annotation_order = genes_order)
 print(visualize_score_genes)
 ```
@@ -166,7 +161,7 @@ data_order = c(
   'DMdown')
 # The fill = FALSE parameter shows the counts
 visualize_name_cpgs = visualize_name(
-  summarized_names = name_summarized_intersections,
+  summarized_names = name_summarized_annotations,
   annotation_order = cpgs_order,
   data_order = data_order,
   fill = FALSE)
@@ -189,7 +184,7 @@ data_order = c(
   'DMdown')
 # The fill = TRUE parameter shows the proportions
 visualize_name_cpgs = visualize_name(
-  summarized_names = name_summarized_intersections,
+  summarized_names = name_summarized_annotations,
   annotation_order = cpgs_order,
   data_order = data_order,
   fill = TRUE)
@@ -214,7 +209,7 @@ data_order = c(
   'DMdown',
   'noDM')
 visualize_name_genes = visualize_name(
-  summarized_names = name_summarized_intersections,
+  summarized_names = name_summarized_annotations,
   annotation_order = genes_order,
   data_order = data_order,
   fill = TRUE)
