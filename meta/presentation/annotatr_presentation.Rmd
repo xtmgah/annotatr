@@ -84,8 +84,8 @@ output:
 
 ## C2: Differential Methylation in Mutant vs Normal
 
-- We looked at the location of regions of differential methylation in CpG and knownGene annotations.
-- The IDH2 mutant prevents methylated CpGs from undergoing the de-methylation pathway. The NBM is the normal bone marrow.
+- We looked at the location of regions of differential methylation in CpG annotations.
+- The IDH2 mutant prevents methylated CpGs from undergoing the de-methylation pathway. It's methylation was compared to NBM, the normal bone marrow.
     - DM up means hyper-methylated in IDH2mut.
     - DM down means hypo-methylated in IDH2mut.
 
