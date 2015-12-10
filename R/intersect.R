@@ -8,9 +8,10 @@
 #' @param regions The GRanges object of the user-data returned by read_bed().
 #' @param annotations A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basic_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailed_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basic_genes and detailed_genes annotations cannot be done at the same time.
 #' @param genome One of the genomes in supported_genomes(). Should match argument used in read_bed()().
-#' @param ignore.strand A boolean indicating whether strandedness should be respected in findOverlaps().
+#' @param ignore.strand Logical variable indicating whether strandedness should be respected in findOverlaps(). Default FALSE.
+#' @param use.score Logical variable. Include the "score" for each genomic region in the tabulated results. Score can mean a variety of things, e.g. percent methylation of a CpG/region or fold-change of a ChIP-seq peak.
 #'
-#' @return A list of Hits objects giving the indices of objects overlapping in query and subject for each annotation.
+#' @return A \code{dplyr::tbl_df} with columns from the GenomicRanges object for the regions and corresponding annotations.
 #'
 #' @examples
 #' # A very simple example with only 3 genomic regions
@@ -19,11 +20,12 @@
 #'
 #' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE)
 #'
-#' i = intersect_annotations(
+#' i = annotate_regions(
 #'   regions = d,
 #'   annotations = annotations,
 #'   genome = 'hg19',
-#'   ignore.strand = TRUE)
+#'   ignore.strand = TRUE,
+#'   use.score = FALSE)
 #'
 #' # A more complicated example using Gm12878 Pol2 ChIP-seq from ENCODE and an annotation shortcut
 #' bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
@@ -31,34 +33,35 @@
 #'
 #' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE)
 #'
-#' i = intersect_annotations(
+#' i = annotate_regions(
 #'   regions = d,
 #'   annotations = annotations,
 #'   genome = 'hg19',
-#'   ignore.strand = TRUE)
+#'   ignore.strand = TRUE,
+#'   use.score = FALSE)
 #'
 #' @export
-intersect_annotations = function(regions, annotations, genome, ignore.strand) {
+annotate_regions = function(regions, annotations, genome, ignore.strand = TRUE, use.score) {
   # Checks before moving forward
   if(class(regions)[1] != "GRanges") {
-    stop('Error in intersect_annotations(...): regions object is not GRanges.')
+    stop('Error in annotate_regions(...): regions object is not GRanges.')
   }
 
   if(!(genome %in% supported_genomes())) {
-    stop('Error in intersect_annotations(...): unsupported genome given. See supported_genomes().')
+    stop('Error in annotate_regions(...): unsupported genome given. See supported_genomes().')
   }
 
   # Check that the annotations are supported, tell the user which are unsupported
   if(!all(annotations %in% c(supported_annotations(),'cpgs','basic_genes','detailed_genes'))) {
     unsupported = base::setdiff(annotations, c(supported_annotations(),'cpgs','basic_genes','detailed_genes'))
 
-    stop(sprintf('Error in intersect_annotations(...): "%s" is(are) not supported. See supported_annotations().',
+    stop(sprintf('Error in annotate_regions(...): "%s" is(are) not supported. See supported_annotations().',
       paste(unsupported, collapse=', ')))
   }
 
   # Do not allow basic_genes and detailed_genes at the same time
   if('basic_genes' %in% annotations && 'detailed_genes' %in% annotations) {
-    stop('Error in intersect_annotations(...): please choose between basic_genes and detailed_genes annotations.')
+    stop('Error in annotate_regions(...): please choose between basic_genes and detailed_genes annotations.')
   }
 
   # Check for shortcut annotation accessors 'cpgs', 'basic_genes', or 'detailed_genes'
@@ -80,63 +83,19 @@ intersect_annotations = function(regions, annotations, genome, ignore.strand) {
   data(list = annotations, package = 'annotatr')
 
   # Perform the intersections in an lapply (consider using mclapply)
-  overlaps = lapply(annotations, function(annot){
-    message(sprintf('Annotating %s', annot))
+  intersections = lapply(annotations, function(annot){
+    message(sprintf('Intersecting %s', annot))
 
     GenomicRanges::findOverlaps(regions, get(annot), ignore.strand = ignore.strand)
   })
-  names(overlaps) = annotations
+  names(intersections) = annotations
 
-  return(overlaps)
-}
-
-#' A function to create tabular output of regions intersected with annotations
-#'
-#' Given output from \code{intersect_annotations()}, create a table for output which shows peak information and corresponding annotation information.
-#'
-#' @param regions A GenomicRanges object output from \code{read_bed()}.
-#' @param intersections A list of Hits objects from \code{intersect_annotations()}.
-#' @param use.score Logical variable. Include the "score" for each genomic region in the tabulated results. Score can mean a variety of things, e.g. percent methylation of a CpG/region or fold-change of a ChIP-seq peak.
-#'
-#' @return A table with columns from the GenomicRanges object for the regions and corresponding annotations
-#'
-#' @examples
-#' bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
-#' annotations = c('basic_genes')
-#'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = FALSE)
-#'
-#' i = intersect_annotations(
-#'   regions = d,
-#'   annotations = annotations,
-#'   genome = 'hg19',
-#'   ignore.strand = TRUE)
-#'
-#' t = annotate_intersections(
-#'   regions = d,
-#'   intersections = i,
-#'   use.score = FALSE)
-#'
-#' @export
-annotate_intersections = function(regions, intersections, use.score = FALSE) {
-  # Checks before moving forward
-  if(class(regions)[1] != "GRanges") {
-    stop('Error in annotate_intersections(...): regions object is not GRanges.')
-  }
-
-  if(class(intersections) != "list") {
-    stop('Error in annotate_intersections(...): intersections must be a list.')
-  }
-
-  if(unique(sapply(intersections, class)) != "Hits") {
-    stop('Error in annotate_intersections(...): intersections must be a list of Hits objects.')
-  }
-
+  # Pull in data from the regions and the annotations
   # Think about using mclapply instead of lapply to speed up. May cause some
   # memory issues or overhead.
   if(use.score) {
     tab_list = lapply(names(intersections), function(n){
-      message(sprintf('Tabulating %s with score', n))
+      message(sprintf('Annotating %s with score', n))
 
       # Get subsets of
       r_sub = regions[intersections[[n]]@queryHits]
@@ -160,7 +119,7 @@ annotate_intersections = function(regions, intersections, use.score = FALSE) {
     })
   } else {
     tab_list = lapply(names(intersections), function(n){
-      message(sprintf('Tabulating %s without score', n))
+      message(sprintf('Annotating %s without score', n))
 
       # Get subsets of
       r_sub = regions[intersections[[n]]@queryHits]
