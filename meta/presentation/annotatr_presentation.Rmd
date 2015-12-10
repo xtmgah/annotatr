@@ -11,7 +11,7 @@ output:
 ## Motivation
 
 - Many high-throughput genomic experiments give genomic regions as results.
-    - ChIP-seq gives regions that represent transcription factor (TF) along the genome.
+    - ChIP-seq gives regions representing transcription factor (TF) binding.
     - Genome-wide association studies (GWAS) give single nucleotide polymorphisms (SNPs) associated with phenotypes.
     - Bisulfite sequencing (BS-seq) gives percent methylation of CpGs.
     - hMeDIP-seq gives qualitative regions of methylation.
@@ -52,7 +52,7 @@ output:
 - Intersecting (`intersect_annotations()` and `annotate_intersections()`)
     - User-selected annotations are retrieved from `data/` and `GenomicRanges::findOverlaps()` returns all intersections.
     - Collate intersections with original data to return table for output.
-    - Big speedups with `dplyr::bind_rows()` and `dplyr::arrange()` over `base` functions.
+    - Big speedups with `dplyr::bind_rows()` + `dplyr::arrange()` over `base::Reduce()` + `base::order()`.
 
 ## Summarize and Visualize
 
@@ -118,6 +118,7 @@ output:
   final = t(sapply(bench, function(b){summary((b$time)*10^-9)}))
   print(final)
 ```
+- This is a 3.7x - 6.9x speedup!
 
 ## Benchmarking with a stopwatch
 
@@ -133,7 +134,7 @@ output:
     - Reports **all** intersections instead of enforcing a prioritization.
     - Visualizes continuous scores or discrete classifications over annotations.
     - **Fast**.
-    - Results in summary tables and visualizations that help give context to data, and help develop / answer new questions.
+    - Gives summary tables and visualizations that give context to data, and help develop / answer new questions.
 - Package source at [http://www.github.com/rcavalcante/annotatr](http://www.github.com/rcavalcante/annotatr).
     - Install with `devtools::install_github('rcavalcante/annotatr')`.
 

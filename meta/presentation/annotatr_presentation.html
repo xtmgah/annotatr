@@ -99,7 +99,7 @@
 <li>Many high-throughput genomic experiments give genomic regions as results.
 
 <ul>
-<li>ChIP-seq gives regions that represent transcription factor (TF) along the genome.</li>
+<li>ChIP-seq gives regions representing transcription factor (TF) binding.</li>
 <li>Genome-wide association studies (GWAS) give single nucleotide polymorphisms (SNPs) associated with phenotypes.</li>
 <li>Bisulfite sequencing (BS-seq) gives percent methylation of CpGs.</li>
 <li>hMeDIP-seq gives qualitative regions of methylation.</li>
@@ -166,7 +166,7 @@
 <ul>
 <li>User-selected annotations are retrieved from <code>data/</code> and <code>GenomicRanges::findOverlaps()</code> returns all intersections.</li>
 <li>Collate intersections with original data to return table for output.</li>
-<li>Big speedups with <code>dplyr::bind_rows()</code> and <code>dplyr::arrange()</code> over <code>base</code> functions.</li>
+<li>Big speedups with <code>dplyr::bind_rows()</code> + <code>dplyr::arrange()</code> over <code>base::Reduce()</code> + <code>base::order()</code>.</li>
 </ul></li>
 </ul>
 
@@ -245,6 +245,10 @@
 <pre >##                Min. 1st Qu. Median   Mean 3rd Qu.   Max.
 ## ChIPpeakAnno 384.30  411.00 421.50 418.60  430.70 434.90
 ## annotatr      50.87   53.98  64.35  60.58   65.97  67.56</pre>
+
+<ul>
+<li>This is a 3.7x - 6.9x speedup!</li>
+</ul>
 
 </article></slide><slide class=''><hgroup><h2>Benchmarking with a stopwatch</h2></hgroup><article  id="benchmarking-with-a-stopwatch">
 
