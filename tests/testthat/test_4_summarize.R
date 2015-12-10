@@ -18,18 +18,14 @@ test_that('Test summarize_score()', {
 
   d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
-  i = intersect_annotations(
+  i = annotate_regions(
     regions = d,
     annotations = annotations,
     genome = 'hg19',
-    ignore.strand = T)
+    ignore.strand = T,
+    use.score = T)
 
-  t = annotate_intersections(
-    regions = d,
-    intersections = i,
-    use.score = TRUE)
-
-  s = summarize_score(t)
+  s = summarize_score(i)
 
   expect_equal( mean(s[['mean']]), expected = 25.19482, tolerance = 0.01)
 })
@@ -40,18 +36,14 @@ test_that('Test summarize_name()', {
 
   d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
-  i = intersect_annotations(
+  i = annotate_regions(
     regions = d,
     annotations = annotations,
     genome = 'hg19',
-    ignore.strand = T)
-
-  t = annotate_intersections(
-    regions = d,
-    intersections = i,
+    ignore.strand = T,
     use.score = TRUE)
 
-  s = summarize_name(t)
+  s = summarize_name(i)
 
   expect_equal( sum(s[['n']]), expected = 19984)
 })

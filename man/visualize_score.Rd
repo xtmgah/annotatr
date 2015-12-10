@@ -7,15 +7,15 @@
 visualize_score(summarized_scores, annotation_order)
 }
 \arguments{
-\item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.}
+\item{summarized_scores}{The \code{tbl_df} result of \code{summarize_score()}.}
 
-\item{aggregated_scores}{The tbl_df result of \code{summarize_score()}.}
+\item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.}
 }
 \value{
-A ggplot object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
+A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Given a dplyr::tbl_df of aggregated scores, visualize the distribution of scores over the annotation types.
+Given a \code{dplyr::tbl_df} of score aggregated annotations (from \code{summarize_score()}), visualize the distribution of scores over the annotation types.
 }
 \examples{
 ########################################################################
@@ -25,18 +25,14 @@ annotations = c('basic_genes','cpgs')
 
 d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
-i = intersect_annotations(
+i = annotate_regions(
   regions = d,
   annotations = annotations,
   genome = 'hg19',
-  ignore.strand = TRUE)
-
-t = annotate_intersections(
-  regions = d,
-  intersections = i,
+  ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_score(t)
+s = summarize_score(i)
 
 cpgs_order = c(
   'hg19_cpg_islands',
@@ -61,18 +57,14 @@ annotations = c('basic_genes','cpgs')
 
 d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
-i = intersect_annotations(
+i = annotate_regions(
   regions = d,
   annotations = annotations,
   genome = 'hg19',
-  ignore.strand = TRUE)
-
-t = annotate_intersections(
-  regions = d,
-  intersections = i,
+  ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_score(t)
+s = summarize_score(i)
 
 cpgs_order = c(
   'hg19_cpg_islands',

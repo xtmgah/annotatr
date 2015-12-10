@@ -2,24 +2,24 @@
 % Please edit documentation in R/visualize.R
 \name{visualize_name}
 \alias{visualize_name}
-\title{Summarize scores over annotations}
+\title{Visualize scores over annotations}
 \usage{
 visualize_name(summarized_names, annotation_order, data_order, fill = FALSE)
 }
 \arguments{
+\item{summarized_names}{The \code{tbl_df} result of \code{summarize_name()}.}
+
 \item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.}
 
-\item{fill}{A boolean indicating whether \code{ggplot::geom_bar(..., position='fill')} or not. When TRUE, the barplot is normalized across the categories on the x-axis, and when FALSE, the barplot reflects counts of the categories on the x-axis.}
+\item{data_order}{A character vector which doubles as the subset of data_name's desired for visualization as well as the ordering.}
 
-\item{annotated_regions}{The tbl_df result of \code{annotate_intersections()}.}
-
-\item{data_name_order}{A character vector which doubles as the subset of data_name's desired for visualization as well as the ordering.}
+\item{fill}{A boolean indicating whether \code{ggplot::geom_bar(..., position='fill')} or not. When TRUE, the barplot is normalized across the categories on the x-axis, and when FALSE, the barplot reflects counts of the categories on the x-axis. Default is FALSE.}
 }
 \value{
-A tbl_df of the counts of (annot_type, data_name) pairs.
+A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Given a dplyr::tbl_df of annotated regions, summarize names over (annot_type, data_name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
+Given a \code{dplyr::tbl_df} of name aggregated annotations (from \code{summarize_name()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
 }
 \examples{
 # An example of differentially methylated regions classified as DM up, DM down, or no DM
@@ -28,18 +28,14 @@ annotations = c('basic_genes','cpgs')
 
 d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
-i = intersect_annotations(
+i = annotate_regions(
   regions = d,
   annotations = annotations,
   genome = 'hg19',
-  ignore.strand = TRUE)
-
-t = annotate_intersections(
-  regions = d,
-  intersections = i,
+  ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_name(t)
+s = summarize_name(i)
 
 cpgs_order = c(
   'hg19_cpg_islands',
