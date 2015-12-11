@@ -98,6 +98,10 @@ print(annotated_regions)
 The dataset used in the running example actually has a classification (DMup, DMdown, noDM) and a score (methylation difference between two groups) associated with each region. We will employ both summarization functions in preparation for visualization.
 
 ```{r}
+# Find the number of regions per annotation type
+summarized_annotations = summarize_annotation(annotated_regions)
+print(summarized_annotations)
+
 # Take the mean of the score column across all regions
 # occurring in an annotation.
 score_summarized_annotations = summarize_score(annotated_regions)
@@ -111,7 +115,22 @@ print(name_summarized_annotations)
 
 ## Visualizing Over Annotations
 
-`annotatr` has two visualization functions (`visualize_score()` and `visualize_name()`) that are paired with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`). For maximum flexibility, the user can pass an `annotation_order` parameter into both visualization functions to ensure the desired order, and to visualize a subset of the annotations. A `data_order` can be passed into `visualize_name()` to order the data classifications as desired, and to visualize a subset of the data classifications.
+`annotatr` has three visualization functions (`visualize_annotation()`, `visualize_score()` and `visualize_name()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`). For maximum flexibility, the user can pass an `annotation_order` parameter into all three visualization functions to ensure the desired order, and to visualize a subset of the annotations. A `data_order` can be passed into `visualize_name()` to order the data classifications as desired, and to visualize a subset of the data classifications.
+
+```{r, fig.align='center', fig.cap='Number of DM regions per annotation.', fig.height=5, fig.width=5, fig.show = 'hold'}
+# View the number of regions per annotation.
+annots_order = c(
+  'hg19_knownGenes_1to5kb',
+  'hg19_knownGenes_promoters',
+  'hg19_knownGenes_5UTRs',
+  'hg19_knownGenes_exons',
+  'hg19_knownGenes_introns',
+  'hg19_knownGenes_3UTRs')
+visualize_knownGene_annotations = visualize_annotation(
+  summarized_annotations = summarized_annotations,
+  annotation_order = annots_order)
+print(visualize_knownGene_annotations)
+```
 
 ```{r, fig.align='center', fig.cap='Methylation difference distributions across the CpG annotations.', fig.height=6, fig.width=6, fig.show = 'hold'}
 # View the score summarized over the CpG annotations

@@ -1,9 +1,56 @@
 context('Test visualization of summaries')
 
+test_that('Test error on incorrect input class in visualize_annotation()', {
+  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
+
+  expect_error(visualize_annotation(bed), 'summarized_annotations must have class tbl_df')
+})
+
 test_that('Test error on incorrect input class in visualize_score()', {
   bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 
   expect_error(visualize_score(bed), 'summarized_scores must have class grouped_df')
+})
+
+test_that('Test error on incorrect input class in visualize_name()', {
+  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
+
+  expect_error(visualize_name(bed), 'summarized_names must have class grouped_df')
+})
+
+test_that('Test visualize_annotation() on signalValue from ChIP-seq data', {
+  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
+  annotations = c('basic_genes','cpgs')
+
+  d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
+
+  i = annotate_regions(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg19',
+    ignore.strand = T,
+    use.score = TRUE)
+
+  s = summarize_annotation(i)
+
+  annots_order = c(
+    'hg19_cpg_islands',
+    'hg19_cpg_shores',
+    'hg19_cpg_shelves',
+    'hg19_cpg_inter',
+    'hg19_knownGenes_1to5kb',
+    'hg19_knownGenes_promoters',
+    'hg19_knownGenes_5UTRs',
+    'hg19_knownGenes_exons',
+    'hg19_knownGenes_introns',
+    'hg19_knownGenes_3UTRs')
+
+  v_annots = visualize_annotation(s, annots_order)
+
+  error_order = c('bingbong')
+
+  expect_error( visualize_annotation(s, error_order), 'annotations in annotation_order that are not present')
+  expect_equal( dplyr::setequal(class(v_annots), c('gg','ggplot')), expected = TRUE)
 })
 
 test_that('Test visualize_score() on signalValue from ChIP-seq data', {
