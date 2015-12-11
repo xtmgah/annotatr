@@ -4,22 +4,27 @@
 \alias{visualize_name}
 \title{Visualize scores over annotations}
 \usage{
-visualize_name(summarized_names, annotation_order, data_order, fill = FALSE)
+visualize_name(summarized_names, x, fill, x_order, fill_order,
+  position = "fill")
 }
 \arguments{
-\item{summarized_names}{The \code{tbl_df} result of \code{summarize_name()}.}
+\item{summarized_names}{The \code{grouped_df} result of \code{summarize_name()}.}
 
-\item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.}
+\item{x}{One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.}
 
-\item{data_order}{A character vector which doubles as the subset of data_name's desired for visualization as well as the ordering.}
+\item{fill}{One of 'annot_type', 'data_name', or NULL, indicating whether annotation classes or data classes will fill the bars. If NULL then the bars will be the total counts of the x classes.}
 
-\item{fill}{A boolean indicating whether \code{ggplot::geom_bar(..., position='fill')} or not. When TRUE, the barplot is normalized across the categories on the x-axis, and when FALSE, the barplot reflects counts of the categories on the x-axis. Default is FALSE.}
+\item{x_order}{A character vector that subsets and orders the x classes.}
+
+\item{fill_order}{A character vector that subsets and orders the fill classes.}
+
+\item{position}{A string which has the same possible values as in \code{ggplot2::geom_bar(..., position)}, i.e., 'stack', 'fill', 'dodge', etc.}
 }
 \value{
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Given a \code{dplyr::tbl_df} of name aggregated annotations (from \code{summarize_name()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
+Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_name()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
 }
 \examples{
 # An example of differentially methylated regions classified as DM up, DM down, or no DM
@@ -37,29 +42,36 @@ i = annotate_regions(
 
 s = summarize_name(i)
 
-cpgs_order = c(
+fill_order = c(
   'hg19_cpg_islands',
   'hg19_cpg_shores',
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
-data_order = c(
+x_order = c(
   'DMup',
   'DMdown')
-v_cpgs_counts = visualize_name(s, cpgs_order, data_order, fill=FALSE)
-v_cpgs_proportions = visualize_name(s, cpgs_order, data_order, fill=TRUE)
+v_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
+  x_order = x_order, fill_order = fill_order, position='stack')
+v_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
+  x_order = x_order, fill_order = fill_order, position='fill')
+v_cpgs_nofill_data = visualize_name(summarized_names=s, x='data_name', fill=NULL,
+  x_order = x_order, fill_order = fill_order, position='stack')
 
-genes_order = c(
-  'hg19_knownGenes_1to5kb',
-  'hg19_knownGenes_promoters',
-  'hg19_knownGenes_5UTRs',
-  'hg19_knownGenes_exons',
-  'hg19_knownGenes_introns',
-  'hg19_knownGenes_3UTRs')
-data_order = c(
+x_order = c(
+  'hg19_cpg_islands',
+  'hg19_cpg_shores',
+  'hg19_cpg_shelves',
+  'hg19_cpg_inter')
+fill_order = c(
   'DMup',
-  'DMdown')
-v_genes_counts = visualize_name(s, genes_order, data_order, fill=FALSE)
-v_genes_proportions = visualize_name(s, genes_order, data_order, fill=TRUE)
+  'DMdown',
+  'noDM')
+v_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
+  x_order = x_order, fill_order = fill_order, position='stack')
+v_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
+  x_order = x_order, fill_order = fill_order, position='fill')
+v_cpgs_nofill_annot = visualize_name(summarized_names=s, x='annot_type', fill=NULL,
+  x_order = x_order, fill_order = fill_order, position='stack')
 
 }
 

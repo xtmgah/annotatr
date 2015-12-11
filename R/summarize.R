@@ -20,7 +20,7 @@
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_annotations(i)
+#' s = summarize_annotation(i)
 #'
 #' @export
 summarize_annotation = function(annotated_regions) {

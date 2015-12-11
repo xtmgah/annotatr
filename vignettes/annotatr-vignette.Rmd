@@ -3,12 +3,7 @@ title: "`annotatr`: Making sense of genomic regions"
 author: "Raymond G. Cavalcante and Hani Habra"
 date: "`r Sys.Date()`"
 output:
-  pdf_document:
-    toc: true
-    toc_depth: 3
-    number_section: true
-    fig_caption: yes
-    highlight: haddock
+  BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -41,7 +36,7 @@ The base CpG island (CGI) track serves as our CpG island annotations. CpG shores
 
 The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, exons, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, and 3'UTR introns. The schematic below gives an idea of how the location coordinates in the knownGene files can be used to determine the annotations.
 
-![Schematic of knownGene annotations.](annotatr_knownGenes.pdf)
+![Schematic of knownGene annotations.](annotatr_knownGenes.jpeg)
 
 # Usage
 
@@ -115,10 +110,12 @@ print(name_summarized_annotations)
 
 ## Visualizing Over Annotations
 
-`annotatr` has three visualization functions (`visualize_annotation()`, `visualize_score()` and `visualize_name()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`). For maximum flexibility, the user can pass an `annotation_order` parameter into all three visualization functions to ensure the desired order, and to visualize a subset of the annotations. A `data_order` can be passed into `visualize_name()` to order the data classifications as desired, and to visualize a subset of the data classifications.
+`annotatr` has three visualization functions (`visualize_annotation()`, `visualize_score()` and `visualize_name()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
 
 ```{r, fig.align='center', fig.cap='Number of DM regions per annotation.', fig.height=5, fig.width=5, fig.show = 'hold'}
-# View the number of regions per annotation.
+# View the number of regions per annotation. This function
+# is useful when there is no classification or data
+# associated with the regions.
 annots_order = c(
   'hg19_knownGenes_1to5kb',
   'hg19_knownGenes_promoters',
@@ -134,6 +131,7 @@ print(visualize_knownGene_annotations)
 
 ```{r, fig.align='center', fig.cap='Methylation difference distributions across the CpG annotations.', fig.height=6, fig.width=6, fig.show = 'hold'}
 # View the score summarized over the CpG annotations
+
 # A subset of cpgs_order could be chosen to display
 # the data distribution only in those annotations.
 cpgs_order = c(
@@ -149,6 +147,7 @@ print(visualize_score_cpgs)
 
 ```{r, fig.align='center', fig.cap='Methylation difference distributions across the basic genes annotation.', fig.height=6.5, fig.width=6.5, fig.show='hold'}
 # View the score summarized over the knownGene annotations.
+
 # A subset of genes_order could be chosen to display
 # the data distribution only in those annotations.
 genes_order = c(
@@ -164,73 +163,59 @@ visualize_score_genes = visualize_score(
 print(visualize_score_genes)
 ```
 
-```{r, fig.align='center', fig.cap='Differential methylation classification counts by CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
-# View the classification summarized over the CpG annotations
-# A subset of cpgs_order could be chosen to display
-# the data distribution only in those annotations.
-cpgs_order = c(
+```{r, fig.align='center', fig.cap='Differential methylation classification with counts of CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
+# View the counts of CpG annotations in data classes
+
+# The orders for the x-axis labels. This is also a subset
+# of the labels (DMup, DMdown, noDM).
+x_order = c(
+  'DMup',
+  'DMdown')
+# The orders for the fill labels. Can also use this
+# parameter to subset annotation types to fill.
+fill_order = c(
   'hg19_cpg_islands',
   'hg19_cpg_shores',
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
-# A subset of cpgs_order could be chosen to display
-# the data distribution only in those annotations.
-data_order = c(
-  'DMup',
-  'DMdown')
-# The fill = FALSE parameter shows the counts
-visualize_name_cpgs = visualize_name(
-  summarized_names = name_summarized_annotations,
-  annotation_order = cpgs_order,
-  data_order = data_order,
-  fill = FALSE)
-print(visualize_name_cpgs)
+# Make a barplot of the data class where each bar
+# is composed of the counts of CpG annotations.
+visualize_cpgs = visualize_name(
+  summarized_names=name_summarized_annotations, x='data_name', fill='annot_type',
+  x_order = x_order, fill_order = fill_order, position='stack')
+print(visualize_cpgs)
 ```
 
-```{r, fig.align='center', fig.cap='Differential methylation classification proportions by CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
-# View the classification summarized over the CpG annotations
-# A subset of cpgs_order could be chosen to display
-# the data distribution only in those annotations.
-cpgs_order = c(
-  'hg19_cpg_islands',
-  'hg19_cpg_shores',
-  'hg19_cpg_shelves',
-  'hg19_cpg_inter')
-# A subset of cpgs_order could be chosen to display
-# the data distribution only in those annotations.
-data_order = c(
-  'DMup',
-  'DMdown')
-# The fill = TRUE parameter shows the proportions
-visualize_name_cpgs = visualize_name(
-  summarized_names = name_summarized_annotations,
-  annotation_order = cpgs_order,
-  data_order = data_order,
-  fill = TRUE)
-print(visualize_name_cpgs)
+```{r, fig.align='center', fig.cap='Differential methylation classification with proportion of CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
+# Use the same order vectors as the previous code block,
+# but use proportional fill instead of counts.
+
+# Make a barplot of the data class where each bar
+# is composed of the *proportion* of CpG annotations.
+visualize_cpgs = visualize_name(
+  summarized_names=name_summarized_annotations, x='data_name', fill='annot_type',
+  x_order = x_order, fill_order = fill_order, position='fill')
+print(visualize_cpgs)
 ```
 
-```{r, fig.align='center', fig.cap='Differential methylation classification proportions by basic genes annotation.', fig.height=6, fig.width=6, fig.show='hold'}
-# View the score summarized over the knownGene annotations.
-# A subset of genes_order could be chosen to display
-# the data distribution only in those annotations.
-genes_order = c(
+```{r, fig.align='center', fig.cap='Basic gene annotations with proportions of DM classification.', fig.height=6, fig.width=6, fig.show='hold'}
+# View the proportions of data classes in knownGene annotations
+
+# The orders for the x-axis labels.
+x_order = c(
   'hg19_knownGenes_1to5kb',
   'hg19_knownGenes_promoters',
   'hg19_knownGenes_5UTRs',
   'hg19_knownGenes_exons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
-# A subset of cpgs_order could be chosen to display
-# the data distribution only in those annotations.
-data_order = c(
+# The orders for the fill labels.
+fill_order = c(
   'DMup',
   'DMdown',
   'noDM')
-visualize_name_genes = visualize_name(
-  summarized_names = name_summarized_annotations,
-  annotation_order = genes_order,
-  data_order = data_order,
-  fill = TRUE)
-print(visualize_name_genes)
+visualize_genes = visualize_name(
+  summarized_names=name_summarized_annotations, x='annot_type', fill='data_name',
+  x_order = x_order, fill_order = fill_order, position='fill')
+print(visualize_genes)
 ```

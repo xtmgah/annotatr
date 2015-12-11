@@ -1,20 +1,10 @@
 context('Test visualization of summaries')
 
-test_that('Test error on incorrect input class in visualize_annotation()', {
+test_that('Test error on incorrect input class in visualize functions', {
   bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 
   expect_error(visualize_annotation(bed), 'summarized_annotations must have class tbl_df')
-})
-
-test_that('Test error on incorrect input class in visualize_score()', {
-  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
-
   expect_error(visualize_score(bed), 'summarized_scores must have class grouped_df')
-})
-
-test_that('Test error on incorrect input class in visualize_name()', {
-  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
-
   expect_error(visualize_name(bed), 'summarized_names must have class grouped_df')
 })
 
@@ -152,45 +142,86 @@ test_that('Test visualize_name() on classification data', {
 
   s = summarize_name(i)
 
-  cpgs_order = c(
+  ################################################
+  # Test one order on CpGs and all positions
+  fill_order = c(
     'hg19_cpg_islands',
     'hg19_cpg_shores',
     'hg19_cpg_shelves',
     'hg19_cpg_inter')
-  data_order = c(
+  x_order = c(
     'DMup',
     'DMdown')
-  v_cpgs_counts = visualize_name(s, cpgs_order, data_order, fill=FALSE)
-  v_cpgs_proportions = visualize_name(s, cpgs_order, data_order, fill=TRUE)
+  v_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
+    x_order = x_order, fill_order = fill_order, position='stack')
+  v_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
+    x_order = x_order, fill_order = fill_order, position='fill')
+  v_cpgs_nofill_data = visualize_name(summarized_names=s, x='data_name', fill=NULL,
+    x_order = x_order, fill_order = fill_order, position='stack')
 
-  genes_order = c(
+  ################################################
+  # Test the other order on CpGs and all positions
+  x_order = c(
+    'hg19_cpg_islands',
+    'hg19_cpg_shores',
+    'hg19_cpg_shelves',
+    'hg19_cpg_inter')
+  fill_order = c(
+    'DMup',
+    'DMdown',
+    'noDM')
+  v_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
+    x_order = x_order, fill_order = fill_order, position='stack')
+  v_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
+    x_order = x_order, fill_order = fill_order, position='fill')
+  v_cpgs_nofill_annot = visualize_name(summarized_names=s, x='annot_type', fill=NULL,
+    x_order = x_order, fill_order = fill_order, position='stack')
+
+  ################################################
+  # Test on knownGenes and with error order vectors
+  fill_order = c(
     'hg19_knownGenes_1to5kb',
     'hg19_knownGenes_promoters',
     'hg19_knownGenes_5UTRs',
     'hg19_knownGenes_exons',
     'hg19_knownGenes_introns',
     'hg19_knownGenes_3UTRs')
-  data_order = c(
+  x_order = c(
     'DMup',
     'DMdown')
-  v_genes_counts = visualize_name(s, genes_order, data_order, fill=FALSE)
-  v_genes_proportions = visualize_name(s, genes_order, data_order, fill=TRUE)
+  v_genes_counts = visualize_name(s, x='data_name', fill='annot_type',
+    x_order = x_order, fill_order = fill_order, position='stack')
+  v_genes_proportions = visualize_name(s, x='data_name', fill='annot_type',
+    x_order = x_order, fill_order = fill_order, position='stack')
 
-  cpgs_error_order = c(
+  x_order = c(
+    'hg19_cpg_islands',
+    'hg19_cpg_shores',
+    'hg19_cpg_shelves',
+    'hg19_cpg_inter')
+  fill_order = c(
+    'DMup',
+    'DMdown',
+    'noDM')
+  x_error_order = c(
     'hg19_cpg_islands',
     'hg19_cpg_shores',
     'hg19_cpg_shelves',
     'hg19_cpg_inter',
     'walla_walla')
-  data_error_order = c(
+  fill_error_order = c(
     'DMup',
     'DMdown',
     'margaret_thatcher')
 
-  expect_error( visualize_name(s, cpgs_error_order, data_order, fill=FALSE), 'annotations in annotation_order')
-  expect_error( visualize_name(s, cpgs_order, data_error_order, fill=FALSE), 'data_names in data_order that are')
-  expect_equal( dplyr::setequal(class(v_cpgs_counts), c('gg','ggplot')), expected = TRUE)
-  expect_equal( dplyr::setequal(class(v_cpgs_proportions), c('gg','ggplot')), expected = TRUE)
+  expect_error( visualize_name(s, x='annot_type', fill='data_name', x_order=x_error_order, fill_order=fill_order, position='stack'), 'elements in x_order that are not present')
+  expect_error( visualize_name(s, x='annot_type', fill='data_name', x_order=x_order, fill_order=fill_error_order, position='stack'), 'elements in fill_order that are not present')
+  expect_equal( dplyr::setequal(class(v_cpgs_counts_data_annot), c('gg','ggplot')), expected = TRUE)
+  expect_equal( dplyr::setequal(class(v_cpgs_proportions_annot_data), c('gg','ggplot')), expected = TRUE)
+  expect_equal( dplyr::setequal(class(v_cpgs_nofill_data), c('gg','ggplot')), expected = TRUE)
+  expect_equal( dplyr::setequal(class(v_cpgs_counts_annot_data), c('gg','ggplot')), expected = TRUE)
+  expect_equal( dplyr::setequal(class(v_cpgs_proportions_annot_data), c('gg','ggplot')), expected = TRUE)
+  expect_equal( dplyr::setequal(class(v_cpgs_nofill_annot), c('gg','ggplot')), expected = TRUE)
   expect_equal( dplyr::setequal(class(v_genes_counts), c('gg','ggplot')), expected = TRUE)
   expect_equal( dplyr::setequal(class(v_genes_proportions), c('gg','ggplot')), expected = TRUE)
 })
