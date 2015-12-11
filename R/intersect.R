@@ -64,20 +64,22 @@ annotate_regions = function(regions, annotations, genome, ignore.strand = TRUE, 
     stop('Error in annotate_regions(...): please choose between basic_genes and detailed_genes annotations.')
   }
 
-  # Check for shortcut annotation accessors 'cpgs', 'basic_genes', or 'detailed_genes'
-  # and create the right annotations based on the genome
-  new_annotations = c()
-  if('cpgs' %in% annotations) {
-    new_annotations = paste(genome, 'cpg', c('islands','shores','shelves','inter'), sep='_')
+  if('basic_genes' %in% annotations || 'detailed_genes' %in% annotations || 'cpgs' %in% annotations) {
+    # Check for shortcut annotation accessors 'cpgs', 'basic_genes', or 'detailed_genes'
+    # and create the right annotations based on the genome
+    new_annotations = c()
+    if('cpgs' %in% annotations) {
+      new_annotations = paste(genome, 'cpg', c('islands','shores','shelves','inter'), sep='_')
+    }
+    if ('basic_genes' %in% annotations) {
+      new_annotations = c(new_annotations, paste(genome, 'knownGenes', c('1to5kb','promoters','5UTRs','exons','introns','3UTRs'), sep='_'))
+    }
+    if ('detailed_genes' %in% annotations) {
+      new_annotations = c(new_annotations, paste(genome, 'knownGenes',
+        c('1to5kb','promoters','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','exons3UTRs','introns3UTRs'), sep='_'))
+    }
+    annotations = setdiff(c(annotations, new_annotations), c('basic_genes','detailed_genes','cpgs'))
   }
-  if ('basic_genes' %in% annotations) {
-    new_annotations = c(new_annotations, paste(genome, 'knownGenes', c('1to5kb','promoters','5UTRs','exons','introns','3UTRs'), sep='_'))
-  }
-  if ('detailed_genes' %in% annotations) {
-    new_annotations = c(new_annotations, paste(genome, 'knownGenes',
-      c('1to5kb','promoters','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','exons3UTRs','introns3UTRs'), sep='_'))
-  }
-  annotations = new_annotations
 
   # Collect the annotation objects into a GRangesList
   data(list = annotations, package = 'annotatr')
