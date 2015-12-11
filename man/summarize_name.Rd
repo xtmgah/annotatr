@@ -7,13 +7,13 @@
 summarize_name(annotated_regions)
 }
 \arguments{
-\item{annotated_regions}{The tbl_df result of \code{annotate_intersections()}.}
+\item{annotated_regions}{The \code{tbl_df} result of \code{annotate_regions()}.}
 }
 \value{
-A tbl_df of the counts of (annot_type, data_name) pairs.
+A \code{tbl_df} of the counts of (annot_type, data_name) pairs.
 }
 \description{
-Given a dplyr::tbl_df of annotated regions, summarize names over (annot_type, data_name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
+Given a \code{dplyr::tbl_df} of annotated regions, summarize names over (annot_type, data_name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
 }
 \examples{
 # An example of differentially methylated regions classified as DM up, DM down, or no DM

@@ -2,10 +2,12 @@
 
 export(annotate_regions)
 export(read_bed)
+export(summarize_annotation)
 export(summarize_name)
 export(summarize_score)
 export(supported_annotations)
 export(supported_genomes)
+export(visualize_annotation)
 export(visualize_name)
 export(visualize_score)
 import(GenomicRanges)

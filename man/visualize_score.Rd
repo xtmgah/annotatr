@@ -7,7 +7,7 @@
 visualize_score(summarized_scores, annotation_order)
 }
 \arguments{
-\item{summarized_scores}{The \code{tbl_df} result of \code{summarize_score()}.}
+\item{summarized_scores}{The \code{grouped_df} result of \code{summarize_score()}.}
 
 \item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.}
 }
@@ -15,7 +15,7 @@ visualize_score(summarized_scores, annotation_order)
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Given a \code{dplyr::tbl_df} of score aggregated annotations (from \code{summarize_score()}), visualize the distribution of scores over the annotation types.
+Given a \code{dplyr::grouped_df} of score aggregated annotations (from \code{summarize_score()}), visualize the distribution of scores over the annotation types.
 }
 \examples{
 ########################################################################
