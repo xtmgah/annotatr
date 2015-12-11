@@ -1,10 +1,48 @@
+#' Summarize annotation counts
+#'
+#' Given a \code{dplyr::tbl_df} of annotated regions, count the number of regions in each annotation.
+#'
+#' @param annotated_regions The \code{tbl_df} result of \code{annotate_regions()}.
+#'
+#' @return A \code{tbl_df} of the number of regions per annotation.
+#'
+#' @examples
+#' # An example of ChIP-seq peaks with signalValue used for score
+#' bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
+#' annotations = c('basic_genes','cpgs')
+#'
+#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+#'
+#' i = annotate_regions(
+#'   regions = d,
+#'   annotations = annotations,
+#'   genome = 'hg19',
+#'   ignore.strand = TRUE,
+#'   use.score = TRUE)
+#'
+#' s = summarize_annotations(i)
+#'
+#' @export
+summarize_annotation = function(annotated_regions) {
+  if(class(annotated_regions)[1] != "tbl_df") {
+    stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_regions() into this function.')
+  }
+
+  message('Summarizing scores over (annotation type, annotation ID) pairs')
+  agg = dplyr::tally(
+    dplyr::group_by(annotated_regions, annot_type)
+  )
+
+  return(agg)
+}
+
 #' Summarize scores over annotations
 #'
-#' Given a dplyr::tbl_df of annotated regions, summarize scores over (annot_type, annot_id) pairs.
+#' Given a \code{dplyr::tbl_df} of annotated regions, summarize scores over (annot_type, annot_id) pairs.
 #'
-#' @param annotated_regions The tbl_df result of \code{annotate_intersections()}.
+#' @param annotated_regions The \code{tbl_df} result of \code{annotate_regions()}.
 #'
-#' @return A tbl_df of the mean of scores over (annot_type, annot_id) pairs.
+#' @return A \code{tbl_df} of the mean of scores over (annot_type, annot_id) pairs.
 #'
 #' @examples
 #' # An example of ChIP-seq peaks with signalValue used for score
@@ -25,7 +63,7 @@
 #' @export
 summarize_score = function(annotated_regions) {
   if(class(annotated_regions)[1] != "tbl_df") {
-    stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_intersections() into this function.')
+    stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_regions() into this function.')
   }
 
   message('Summarizing scores over (annotation type, annotation ID) pairs')
@@ -41,11 +79,11 @@ summarize_score = function(annotated_regions) {
 
 #' Summarize scores over annotations
 #'
-#' Given a dplyr::tbl_df of annotated regions, summarize names over (annot_type, data_name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
+#' Given a \code{dplyr::tbl_df} of annotated regions, summarize names over (annot_type, data_name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
 #'
-#' @param annotated_regions The tbl_df result of \code{annotate_intersections()}.
+#' @param annotated_regions The \code{tbl_df} result of \code{annotate_regions()}.
 #'
-#' @return A tbl_df of the counts of (annot_type, data_name) pairs.
+#' @return A \code{tbl_df} of the counts of (annot_type, data_name) pairs.
 #'
 #' @examples
 #' # An example of differentially methylated regions classified as DM up, DM down, or no DM
@@ -66,7 +104,7 @@ summarize_score = function(annotated_regions) {
 #' @export
 summarize_name = function(annotated_regions) {
   if(class(annotated_regions)[1] != "tbl_df") {
-    stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_intersections() into this function.')
+    stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_regions() into this function.')
   }
 
   message('Summarizing names over annotation type')
