@@ -9,7 +9,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
 # Introduction
 
 Genomic regions resulting from next-generation sequencing experiments and bioinformatics pipelines are made more valuable when annotated to genomic features. A SNP occurring in an exon, or an enhancer, is likely of greater interest than one occurring in an inter-genic region. It may be of interest to find that a particular transcription factor overwhelmingly binds in promoters, while another binds mostly in 3’UTRs. Hyper-methylation at promoters containing a CpG island may indicate different regulatory regimes in one condition compared to another.
@@ -40,15 +39,11 @@ The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter 
 
 # Usage
 
-## Reading A File
+## Reading A File with `read_bed()`
 
-`annotatr` expects that the genomic regions of interest are encoded as a BED6 file ([spec](https://genome.ucsc.edu/FAQ/FAQformat.html#format1)) with no header row. However, we allow the user to overload both the `name` and `score` columns. The `name` column can be a non-unique character vector indicating some classification for each region (e.g. hyper-methylated and hypo-methylated). The `score` column can take continuous or discrete numerical values that represent data associated with each region (e.g. the percent methylation).
+`annotatr` reads in genomic regions of interest encoded as [BED6](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) using the `read_bed()` function. The `name` column may be a non-unique character vector indicating some classification for each region (e.g. hyper-methylated and hypo-methylated). The `score` column may take continuous or discrete numerical values that represent data associated with each region (e.g. the percent methylation).
 
-The `stranded` parameter in `read_bed()` indicates whether the regions have strand information. The `use.score` parameter incorporates the `score` column from the BED6 file into the `GenomicRanges` object if TRUE, and not if FALSE.
-
-```{r, echo=FALSE}
-suppressWarnings(devtools::load_all())
-```
+`read_bed()` requires the `filename` of the file to be read, a `genome` (one of hg19, hg38, mm9, or mm10), a logical value indicating whether the data is `stranded`, and a logical value indicating whether the `score` column should be used.
 
 ```{r}
 # This file in inst/extdata represents differentially methylated
@@ -66,11 +61,11 @@ regions = read_bed(
 print(regions)
 ```
 
-## Annotating Regions
+## Annotating Regions with `annotate_regions()`
 
-Users may select their annotations a la carte by using the accessors listed with `supported_annotations()`, or by shortcuts. The `cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `basic_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `detailed_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `basic_genes` and `detailed_genes` shortcuts may not be used at the same time.
+Users may select annotations a la carte via the accessors listed with `supported_annotations()`, or via shortcuts. The `cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `basic_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `detailed_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `basic_genes` and `detailed_genes` shortcuts may not be used at the same time.
 
-A genome must be specified in `annotate_regions()`, and should naturally match that used in `read_bed()`. The `ignore.strand` parameter is passed directly to the same parameter in `GenomicRanges::findOverlaps()`. If TRUE, overlaps are found regardless of strand information, and if FALSE, overlaps must have the same strand. The `use.score` parameter carries along information from the `score` column if TRUE, and not if FALSE.
+`annotate_regions()` requires a `GRanges` object (either the result of `read_bed()` or an object the user already has), a character vector indicating the `annotations` to annotate the regions with, the `genome` as above, a logical value indicating whether to `ignore.strand` when calling `GenomicRanges::findOverlaps()`, and a logical value indicating whether to `use.score`.
 
 ```{r}
 # Select annotations for intersection with regions
@@ -90,7 +85,11 @@ print(annotated_regions)
 
 ## Summarizing Over Annotations
 
-The dataset used in the running example actually has a classification (DMup, DMdown, noDM) and a score (methylation difference between two groups) associated with each region. We will employ both summarization functions in preparation for visualization.
+The dataset used in the running example has a class (DMup, DMdown, noDM) and a score (methylation difference between two groups) associated with each region. We will employ all three summarization functions in preparation for visualization.
+
+The three summarization functions -- `summarize_annotation()`, `summarize_score()`, and `summarize_name()` -- all take the `tbl_df` objects output from `annotate_regions()` as their input, and output either a `dplyr::tbl_df` (for `summarize_annotation()`) or `dplyr::grouped_df` (for the others).
+
+When there is no class (`name` column) or score (`score` column) information associated with the regions, `summarize_annotation()` is the only possible function to use. It gives the counts of regions in each annotation type (see example below). If there is class or score information, then `summarize_score()` and/or `summarize_name()` may be used.
 
 ```{r}
 # Find the number of regions per annotation type
@@ -110,7 +109,7 @@ print(name_summarized_annotations)
 
 ## Visualizing Over Annotations
 
-`annotatr` has three visualization functions (`visualize_annotation()`, `visualize_score()` and `visualize_name()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
+There are three visualization functions -- `visualize_annotation()`, `visualize_score()` and `visualize_name()` -- that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print()`) and saved (`ggsave()`).
 
 ```{r, fig.align='center', fig.cap='Number of DM regions per annotation.', fig.height=5, fig.width=5, fig.show = 'hold'}
 # View the number of regions per annotation. This function
