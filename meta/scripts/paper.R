@@ -21,8 +21,10 @@ cpgs_order = c(
   'hg19_cpg_shores',
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
-vp_cpg = visualize_score(sp, cpgs_order)
-vn_cpg = visualize_score(sn, cpgs_order)
+vp_cpg = visualize_score(sp, cpgs_order, bin_width = 5,
+  plot_title = 'Avg. Meth. Over CpG Annotations (HPV+)', x_label = 'Avg. Meth. per CpG Annotations')
+vn_cpg = visualize_score(sn, cpgs_order, bin_width = 5,
+  plot_title = 'Avg. Meth. Over CpG Annotations (HPV-)', x_label = 'Avg. Meth. per CpG Annotation')
 
 ggsave(filename='../paper/hpv+_score_over_cpgs.png',width=6, height=6, plot=vp_cpg, dpi=300)
 ggsave(filename='../paper/hpv-_score_over_cpgs.png',width=6, height=6, plot=vn_cpg, dpi=300)
@@ -36,8 +38,10 @@ genes_order = c(
   'hg19_knownGenes_intronsCDSs',
   'hg19_knownGenes_exons3UTRs',
   'hg19_knownGenes_introns3UTRs')
-vp_genes = visualize_score(sp, genes_order)
-vn_genes = visualize_score(sn, genes_order)
+vp_genes = visualize_score(sp, genes_order, bin_width = 5,
+  plot_title = 'Avg. Meth. Over knownGene Annotations (HPV+)', x_label = 'Avg. Meth. per knownGenes Annotation')
+vn_genes = visualize_score(sn, genes_order, bin_width = 5,
+  plot_title = 'Avg. Meth. Over knownGene Annotations (HPV-)', x_label = 'Avg. Meth. per knownGenes Annotation')
 
 ggsave(filename='../paper/hpv+_score_over_detailed_genes.png',width=12, height=12, plot=vp_genes, dpi=300)
 ggsave(filename='../paper/hpv-_score_over_detailed_genes.png',width=12, height=12, plot=vn_genes, dpi=300)
@@ -51,7 +55,7 @@ rdm = read_bed(dm, genome = 'hg19', stranded = F, use.score = T)
 adm = annotate_regions(rdm, annotations = c('cpgs','detailed_genes'), genome = 'hg19', ignore.strand = TRUE, use.score = TRUE)
 sdm = summarize_name(adm)
 
-x_order = c('DMup','DMdown')
+x_order = c('hyper','hypo')
 fill_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter')
 vdm_cpgs = visualize_name(
   summarized_names = sdm,
@@ -59,7 +63,11 @@ vdm_cpgs = visualize_name(
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
-  position = 'stack'
+  position = 'stack',
+  plot_title = 'CpG Annotations by DM Status',
+  legend_title = 'Annotation',
+  x_label = 'Differential Methylation Status',
+  y_label = 'Count'
   )
 
 ggsave(filename='../paper/DM_in_cpgs.png',width=6, height=6, plot=vdm_cpgs, dpi=300)
@@ -70,7 +78,11 @@ vdm_cpgs_fill = visualize_name(
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
-  position = 'fill'
+  position = 'fill',
+  plot_title = 'CpG Annotations by DM Status',
+  legend_title = 'Annotation',
+  x_label = 'Differential Methylation Status',
+  y_label = 'Proportion'
   )
 
 ggsave(filename='../paper/DM_in_cpgs_fill.png',width=6, height=6, plot=vdm_cpgs_fill, dpi=300)
@@ -85,14 +97,18 @@ fill_order = c(
   'hg19_knownGenes_intronsCDSs',
   'hg19_knownGenes_exons3UTRs',
   'hg19_knownGenes_introns3UTRs')
-x_order = c('DMup','DMdown')
+x_order = c('hyper','hypo')
 vdm_genes = visualize_name(
   summarized_names = sdm,
   x = 'data_name',
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
-  position = 'stack'
+  position = 'stack',
+  plot_title = 'KnownGenes Annotations by DM Status',
+  legend_title = 'Annotation',
+  x_label = 'Differential Methylation Status',
+  y_label = 'Count'
   )
 
 ggsave(filename='../paper/DM_in_genes.png',width=6, height=6, plot=vdm_genes, dpi=300)
@@ -103,7 +119,11 @@ vdm_genes_fill = visualize_name(
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
-  position = 'fill'
+  position = 'fill',
+  plot_title = 'KnownGenes Annotations by DM Status',
+  legend_title = 'Annotation',
+  x_label = 'Differential Methylation Status',
+  y_label = 'Proportion'
   )
 
 ggsave(filename='../paper/DM_in_genes_fill.png',width=6, height=6, plot=vdm_genes_fill, dpi=300)
@@ -133,7 +153,11 @@ vcl_cpgs = visualize_name(
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
-  position = 'stack'
+  position = 'stack',
+  plot_title = 'CpG Annotations by Methylation Classification',
+  legend_title = 'Annotation',
+  x_label = 'mC/hmC Methylation Classification',
+  y_label = 'Count'
   )
 
 ggsave(filename='../paper/classes_in_cpgs.png',width=6, height=6, plot=vcl_cpgs, dpi=300)
@@ -144,7 +168,11 @@ vcl_cpgs_fill = visualize_name(
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
-  position = 'fill'
+  position = 'fill',
+  plot_title = 'CpG Annotations by Methylation Classification',
+  legend_title = 'Annotation',
+  x_label = 'mC/hmC Methylation Classification',
+  y_label = 'Proportion'
   )
 
 ggsave(filename='../paper/classes_in_cpgs_fill.png',width=6, height=6, plot=vcl_cpgs_fill, dpi=300)
@@ -174,7 +202,11 @@ scl_genes = visualize_name(
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
-  position = 'stack'
+  position = 'stack',
+  plot_title = 'knownGenes Annotations by Methylation Classification',
+  legend_title = 'Annotation',
+  x_label = 'mC/hmC Methylation Classification',
+  y_label = 'Count'
   )
 
 ggsave(filename='../paper/classes_in_genes.png',width=6, height=6, plot=scl_genes, dpi=300)
@@ -185,7 +217,11 @@ scl_genes_fill = visualize_name(
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
-  position = 'fill'
+  position = 'fill',
+  plot_title = 'knownGenes Annotations by Methylation Classification',
+  legend_title = 'Annotation',
+  x_label = 'mC/hmC Methylation Classification',
+  y_label = 'Proportion'
   )
 
 ggsave(filename='../paper/classes_in_genes_fill.png',width=6, height=6, plot=scl_genes_fill, dpi=300)
