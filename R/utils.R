@@ -32,10 +32,7 @@ supported_genomes = function() {
 #'
 #' @param annotations A character vector of annotations, in the order they are to appear in the visualization.
 #'
-#' @return A character vector of tidied annotation names
-#'
-#' @examples
-#' tidy_annotations(annotations = c('hg19_cpg_islands','hg19_knownGenes_promoters'))
+#' @return A list of mappings from original annotation names to names ready for visualization.
 tidy_annotations = function(annotations) {
   tidy = sapply(annotations, function(a){
     tokens = unlist(strsplit(a,'_'))
@@ -50,5 +47,8 @@ tidy_annotations = function(annotations) {
     }
   })
 
-  return(tidy)
+  flip_tidy = names(tidy)
+  names(flip_tidy) = tidy
+
+  return(as.list(flip_tidy))
 }

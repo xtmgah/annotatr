@@ -2,23 +2,32 @@
 % Please edit documentation in R/visualize.R
 \name{visualize_name}
 \alias{visualize_name}
-\title{Visualize scores over annotations}
+\title{Visualize names over annotations}
 \usage{
-visualize_name(summarized_names, x, fill, x_order, fill_order,
-  position = "fill")
+visualize_name(summarized_names, x, fill = NULL, x_order = NULL,
+  fill_order = NULL, position = "stack", plot_title = NULL,
+  legend_title = NULL, x_label = NULL, y_label = NULL)
 }
 \arguments{
 \item{summarized_names}{The \code{grouped_df} result of \code{summarize_name()}.}
 
 \item{x}{One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.}
 
-\item{fill}{One of 'annot_type', 'data_name', or NULL, indicating whether annotation classes or data classes will fill the bars. If NULL then the bars will be the total counts of the x classes.}
+\item{fill}{One of 'annot_type', 'data_name', or \code{NULL}, indicating whether annotation classes or data classes will fill the bars. If \code{NULL} then the bars will be the total counts of the x classes.}
 
-\item{x_order}{A character vector that subsets and orders the x classes.}
+\item{x_order}{A character vector that subsets and orders the x classes. Default \code{NULL}, uses existing values.}
 
-\item{fill_order}{A character vector that subsets and orders the fill classes.}
+\item{fill_order}{A character vector that subsets and orders the fill classes. Default \code{NULL}, uses existing values.}
 
 \item{position}{A string which has the same possible values as in \code{ggplot2::geom_bar(..., position)}, i.e., 'stack', 'fill', 'dodge', etc.}
+
+\item{plot_title}{A string used for the title of the plot. Default \code{NULL}, no title displayed.}
+
+\item{legend_title}{A string used for the legend title to describe fills (if fill is not \code{NULL}). Default \code{NULL}, displays corresponding variable name.}
+
+\item{x_label}{A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.}
+
+\item{y_label}{A string used for the y-axis label. Default \code{NULL}, corresponding variable name used.}
 }
 \value{
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
@@ -48,8 +57,8 @@ fill_order = c(
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
 x_order = c(
-  'DMup',
-  'DMdown')
+  'hyper',
+  'hypo')
 v_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack')
 v_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
@@ -63,9 +72,9 @@ x_order = c(
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
 fill_order = c(
-  'DMup',
-  'DMdown',
-  'noDM')
+  'hyper',
+  'hypo',
+  'none')
 v_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
   x_order = x_order, fill_order = fill_order, position='stack')
 v_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',

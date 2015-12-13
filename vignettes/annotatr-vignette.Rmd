@@ -90,7 +90,7 @@ print(annotated_regions)
 
 ## Summarizing Over Annotations
 
-The dataset used in the running example actually has a classification (DMup, DMdown, noDM) and a score (methylation difference between two groups) associated with each region. We will employ both summarization functions in preparation for visualization.
+The dataset used in the running example actually has a classification (hyper, hypo, none) and a score (methylation difference between two groups) associated with each region. We will employ both summarization functions in preparation for visualization.
 
 ```{r}
 # Find the number of regions per annotation type
@@ -112,6 +112,22 @@ print(name_summarized_annotations)
 
 `annotatr` has three visualization functions (`visualize_annotation()`, `visualize_score()` and `visualize_name()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
 
+```{r, eval=FALSE}
+# Usage of visualization functions
+
+visualize_annotation(summarized_annotations, annotation_order = NULL,
+  plot_title = NULL, x_label = NULL, y_label = NULL)
+
+visualize_score(summarized_scores, annotation_order = NULL, bin_width = 10,
+  plot_title = NULL, x_label = NULL, y_label = NULL)
+
+visualize_name(summarized_names, x, fill = NULL, x_order = NULL,
+  fill_order = NULL, position = "stack", plot_title = NULL,
+  legend_title = NULL, x_label = NULL, y_label = NULL)
+```
+
+All visualizations use an internal function, `tidy_annotations()`, on `annotation_order`, `x_order`, and `fill_order` parameters, which cleans annotation accessors for visualization. Each visualization function is designed to work with a small number of parameters. Order parameters are not required; when `NULL`, all values are displayed. Parameters for plot titles, legend titles, and axis labels are likewise optional, and will default to object name attributes if `NULL`.
+
 ```{r, fig.align='center', fig.cap='Number of DM regions per annotation.', fig.height=5, fig.width=5, fig.show = 'hold'}
 # View the number of regions per annotation. This function
 # is useful when there is no classification or data
@@ -125,7 +141,10 @@ annots_order = c(
   'hg19_knownGenes_3UTRs')
 visualize_knownGene_annotations = visualize_annotation(
   summarized_annotations = summarized_annotations,
-  annotation_order = annots_order)
+  annotation_order = annots_order,
+  plot_title = 'Number of Sites Tested for DM on chr9',
+  x_label = 'knownGene Annotations',
+  y_label = 'Count')
 print(visualize_knownGene_annotations)
 ```
 
@@ -141,7 +160,10 @@ cpgs_order = c(
   'hg19_cpg_inter')
 visualize_score_cpgs = visualize_score(
   summarized_scores = score_summarized_annotations,
-  annotation_order = cpgs_order)
+  annotation_order = cpgs_order,
+  bin_width = 10,
+  plot_title = 'Group Meth. Diffs. Across CpG Annotations',
+  x_label = 'Mean Diff. in Meth. Over Annotations')
 print(visualize_score_cpgs)
 ```
 
@@ -159,7 +181,10 @@ genes_order = c(
   'hg19_knownGenes_3UTRs')
 visualize_score_genes = visualize_score(
   summarized_scores = score_summarized_annotations,
-  annotation_order = genes_order)
+  annotation_order = genes_order,
+  bin_width = 10,
+  plot_title = 'Group Meth. Diffs. Across knownGene Annotations',
+  x_label = 'Mean Diff. in Meth. Over Annotations')
 print(visualize_score_genes)
 ```
 
@@ -167,10 +192,10 @@ print(visualize_score_genes)
 # View the counts of CpG annotations in data classes
 
 # The orders for the x-axis labels. This is also a subset
-# of the labels (DMup, DMdown, noDM).
+# of the labels (hyper, hypo, none).
 x_order = c(
-  'DMup',
-  'DMdown')
+  'hyper',
+  'hypo')
 # The orders for the fill labels. Can also use this
 # parameter to subset annotation types to fill.
 fill_order = c(
@@ -182,7 +207,11 @@ fill_order = c(
 # is composed of the counts of CpG annotations.
 visualize_cpgs = visualize_name(
   summarized_names=name_summarized_annotations, x='data_name', fill='annot_type',
-  x_order = x_order, fill_order = fill_order, position='stack')
+  x_order = x_order, fill_order = fill_order, position='stack',
+  plot_title = 'DM Status by CpG Annotation Counts',
+  legend_title = 'Annotations',
+  x_label = 'DM status',
+  y_label = 'Count')
 print(visualize_cpgs)
 ```
 
@@ -194,7 +223,11 @@ print(visualize_cpgs)
 # is composed of the *proportion* of CpG annotations.
 visualize_cpgs = visualize_name(
   summarized_names=name_summarized_annotations, x='data_name', fill='annot_type',
-  x_order = x_order, fill_order = fill_order, position='fill')
+  x_order = x_order, fill_order = fill_order, position='fill',
+  plot_title = 'DM Status by CpG Annotation Proportions',
+  legend_title = 'Annotations',
+  x_label = 'DM status',
+  y_label = 'Proportion')
 print(visualize_cpgs)
 ```
 
@@ -211,11 +244,14 @@ x_order = c(
   'hg19_knownGenes_3UTRs')
 # The orders for the fill labels.
 fill_order = c(
-  'DMup',
-  'DMdown',
-  'noDM')
+  'hyper',
+  'hypo',
+  'none')
 visualize_genes = visualize_name(
   summarized_names=name_summarized_annotations, x='annot_type', fill='data_name',
-  x_order = x_order, fill_order = fill_order, position='fill')
+  x_order = x_order, fill_order = fill_order, position='fill',
+  legend_title = 'DM Status',
+  x_label = 'knownGene Annotations',
+  y_label = 'Proportion')
 print(visualize_genes)
 ```

@@ -17,6 +17,6 @@ test_that('Test tidy_annotations()', {
   hg19_tidy_annots = tidy_annotations(hg19_annots)
   mm9_tidy_annots = tidy_annotations(mm9_annots)
 
-  expect_equal( all(hg19_tidy_annots == c('CpG islands', 'promoters', 'interCGI')), expected = TRUE)
-  expect_equal( all(mm9_tidy_annots == c('CpG islands', 'exonsCDSs', 'interCGI')), expected = TRUE)
+  expect_equal( all(names(hg19_tidy_annots) == c('CpG islands', 'promoters', 'interCGI')), expected = TRUE)
+  expect_equal( all(names(mm9_tidy_annots) == c('CpG islands', 'exonsCDSs', 'interCGI')), expected = TRUE)
 })
