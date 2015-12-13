@@ -4,12 +4,21 @@
 \alias{visualize_score}
 \title{Visualize score distributions over annotations}
 \usage{
-visualize_score(summarized_scores, annotation_order)
+visualize_score(summarized_scores, annotation_order = NULL, bin_width = 10,
+  plot_title = NULL, x_label = NULL, y_label = NULL)
 }
 \arguments{
 \item{summarized_scores}{The \code{grouped_df} result of \code{summarize_score()}.}
 
 \item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.}
+
+\item{bin_width}{An integer indicating the bin width of the histogram used for score. Default 10. Select something appropriate for the data.}
+
+\item{plot_title}{A string used for the title of the plot. Default \code{NULL}, no title displayed.}
+
+\item{x_label}{A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.}
+
+\item{y_label}{A string used for the y-axis label. Default \code{NULL}, corresponding variable name used.}
 }
 \value{
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
@@ -48,7 +57,7 @@ genes_order = c(
   'hg19_knownGenes_exons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
-v_genes = visualize_score(s, genes_order)
+v_genes = visualize_score(s, genes_order, bin_width=30)
 
 ########################################################################
 # An example of percent methylation at CpG sites
@@ -80,7 +89,7 @@ genes_order = c(
   'hg19_knownGenes_exons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
-v_genes = visualize_score(s, genes_order)
+v_genes = visualize_score(s, genes_order, bin_width=5)
 
 }
 

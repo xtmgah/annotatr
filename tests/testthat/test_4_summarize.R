@@ -1,4 +1,4 @@
-context('Test score and name summaries over annotations')
+context('Test summarize module')
 
 test_that('Test error on incorrect input class in summarize_score()', {
   bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')

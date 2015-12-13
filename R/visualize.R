@@ -3,7 +3,10 @@
 #' Given a \code{dplyr::tbl_df} of counts of regions per annotation (from \code{summarize_annotation()}), visualize the counts per annotation as a bar graph.
 #'
 #' @param summarized_annotations The \code{tbl_df} result of \code{summarize_annotation()}.
-#' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.
+#' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering. If \code{NULL}, all annotations are displayed.
+#' @param plot_title A string used for the title of the plot. Default \code{NULL}, no title is displayed.
+#' @param x_label A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.
+#' @param y_label A string used for the y-axis label. Default \code{NULL}, corresponding variable name used.
 #'
 #' @return A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 #'
@@ -38,34 +41,60 @@
 #' v_annots = visualize_annotation(s, annots_order)
 #'
 #' @export
-visualize_annotation = function(summarized_annotations, annotation_order) {
-  if(class(summarized_annotations)[1] != "tbl_df") {
-    stop('Error: summarized_annotations must have class tbl_df. The best way to ensure this is to pass the result of summarize_annotation() into this function.')
-  }
+visualize_annotation = function(summarized_annotations, annotation_order=NULL,
+  plot_title=NULL, x_label=NULL, y_label=NULL) {
 
-  # Collect all annotation types
-  all_annot_types = unique(summarized_annotations[['annot_type']])
+  ########################################################################
+  # Argument parsing and error handling
 
-  # Check set equality of annot_types in the summarized_scores and the annotation_order
-  if( !dplyr::setequal(all_annot_types, annotation_order) ) {
-    if( all(annotation_order %in% all_annot_types) ) {
-      summarized_annotations = subset(summarized_annotations, summarized_annotations[['annot_type']] %in% annotation_order)
-    } else {
-      stop('There are annotations in annotation_order that are not present in annot_type column of summarized_annotations.')
+    if(class(summarized_annotations)[1] != "tbl_df") {
+      stop('Error: summarized_annotations must have class tbl_df. The best way to ensure this is to pass the result of summarize_annotation() into this function.')
     }
-  }
 
-  # Convert annot_type to a vector with the levels in the desired order
-  summarized_annotations[['annot_type']] = factor(
-    summarized_annotations[['annot_type']],
-    levels = annotation_order)
+  ########################################################################
+  # Order and subset the annotations if annotation_order is not NULL
 
-  # Make the ggplot
-  # NOTE: binwidth may need to be a parameter
-  plot =
-    ggplot(summarized_annotations, aes(x=annot_type, y=n)) +
-    geom_bar(stat='identity') +
-    theme(axis.text.x = element_text(angle = 30, hjust = 1))
+    if(!is.null(annotation_order)) {
+      # Collect all annotation types
+      all_annot_types = unique(summarized_annotations[['annot_type']])
+
+      # Check set equality of annot_types in the summarized_scores and the annotation_order
+      if( !dplyr::setequal(all_annot_types, annotation_order) ) {
+        if( all(annotation_order %in% all_annot_types) ) {
+          summarized_annotations = subset(summarized_annotations, summarized_annotations[['annot_type']] %in% annotation_order)
+        } else {
+          stop('There are annotations in annotation_order that are not present in annot_type column of summarized_annotations.')
+        }
+      }
+
+      # Convert annot_type to a vector with the levels in the desired order
+      summarized_annotations[['annot_type']] = factor(
+        summarized_annotations[['annot_type']],
+        levels = annotation_order)
+      levels(summarized_annotations[['annot_type']]) = tidy_annotations(annotation_order)
+    }
+
+  ########################################################################
+  # Construct the plot
+
+    # Make the base ggplot
+    # NOTE: binwidth may need to be a parameter
+    plot =
+      ggplot(summarized_annotations, aes(x=annot_type, y=n)) +
+      geom_bar(stat='identity') +
+      theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+    # Add any user defined labels to the plot if their values are not NULL
+    # if they are NULL, ggplot() will use defaults
+    if(!is.null(plot_title)) {
+      plot = plot + ggtitle(plot_title)
+    }
+    if(!is.null(x_label)) {
+      plot = plot + xlab(x_label)
+    }
+    if(!is.null(y_label)) {
+      plot = plot + ylab(y_label)
+    }
 
   return(plot)
 }
@@ -76,6 +105,10 @@ visualize_annotation = function(summarized_annotations, annotation_order) {
 #'
 #' @param summarized_scores The \code{grouped_df} result of \code{summarize_score()}.
 #' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.
+#' @param bin_width An integer indicating the bin width of the histogram used for score. Default 10. Select something appropriate for the data.
+#' @param plot_title A string used for the title of the plot. Default \code{NULL}, no title displayed.
+#' @param x_label A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.
+#' @param y_label A string used for the y-axis label. Default \code{NULL}, corresponding variable name used.
 #'
 #' @return A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 #'
@@ -110,7 +143,7 @@ visualize_annotation = function(summarized_annotations, annotation_order) {
 #'   'hg19_knownGenes_exons',
 #'   'hg19_knownGenes_introns',
 #'   'hg19_knownGenes_3UTRs')
-#' v_genes = visualize_score(s, genes_order)
+#' v_genes = visualize_score(s, genes_order, bin_width=30)
 #'
 #' ########################################################################
 #' # An example of percent methylation at CpG sites
@@ -142,52 +175,81 @@ visualize_annotation = function(summarized_annotations, annotation_order) {
 #'   'hg19_knownGenes_exons',
 #'   'hg19_knownGenes_introns',
 #'   'hg19_knownGenes_3UTRs')
-#' v_genes = visualize_score(s, genes_order)
+#' v_genes = visualize_score(s, genes_order, bin_width=5)
 #'
 #' @export
-visualize_score = function(summarized_scores, annotation_order) {
-  if(class(summarized_scores)[1] != "grouped_df") {
-    stop('Error: summarized_scores must have class grouped_df. The best way to ensure this is to pass the result of summarize_score() into this function.')
-  }
+visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=10,
+  plot_title=NULL, x_label=NULL, y_label=NULL) {
 
-  # Collect all annotation types
-  all_annot_types = unique(summarized_scores[['annot_type']])
-
-  # Check set equality of annot_types in the summarized_scores and the annotation_order
-  if( !dplyr::setequal(all_annot_types, annotation_order) ) {
-    if( all(annotation_order %in% all_annot_types) ) {
-      summarized_scores = subset(summarized_scores, summarized_scores[['annot_type']] %in% annotation_order)
-    } else {
-      stop('There are annotations in annotation_order that are not present in annot_type column of summarized_scores.')
+  ########################################################################
+  # Argument parsing and error handling
+    if(class(summarized_scores)[1] != "grouped_df") {
+      stop('Error: summarized_scores must have class grouped_df. The best way to ensure this is to pass the result of summarize_score() into this function.')
     }
-  }
 
-  # Convert annot_type to a vector with the levels in the desired order
-  summarized_scores[['annot_type']] = factor(
-    summarized_scores[['annot_type']],
-    levels = annotation_order)
+  ########################################################################
+  # Order and subset the annotations if annotation_order is not NULL
 
-  # Make the ggplot
-  # NOTE: binwidth may need to be a parameter
-  plot =
-    ggplot(summarized_scores, aes(mean)) +
-    geom_histogram(binwidth=5, aes(y=..density..)) +
-    facet_wrap(~annot_type) +
-    theme_bw()
+    if(!is.null(annotation_order)) {
+      # Collect all annotation types
+      all_annot_types = unique(summarized_scores[['annot_type']])
+
+      # Check set equality of annot_types in the summarized_scores and the annotation_order
+      if( !dplyr::setequal(all_annot_types, annotation_order) ) {
+        if( all(annotation_order %in% all_annot_types) ) {
+          summarized_scores = subset(summarized_scores, summarized_scores[['annot_type']] %in% annotation_order)
+        } else {
+          stop('There are annotations in annotation_order that are not present in annot_type column of summarized_annotations.')
+        }
+      }
+
+      # Convert annot_type to a vector with the levels in the desired order
+      summarized_scores[['annot_type']] = factor(
+        summarized_scores[['annot_type']],
+        levels = annotation_order)
+      levels(summarized_scores[['annot_type']]) = tidy_annotations(annotation_order)
+    }
+
+  ########################################################################
+  # Construct the plot
+
+    # Make the base ggplot
+    # NOTE: binwidth may need to be a parameter
+    plot =
+      ggplot(summarized_scores, aes(mean)) +
+      geom_histogram(binwidth=bin_width, aes(y=..density..)) +
+      facet_wrap(~annot_type) +
+      theme_bw()
+
+    # Add any user defined labels to the plot if their values are not NULL
+    # if they are NULL, ggplot() will use defaults
+    if(!is.null(plot_title)) {
+      plot = plot + ggtitle(plot_title)
+    }
+    if(!is.null(x_label)) {
+      plot = plot + xlab(x_label)
+    }
+    if(!is.null(y_label)) {
+      plot = plot + ylab(y_label)
+    }
 
   return(plot)
 }
 
-#' Visualize scores over annotations
+#' Visualize names over annotations
 #'
 #' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_name()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
 #'
 #' @param summarized_names The \code{grouped_df} result of \code{summarize_name()}.
 #' @param x One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.
-#' @param fill One of 'annot_type', 'data_name', or NULL, indicating whether annotation classes or data classes will fill the bars. If NULL then the bars will be the total counts of the x classes.
-#' @param x_order A character vector that subsets and orders the x classes.
-#' @param fill_order A character vector that subsets and orders the fill classes.
+#' @param fill One of 'annot_type', 'data_name', or \code{NULL}, indicating whether annotation classes or data classes will fill the bars. If \code{NULL} then the bars will be the total counts of the x classes.
+#' @param x_order A character vector that subsets and orders the x classes. Default \code{NULL}, uses existing values.
+#' @param fill_order A character vector that subsets and orders the fill classes. Default \code{NULL}, uses existing values.
 #' @param position A string which has the same possible values as in \code{ggplot2::geom_bar(..., position)}, i.e., 'stack', 'fill', 'dodge', etc.
+#' @param plot_title A string used for the title of the plot. Default \code{NULL}, no title displayed.
+#' @param legend_title A string used for the legend title to describe fills (if fill is not \code{NULL}). Default \code{NULL}, displays corresponding variable name.
+#' @param x_label A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.
+#' @param y_label A string used for the y-axis label. Default \code{NULL}, corresponding variable name used.
 #'
 #' @return A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 #'
@@ -213,8 +275,8 @@ visualize_score = function(summarized_scores, annotation_order) {
 #'   'hg19_cpg_shelves',
 #'   'hg19_cpg_inter')
 #' x_order = c(
-#'   'DMup',
-#'   'DMdown')
+#'   'hyper',
+#'   'hypo')
 #' v_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
 #'   x_order = x_order, fill_order = fill_order, position='stack')
 #' v_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
@@ -228,9 +290,9 @@ visualize_score = function(summarized_scores, annotation_order) {
 #'   'hg19_cpg_shelves',
 #'   'hg19_cpg_inter')
 #' fill_order = c(
-#'   'DMup',
-#'   'DMdown',
-#'   'noDM')
+#'   'hyper',
+#'   'hypo',
+#'   'none')
 #' v_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
 #'   x_order = x_order, fill_order = fill_order, position='stack')
 #' v_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
@@ -239,61 +301,119 @@ visualize_score = function(summarized_scores, annotation_order) {
 #'   x_order = x_order, fill_order = fill_order, position='stack')
 #'
 #' @export
-visualize_name = function(summarized_names, x, fill, x_order, fill_order, position = 'fill') {
-  if(class(summarized_names)[1] != "grouped_df") {
-    stop('Error: summarized_names must have class grouped_df. The best way to ensure this is to pass the result of summarize_name() into this function.')
-  }
+visualize_name = function(summarized_names, x, fill=NULL, x_order=NULL, fill_order=NULL,
+  position = 'stack', plot_title=NULL, legend_title=NULL, x_label=NULL, y_label=NULL) {
 
-  if(position != 'stack' && position != 'fill' && position != 'dodge') {
-    stop('Error: position must be one of "stack", "fill", or "dodge"')
-  }
+  ########################################################################
+  # Argument parsing and error handling
 
-  if(!is.null(fill) && x == fill) {
-    stop('Error: x cannot equal fill')
-  }
-
-  # Collect all x types
-  all_x_types = unique(summarized_names[[x]])
-
-  # Check set equality of x in the summarized_scores and the x_order
-  if( !dplyr::setequal(all_x_types, x_order) ) {
-    if( all(x_order %in% all_x_types) ) {
-      summarized_names = subset(summarized_names, summarized_names[[x]] %in% x_order)
-    } else {
-      stop('There are elements in x_order that are not present in the corresponding column of summarized_names.')
+    # Check correct class of input
+    if(class(summarized_names)[1] != "grouped_df") {
+      stop('Error: summarized_names must have class grouped_df. The best way to ensure this is to pass the result of summarize_name() into this function.')
     }
-  }
 
-  # Convert x to factor with levels in the correct order
-  summarized_names[[x]] = factor(
-    summarized_names[[x]],
-    levels = x_order)
+    # Ensure the value of x is a column name in summarized_names
+    if( !(x %in% colnames(summarized_names)) ) {
+      stop('The column name used for x does not exist in summarized_names. Try using "annot_type" or "data_name".')
+    }
 
-  if(!is.null(fill)) {
-    # Collect all fill types
-    all_fill_names = unique(summarized_names[[fill]])
-
-    # Check set equality of fill in the summarized_scores and the data_order
-    if( !dplyr::setequal(all_fill_names, fill_order) ) {
-      if( all(fill_order %in% all_fill_names) ) {
-        summarized_names = subset(summarized_names, summarized_names[[fill]] %in% fill_order)
-      } else {
-        stop('There are elements in fill_order that are not present in the corresponding column of summarized_names.')
+    # Ensure the value of fill is a column name in summarized_names if it isn't NULL
+    # Also ensure fill != x
+    if( !is.null(fill) ) {
+      if( !(fill %in% colnames(summarized_names)) ) {
+        stop('The column name used for fill does not exist in summarized_names. Try using "annot_type" or "data_name".')
+      }
+      if( x == fill ) {
+        stop('Error: x cannot equal fill')
       }
     }
 
-    # Convert fill to factor with levels in the correct order
-    summarized_names[[fill]] = factor(
-      summarized_names[[fill]],
-      levels = fill_order)
-  }
+    # Check valid position argument
+    if(position != 'stack' && position != 'fill' && position != 'dodge') {
+      stop('Error: position must be one of "stack", "fill", or "dodge"')
+    }
 
-  # Make the ggplot
-  plot =
-    ggplot(summarized_names, aes_string(x=x, y='n', fill=fill)) +
-    geom_bar(stat='identity', position=position, aes_string(order = fill)) +
-    scale_fill_brewer('Blues') +
-    theme(axis.text.x = element_text(angle = 30, hjust = 1))
+  ########################################################################
+  # Order and subset x if x_order isn't NULL
+
+    if(!is.null(x_order)) {
+      # Collect all x types
+      all_x_types = unique(summarized_names[[x]])
+
+      # Check set equality of x in the summarized_scores and the x_order
+      if( !dplyr::setequal(all_x_types, x_order) ) {
+        if( all(x_order %in% all_x_types) ) {
+          summarized_names = subset(summarized_names, summarized_names[[x]] %in% x_order)
+        } else {
+          stop('There are elements in x_order that are not present in the corresponding column of summarized_names.')
+        }
+      }
+
+      # Convert x to factor with levels in the correct order
+      # Also convert the levels to tidy names if x is annotations
+      summarized_names[[x]] = factor(
+        summarized_names[[x]],
+        levels = x_order)
+      if(x == 'annot_type') {
+        levels(summarized_names[[x]]) = tidy_annotations(x_order)
+      }
+    }
+
+  ########################################################################
+  # Order and subset fill if fill and fill_order are not NULL
+
+    if(!is.null(fill)) {
+      if(!is.null(fill_order)) {
+        # Collect all fill types
+        all_fill_names = unique(summarized_names[[fill]])
+
+        # Check set equality of fill in the summarized_scores and the data_order
+        if( !dplyr::setequal(all_fill_names, fill_order) ) {
+          if( all(fill_order %in% all_fill_names) ) {
+            summarized_names = subset(summarized_names, summarized_names[[fill]] %in% fill_order)
+          } else {
+            stop('There are elements in fill_order that are not present in the corresponding column of summarized_names.')
+          }
+        }
+
+        # Convert fill to factor with levels in the correct order
+        # Also convert the levels to tidy names if fill is annotations
+        summarized_names[[fill]] = factor(
+          summarized_names[[fill]],
+          levels = fill_order)
+        if(fill == 'annot_type') {
+          levels(summarized_names[[fill]]) = tidy_annotations(fill_order)
+        }
+      }
+    }
+
+  ########################################################################
+  # Construct the plot
+
+    # Make base ggplot
+    plot =
+      ggplot(summarized_names, aes_string(x=x, y='n', fill=fill)) +
+      geom_bar(stat='identity', position=position, aes_string(order = fill), width=0.5) +
+      theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+    # Change the fill scale and name if legend_title isn't null
+    if(!is.null(legend_title)) {
+      plot = plot + scale_fill_brewer(name=legend_title)
+    } else {
+      plot = plot + scale_fill_brewer()
+    }
+
+    # Add any user defined labels to the plot if their values are not NULL
+    # if they are NULL, ggplot() will use defaults
+    if(!is.null(plot_title)) {
+      plot = plot + ggtitle(plot_title)
+    }
+    if(!is.null(x_label)) {
+      plot = plot + xlab(x_label)
+    }
+    if(!is.null(y_label)) {
+      plot = plot + ylab(y_label)
+    }
 
   return(plot)
 }

@@ -4,12 +4,19 @@
 \alias{visualize_annotation}
 \title{Visualize the number of regions per annotation}
 \usage{
-visualize_annotation(summarized_annotations, annotation_order)
+visualize_annotation(summarized_annotations, annotation_order = NULL,
+  plot_title = NULL, x_label = NULL, y_label = NULL)
 }
 \arguments{
 \item{summarized_annotations}{The \code{tbl_df} result of \code{summarize_annotation()}.}
 
-\item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.}
+\item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering. If \code{NULL}, all annotations are displayed.}
+
+\item{plot_title}{A string used for the title of the plot. Default \code{NULL}, no title is displayed.}
+
+\item{x_label}{A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.}
+
+\item{y_label}{A string used for the y-axis label. Default \code{NULL}, corresponding variable name used.}
 }
 \value{
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.

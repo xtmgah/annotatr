@@ -27,3 +27,28 @@ supported_annotations = function() {
 supported_genomes = function() {
   return(c('hg19','hg38','mm9','mm10'))
 }
+
+#' Function to tidy up annotation accessors for visualization
+#'
+#' @param annotations A character vector of annotations, in the order they are to appear in the visualization.
+#'
+#' @return A list of mappings from original annotation names to names ready for visualization.
+tidy_annotations = function(annotations) {
+  tidy = sapply(annotations, function(a){
+    tokens = unlist(strsplit(a,'_'))
+    if(tokens[2] == 'cpg') {
+      if(tokens[3] == 'inter') {
+        return('interCGI')
+      } else {
+        return(paste('CpG', tokens[3]))
+      }
+    } else if (tokens[2] == 'knownGenes') {
+      return(tokens[3])
+    }
+  })
+
+  flip_tidy = names(tidy)
+  names(flip_tidy) = tidy
+
+  return(as.list(flip_tidy))
+}

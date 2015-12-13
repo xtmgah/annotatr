@@ -1,4 +1,4 @@
-context('Test intersection and annotation of intersection')
+context('Test intersect/annotate module')
 
 test_that('Test error thrown for non-GRanges regions object in annotate_regions()',{
   bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')

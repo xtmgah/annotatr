@@ -1,4 +1,4 @@
-context('Test read_bed() function')
+context('Test read module')
 
 test_that('Test error for file does not exist.',{
     expect_error(
