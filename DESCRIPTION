@@ -1,6 +1,6 @@
 Package: annotatr
-Title: Annotation of Genomic Regions to Structural Annotations
-Version: 0.0.1
+Title: Annotation of Genomic Regions to Genomic Annotations
+Version: 1.0.0
 Authors@R: c(
   person("Raymond", "Cavalcante", email = "rcavalca@umich.edu", role = c("aut", "cre")),
   person("Hani", "Habra", email = "hhani@umich.edu", role = c("aut")))
