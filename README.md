@@ -10,6 +10,10 @@ Genomic regions resulting from next-generation sequencing experiments and bioinf
 
 You've already located the package source for `annotatr`. The package can be installed directly from GitHub with the [`devtools`](https://cran.r-project.org/web/packages/devtools/index.html) package.
 
+```{r}
+devtools::install_github('rcavalcante/annotatr')
+```
+
 # Annotations
 
 We downloaded CpG island and UCSC knownGene tracks (for hg19, hg38, mm9, and mm10) from the UCSC Genome Browser. The package source stores these files in `data-raw/`. The package source also contains scripts (in `data-raw/`) used to transform the raw data into `GenomicRanges` objects. The final annotations are bundled with the package and are located in `data/`. Supported annotations are listed with `supported_annotations()` after loading the `annotatr` package.
@@ -22,7 +26,7 @@ The base CpG island (CGI) track serves as our CpG island annotations. CpG shores
 
 The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, exons, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, and 3'UTR introns. The schematic below gives an idea of how the location coordinates in the knownGene files can be used to determine the annotations.
 
-![Schematic of knownGene annotations in vignettes/.](vignettes/annotatr_knownGenes.jpeg)
+![Schematic of knownGene annotations in vignettes/](vignettes/annotatr_knownGenes.jpeg)
 
 # Usage
 
