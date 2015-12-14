@@ -1,5 +1,17 @@
 [![Travis-CI Build Status](https://travis-ci.org/rcavalcante/annotatr.svg?branch=master)](https://travis-ci.org/rcavalcante/annotatr) [![Coverage Status](https://coveralls.io/repos/rcavalcante/annotatr/badge.svg?branch=master&service=github)](https://coveralls.io/github/rcavalcante/annotatr?branch=master)
 
+# Contents
+* [Introduction](https://github.com/rcavalcante/annotatr#introduction)
+* [Installation](https://github.com/rcavalcante/annotatr#installation)
+* [Annotations](https://github.com/rcavalcante/annotatr#annotations)
+    * [CpG Annotations](https://github.com/rcavalcante/annotatr#cpg-annotations)
+    * [UCSC knownGenes](https://github.com/rcavalcante/annotatr#ucsc-knowngenes)
+* [Usage](https://github.com/rcavalcante/annotatr#usage)
+    * [Reading A File](https://github.com/rcavalcante/annotatr#reading-a-file)
+    * [Annotating Regions](https://github.com/rcavalcante/annotatr#annotating-regions)
+    * [Summarizing Over Annotations](https://github.com/rcavalcante/annotatr#summarizing-over-annotations)
+    * [Visualizing Over Annotations](https://github.com/rcavalcante/annotatr#visualizing-over-annotations)
+
 # Introduction
 
 Genomic regions resulting from next-generation sequencing experiments and bioinformatics pipelines are made more valuable when annotated to genomic features. A SNP occurring in an exon, or an enhancer, is likely of greater interest than one occurring in an inter-genic region. It may be of interest to find that a particular transcription factor overwhelmingly binds in promoters, while another binds mostly in 3’UTRs. Hyper-methylation at promoters containing a CpG island may indicate different regulatory regimes in one condition compared to another.
