@@ -6,7 +6,7 @@ context('Test visualization module')
   chip = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
   annotations = c('basic_genes','cpgs')
 
-  chip_d = read_bed(filename = chip, genome = 'hg19', stranded = F, use.score = TRUE)
+  chip_d = read_bed(file = chip, genome = 'hg19', stranded = F, use.score = TRUE)
 
   chip_r = annotate_regions(
     regions = chip_d,
@@ -29,7 +29,7 @@ context('Test visualization module')
   dm = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
   annotations = c('basic_genes','cpgs')
 
-  dm_d = read_bed(filename = dm, genome = 'hg19', stranded = F, use.score = TRUE)
+  dm_d = read_bed(file = dm, genome = 'hg19', stranded = F, use.score = TRUE)
 
   dm_r = annotate_regions(
     regions = dm_d,

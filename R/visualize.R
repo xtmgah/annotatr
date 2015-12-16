@@ -16,7 +16,7 @@
 #' bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 #' annotations = c('basic_genes','cpgs')
 #'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
 #' i = annotate_regions(
 #'   regions = d,
@@ -118,7 +118,7 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #' bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 #' annotations = c('basic_genes','cpgs')
 #'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
 #' i = annotate_regions(
 #'   regions = d,
@@ -150,7 +150,7 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #' bed = system.file('extdata', '2607_mc_hmc_perc_meth_chr21.txt.gz', package = 'annotatr')
 #' annotations = c('basic_genes','cpgs')
 #'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
 #' i = annotate_regions(
 #'   regions = d,
@@ -258,7 +258,7 @@ visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=1
 #' bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
 #' annotations = c('basic_genes','cpgs')
 #'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
 #' i = annotate_regions(
 #'   regions = d,

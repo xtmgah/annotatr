@@ -4,16 +4,19 @@
 \alias{read_bed}
 \title{Convert a bed file into a GenomicRanges object}
 \usage{
-read_bed(filename, genome, stranded = FALSE, use.score = FALSE)
+read_bed(file, col.names = FALSE, genome, stranded = FALSE,
+  use.score = FALSE)
 }
 \arguments{
-\item{filename}{Path to the file with data. File must exist and be in correct format.}
+\item{file}{Path to the file with data. File must exist and be in correct format.}
+
+\item{col.names}{Either \code{TRUE} (column names are given in the first row of the file), \code{FALSE} (the first row does not have column names), or a character vector of column names (the first row is assumed to not be column names, and the values of the character vector will be the resulting column names in the returned \code{GRanges} object). If there are columns in addition to the BED6 columns, it is recommended that a character vector is supplied so that columns can be referred to by downstream functions. Default \code{FALSE}. See documentation for \code{readr::read_tsv()} for more details.}
 
 \item{genome}{Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'}
 
-\item{stranded}{Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file.}
+\item{stranded}{Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file. Default \code{FALSE}}
 
-\item{use.score}{Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file.}
+\item{use.score}{Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file. Default \code{FALSE}}
 }
 \value{
 A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{regionName} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
@@ -23,7 +26,7 @@ A GenomicRanges object with ranges limited by genome and BED file. The GenomicRa
 }
 \examples{
 file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
-read_bed(filename = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
+read_bed(file = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 
 }
 

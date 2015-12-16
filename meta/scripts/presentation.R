@@ -4,7 +4,7 @@ library(ggplot2)
 bed = '../data/2607_mc_hmc_perc_meth_test2.txt'
 annotations = c('basic_genes','cpgs')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
+d = read_bed(file = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
 i = intersect_annotations(
   regions = d,
@@ -43,7 +43,7 @@ ggsave(filename='../presentation/2607_mc_hmc_perc_meth_basic_genes.png', plot=v_
 bed = '../data/2607_mc_hmc_perc_meth_test2.txt'
 annotations = c('detailed_genes')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = TRUE)
+d = read_bed(file = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
 i = intersect_annotations(
   regions = d,
@@ -76,7 +76,7 @@ ggsave(filename='../presentation/2607_mc_hmc_perc_meth_detailed_genes.png', plot
 bed = '../data/IDH2mut_v_NBM_DM.txt'
 annotations = c('detailed_genes','cpgs')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = F)
+d = read_bed(file = bed, genome = 'hg19', stranded = F, use.score = F)
 
 i = intersect_annotations(
   regions = d,
@@ -129,7 +129,7 @@ ggsave(filename='../presentation/IDH2mut_v_NBM_details_genes_counts.png', plot=v
 bed = '../data/IDH2mut_v_NBM_class_comp_trim.bed'
 annotations = c('detailed_genes','cpgs')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = F, use.score = F)
+d = read_bed(file = bed, genome = 'hg19', stranded = F, use.score = F)
 
 i = intersect_annotations(
   regions = d,

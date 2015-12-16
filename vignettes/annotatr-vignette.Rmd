@@ -44,7 +44,7 @@ The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter 
 
 `annotatr` reads in genomic regions of interest encoded as [BED6](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) using the `read_bed()` function. The `name` column may be a non-unique character vector indicating some classification for each region (e.g. hyper-methylated and hypo-methylated). The `score` column may take continuous or discrete numerical values that represent data associated with each region (e.g. the percent methylation).
 
-`read_bed()` requires the `filename` of the file to be read, a `genome` (one of hg19, hg38, mm9, or mm10), a logical value indicating whether the data is `stranded`, and a logical value indicating whether the `score` column should be used.
+`read_bed()` requires the `file` name to be read, a `genome` (one of hg19, hg38, mm9, or mm10), a logical value indicating whether the data is `stranded`, and a logical value indicating whether the `score` column should be used.
 
 ```{r, echo=FALSE}
 suppressWarnings(devtools::load_all())
@@ -59,7 +59,8 @@ dm_file = system.file(
   'IDH2mut_v_NBM_names_scores_chr9.txt.gz',
   package='annotatr')
 regions = read_bed(
-  filename = dm_file,
+  file = dm_file,
+  col.names = FALSE,
   genome = 'hg19',
   stranded = FALSE,
   use.score = TRUE)

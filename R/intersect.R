@@ -18,7 +18,7 @@
 #' bed = system.file('extdata', 'test_intersect.bed', package = 'annotatr')
 #' annotations = c('hg19_cpg_islands','hg19_cpg_shores','hg19_knownGenes_promoters')
 #'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE)
+#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE)
 #'
 #' i = annotate_regions(
 #'   regions = d,
@@ -31,7 +31,7 @@
 #' bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
 #' annotations = c('basic_genes')
 #'
-#' d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE)
+#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE)
 #'
 #' i = annotate_regions(
 #'   regions = d,

@@ -12,7 +12,7 @@ library(ggplot2)
 # Runs read to annotate in ~7s
 
 file = '../data/IDH2mut_v_NBM_test.txt'
-d = read_bed(filename = file, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+d = read_bed(file = file, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 annotations = c('cpgs', 'detailed_genes')
 i = intersect_annotations(
   regions = d,
@@ -34,7 +34,7 @@ plot =
   geom_histogram(binwidth=5, aes(y=..density..)) +
   facet_wrap(~annot_type) +
   theme_bw()
-ggsave(filename = '../figures/IDH2mut_v_NBM_DMdiff_over_annots.png',
+ggsave(file = '../figures/IDH2mut_v_NBM_DMdiff_over_annots.png',
   plot = plot, width = 12, height = 12, dpi = 300)
 
 ################################################################################
@@ -43,7 +43,7 @@ ggsave(filename = '../figures/IDH2mut_v_NBM_DMdiff_over_annots.png',
 # Runs read to annotate in ~1:53m
 
 file = '../data/2607_mc_hmc_perc_meth_test.txt'
-d = read_bed(filename = file, genome = 'hg19', stranded = TRUE, use.score = TRUE)
+d = read_bed(file = file, genome = 'hg19', stranded = TRUE, use.score = TRUE)
 annotations = c('cpgs', 'detailed_genes')
 i = intersect_annotations(
   regions = d,
@@ -68,7 +68,7 @@ plot =
   geom_histogram(binwidth=5, aes(y=..density..)) +
   facet_wrap(~annot_type) +
   theme_bw()
-ggsave(filename = '../figures/2607_mc_hmc_mean_perc_meth_over_annots.png',
+ggsave(file = '../figures/2607_mc_hmc_mean_perc_meth_over_annots.png',
   plot = plot, width = 12, height = 12, dpi = 300)
 
 plot =
@@ -76,7 +76,7 @@ plot =
   geom_histogram(binwidth=5, aes(y=..density..)) +
   facet_wrap(~annot_type) +
   theme_bw()
-ggsave(filename = '../figures/2607_mc_hmc_sd_perc_meth_over_annots.png',
+ggsave(file = '../figures/2607_mc_hmc_sd_perc_meth_over_annots.png',
   plot = plot, width = 12, height = 12, dpi = 300)
 
 ################################################################################
@@ -85,7 +85,7 @@ ggsave(filename = '../figures/2607_mc_hmc_sd_perc_meth_over_annots.png',
 # Runs read to annotate in 2:55m (dplyr)
 
 file = '../data/IDH2mut_v_NBM_class_comp_trim.bed'
-d = read_bed(filename = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
+d = read_bed(file = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 annotations = c('cpgs', 'detailed_genes')
 i = intersect_annotations(
   regions = d,
@@ -100,11 +100,11 @@ t = annotate_intersections(
 plot =
   ggplot(t, aes(data_name, fill=annot_type)) +
   geom_bar()
-ggsave(filename = '../figures/IDH2mut_v_NBM_class_comp_by_type.png',
+ggsave(file = '../figures/IDH2mut_v_NBM_class_comp_by_type.png',
   plot = plot, width = 12, height = 12, dpi = 300)
 
 plot =
   ggplot(subset(t, !(data_name %in% c('unclassifiable','noDM'))), aes(data_name, fill=annot_type)) +
   geom_bar()
-ggsave(filename = '../figures/IDH2mut_v_NBM_class_comp_by_type_no_noDM_uncl.png',
+ggsave(file = '../figures/IDH2mut_v_NBM_class_comp_by_type_no_noDM_uncl.png',
   plot = plot, width = 12, height = 6, dpi = 300)

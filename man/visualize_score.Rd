@@ -32,7 +32,7 @@ Given a \code{dplyr::grouped_df} of score aggregated annotations (from \code{sum
 bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 annotations = c('basic_genes','cpgs')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
@@ -64,7 +64,7 @@ v_genes = visualize_score(s, genes_order, bin_width=30)
 bed = system.file('extdata', '2607_mc_hmc_perc_meth_chr21.txt.gz', package = 'annotatr')
 annotations = c('basic_genes','cpgs')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = annotate_regions(
   regions = d,

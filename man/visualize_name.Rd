@@ -40,7 +40,7 @@ Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summ
 bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
 annotations = c('basic_genes','cpgs')
 
-d = read_bed(filename = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
