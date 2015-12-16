@@ -8,7 +8,7 @@
 #' @param stranded Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file. Default \code{FALSE}
 #' @param use.score Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file. Default \code{FALSE}
 #'
-#' @return A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{regionName} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
+#' @return A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{name} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
 #'
 #' @examples
 #' file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
@@ -20,7 +20,6 @@ read_bed <- function(file, col.names=FALSE, genome, stranded = FALSE, use.score 
     if (!file.exists(file)){
       stop(sprintf('Error: File, %s, not found.', file))
     }
-
     if (! genome %in% c('hg19','hg38','mm9','mm10')){
       stop('Error: Invalid genome.')
     }
@@ -32,57 +31,54 @@ read_bed <- function(file, col.names=FALSE, genome, stranded = FALSE, use.score 
     if (!all(grepl("chr", bed[[1]]))){
       stop('Error: First column of BED file does not appear to be chromsome.')
     }
-
     if (typeof(head(bed[[2]])) != "integer"){
         stop('Error: Second column of BED file must be integer valued.')
     }
-
     if (typeof(head(bed[[3]]))!= "integer"){
         stop('Error: Third column of BED file must be integer valued.')
     }
 
+  # Retrieve chromosome sizes for the genome
   size_code = sprintf('%s_chrom_sizes', genome)
   data(list = size_code, package = "annotatr")
   seqlengths = get(size_code)
 
+  # Construct the appropriate strand vector
   if(stranded){
-      if(length(base::setdiff( unique(bed[[6]]), c("+","-") ) > 0)) {
-          stop("Error: When stranded = T, strand column should contain +/- only.")
-      }
-      if(use.score) {
-          gr <- GenomicRanges::GRanges(
-              seqnames = bed[[1]],
-              ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-              strand = bed[[6]],
-              regionName = bed[[4]],
-              score = bed[[5]],
-              seqlengths = seqlengths)
-      } else{
-          gr <- GenomicRanges::GRanges(
-              seqnames = bed[[1]],
-              ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-              strand = bed[[6]],
-              regionName = bed[[4]],
-              seqlengths = seqlengths)
-      }
+    if(length(base::setdiff( unique(bed[[6]]), c("+","-") ) > 0)) {
+      stop("Error: When stranded = T, strand column should contain +/- only.")
+    }
+    strand = bed[[6]]
   } else {
-      if(use.score) {
-          gr <- GenomicRanges::GRanges(
-              seqnames = bed[[1]],
-              ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-              strand = '*',
-              regionName = bed[[4]],
-              score = bed[[5]],
-              seqlengths = seqlengths)
-      } else{
-          gr <- GenomicRanges::GRanges(
-              seqnames = bed[[1]],
-              ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-              strand = '*',
-              regionName = bed[[4]],
-              seqlengths = seqlengths)
-      }
+    strand = rep.int('*', nrow(bed))
   }
+
+  # Construct the appropriate mcols data.frame
+  if(use.score && ncol(bed) == 6) {
+    mcols = data.frame(name = bed[[4]], score = bed[[5]], stringsAsFactors=F)
+  } else if (!use.score && ncol(bed) == 6) {
+    mcols = data.frame(name = bed[[4]], stringsAsFactors=F)
+  } else if (!use.score && ncol(bed) == 3) {
+    mcols = NULL
+  } else if (use.score && ncol(bed) > 6) {
+    mcols = data.frame(name = bed[[4]], bed[c(5,7:ncol(bed))], stringsAsFactors=F)
+  }
+
+  if(!is.null(mcols)) {
+    gr <- GenomicRanges::GRanges(
+        seqnames = bed[[1]],
+        ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
+        strand = strand,
+        seqlengths = seqlengths)
+    GenomicRanges::mcols(gr) = mcols
+  } else {
+    gr <- GenomicRanges::GRanges(
+        seqnames = bed[[1]],
+        ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
+        strand = strand,
+        seqlengths = seqlengths)
+  }
+
   # Assign the genome metadata
   GenomeInfoDb::genome(gr) = genome
 

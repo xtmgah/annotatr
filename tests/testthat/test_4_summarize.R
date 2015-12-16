@@ -3,16 +3,12 @@ context('Test summarize module')
 ################################################################################
 # Test errors
 
-test_that('Test error on incorrect input class in summarize_score()', {
-  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
+bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 
-  expect_error(summarize_score(bed), 'must have class tbl_df')
-})
-
-test_that('Test error on incorrect input class in summarize_name()', {
-  bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
-
-  expect_error(summarize_name(bed), 'must have class tbl_df')
+test_that('Test error on incorrect input class in summarize functions', {
+  expect_error(summarize_annotation(annotated_regions = bed), 'must have class tbl_df')
+  expect_error(summarize_score(annotated_regions = bed), 'must have class tbl_df')
+  expect_error(summarize_name(annotated_regions = bed), 'must have class tbl_df')
 })
 
 ################################################################################
