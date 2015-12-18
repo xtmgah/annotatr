@@ -104,20 +104,21 @@ annotate_regions = function(regions, annotations, genome, ignore.strand = TRUE, 
       a_sub = get(n)[intersections[[n]]@subjectHits]
 
       # Create the dplyr::tbl_df with score
-      df = dplyr::tbl_df(data.frame(
-        data_chrom = as.character(seqnames(r_sub)),
-        data_start = start(r_sub),
-        data_end = end(r_sub),
-        data_strand = as.character(strand(r_sub)),
-        data_score = r_sub$score,
-        data_name = r_sub$name,
+      df_ra = dplyr::tbl_df(data.frame(
         annot_start = start(a_sub),
         annot_end = end(a_sub),
         annot_strand = as.character(strand(a_sub)),
         annot_type = n,
         annot_id = a_sub$ID,
-        stringsAsFactors=F
-      ))
+        data_chrom = as.character(seqnames(r_sub)),
+        data_start = start(r_sub),
+        data_end = end(r_sub),
+        data_strand = as.character(strand(r_sub)),
+        stringsAsFactors = F))
+
+      df_d = dplyr::tbl_df(as.data.frame(GenomicRanges::mcols(r_sub)))
+
+      df = dplyr::bind_cols(df_ra, df_d)
     })
   } else {
     tab_list = lapply(names(intersections), function(n){
@@ -129,16 +130,16 @@ annotate_regions = function(regions, annotations, genome, ignore.strand = TRUE, 
 
       # Create the dplyr::tbl_df without score
       df = dplyr::tbl_df(data.frame(
-        data_chrom = as.character(seqnames(r_sub)),
-        data_start = start(r_sub),
-        data_end = end(r_sub),
-        data_strand = as.character(strand(r_sub)),
-        data_name = r_sub$name,
         annot_start = start(a_sub),
         annot_end = end(a_sub),
         annot_strand = as.character(strand(a_sub)),
         annot_type = n,
         annot_id = a_sub$ID,
+        data_chrom = as.character(seqnames(r_sub)),
+        data_start = start(r_sub),
+        data_end = end(r_sub),
+        data_strand = as.character(strand(r_sub)),
+        name = r_sub$name,
         stringsAsFactors=F
       ))
     })

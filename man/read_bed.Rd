@@ -10,7 +10,7 @@ read_bed(file, col.names = FALSE, genome, stranded = FALSE,
 \arguments{
 \item{file}{Path to the file with data. File must exist and be in correct format.}
 
-\item{col.names}{Either \code{TRUE} (column names are given in the first row of the file), \code{FALSE} (the first row does not have column names), or a character vector of column names (the first row is assumed to not be column names, and the values of the character vector will be the resulting column names in the returned \code{GRanges} object). If there are columns in addition to the BED6 columns, it is recommended that a character vector is supplied so that columns can be referred to by downstream functions. Default \code{FALSE}. See documentation for \code{readr::read_tsv()} for more details.}
+\item{col.names}{Either \code{TRUE} (column names are given in the first row of the file), \code{FALSE} (the first row does not have column names), or a character vector of column names (the first row is assumed to not be column names, and the values of the character vector will be the resulting column names in the returned \code{GRanges} object). If \code{FALSE} and the file is not BED6, a warning will indicate that downstream functions may behave unexpectedly.}
 
 \item{genome}{Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'}
 

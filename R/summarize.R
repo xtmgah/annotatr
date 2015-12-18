@@ -69,9 +69,9 @@ summarize_score = function(annotated_regions) {
   message('Summarizing scores over (annotation type, annotation ID) pairs')
   agg = dplyr::summarize(
     dplyr::group_by(annotated_regions, annot_type, annot_id),
-    count = length(data_score),
-    mean = mean(data_score),
-    sd = sd(data_score)
+    count = length(score),
+    mean = mean(score),
+    sd = sd(score)
   )
 
   return(agg)
@@ -109,7 +109,7 @@ summarize_name = function(annotated_regions) {
 
   message('Summarizing names over annotation type')
   agg = dplyr::tally(
-    dplyr::group_by(annotated_regions, annot_type, data_name)
+    dplyr::group_by(annotated_regions, annot_type, name)
   )
 
   return(agg)

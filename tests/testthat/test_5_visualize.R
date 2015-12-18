@@ -137,21 +137,21 @@ context('Test visualization module')
     expect_error(
       visualize_name(
         summarized_names = dm_sn,
-        x = 'data_name',
+        x = 'name',
         fill = 'testing'),
       'column name used for fill does not exist in summarized_names')
 
     expect_error(
       visualize_name(
         summarized_names = dm_sn,
-        x = 'data_name',
-        fill = 'data_name'),
+        x = 'name',
+        fill = 'name'),
       'x cannot equal fill')
 
     expect_error(
       visualize_name(
         summarized_names = dm_sn,
-        x = 'data_name',
+        x = 'name',
         fill = 'annot_type',
         position = 'no'),
       'position must be one of "stack", "fill"')
@@ -159,7 +159,7 @@ context('Test visualization module')
     expect_error(
       visualize_name(
         summarized_names = dm_sn,
-        x = 'data_name',
+        x = 'name',
         fill = 'annot_type',
         x_order = cpgs_order),
       'are elements in x_order that are not present')
@@ -167,7 +167,7 @@ context('Test visualization module')
     expect_error(
       visualize_name(
         summarized_names = dm_sn,
-        x = 'data_name',
+        x = 'name',
         fill = 'annot_type',
         fill_order = dm_order),
       'elements in fill_order that are not present')
@@ -176,11 +176,11 @@ context('Test visualization module')
 test_that('Test visualize_name() success', {
   dm_vn_min = visualize_name(
     summarized_names = dm_sn,
-    x = 'data_name')
+    x = 'name')
 
   dm_vn = visualize_name(
     summarized_names = dm_sn,
-    x = 'data_name',
+    x = 'name',
     fill = 'annot_type',
     x_order = dm_order,
     fill_order = genes_order,

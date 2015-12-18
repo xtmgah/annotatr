@@ -50,6 +50,29 @@ test_that('Test summarize_score()', {
   expect_equal( mean(s[['mean']]), expected = 25.19482, tolerance = 0.01)
 })
 
+test_that('Test summarize_score() over multiple columns', {
+  bed = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr21.txt.gz', package = 'annotatr')
+  annotations = c('basic_genes','cpgs')
+
+  d = read_bed(
+    file = bed,
+    col.names=c('chr','start','end','name','pval','strand','diff_meth','mu1','mu0'),
+    genome = 'hg19',
+    stranded = FALSE,
+    use.score = TRUE)
+
+  i = annotate_regions(
+    regions = d,
+    annotations = annotations,
+    genome = 'hg19',
+    ignore.strand = T,
+    use.score = TRUE)
+
+  s = summarize_name(i)
+
+  expect_equal( sum(s[['n']]), expected = 13464)
+})
+
 test_that('Test summarize_name()', {
   bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
   annotations = c('basic_genes','cpgs')

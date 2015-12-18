@@ -48,6 +48,8 @@ context('Test read module')
     file = system.file('extdata', 'test_read_3cols.bed', package='annotatr')
     gr = read_bed(file, col.names = FALSE, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 
+    expect_warning( read_bed(file, col.names = FALSE, genome = 'hg19', stranded = FALSE, use.score = FALSE),
+      'Input file is not BED6, and no column names were given')
     expect_equal( dplyr::setequal(dim(GenomicRanges::mcols(gr)), c(3,0)), expected = TRUE )
   })
 
@@ -79,28 +81,40 @@ context('Test read module')
 
   test_that('Test correct length when no duplicates' , {
     file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
-    gr = read_bed(file, genome = 'hg19', stranded = FALSE)
+    gr = read_bed(file, col.names = FALSE, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 
     expect_equal(length(gr), expected = 9848)
   })
 
   test_that('Test stranded argument' , {
     file = system.file('extdata', 'test_with_data_strand.bed', package = 'annotatr')
-    gr = read_bed(file, genome = 'hg19', stranded = TRUE)
+    gr = read_bed(file, col.names = FALSE, genome = 'hg19', stranded = TRUE, use.score = FALSE)
 
     expect_equal(length(gr), expected = 3)
   })
 
   test_that('Unique works on ranges only', {
     file = system.file('extdata','test_duplicates_with_data_strand.bed',package='annotatr')
-    gr = read_bed(file, genome = 'hg19', stranded=TRUE, use.score=TRUE)
+    gr = read_bed(file, col.names = FALSE, genome = 'hg19', stranded=TRUE, use.score=TRUE)
 
     expect_equal( length(gr), expected = 3)
   })
 
   test_that('Test unique statement works', {
     file = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
-    gr = read_bed(file, genome = 'hg19', stranded = FALSE)
+    gr = read_bed(file, col.names = FALSE, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 
     expect_equal( 27558 - length(gr), expected = 5821)
+  })
+
+  test_that('Test multiple column data', {
+    file = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr21.txt.gz', package = 'annotatr')
+    gr = read_bed(
+      file,
+      col.names=c('chr','start','end','name','pval','strand','diff_meth','mu1','mu0'),
+      genome = 'hg19',
+      stranded = FALSE,
+      use.score = TRUE)
+
+    expect_equal( dplyr::setequal(colnames(GenomicRanges::mcols(gr)), c('name','pval','diff_meth','mu1','mu0')), expected = TRUE)
   })

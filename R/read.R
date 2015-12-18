@@ -3,7 +3,7 @@
 #' \code{read_bed} reads in data from a BED6 file, checks to see if it follows the appropriate BED (Browser Extensible Data) format, and checks validity of genome. If valid, reads file data into a GenomicRanges object. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
 #'
 #' @param file Path to the file with data. File must exist and be in correct format.
-#' @param col.names Either \code{TRUE} (column names are given in the first row of the file), \code{FALSE} (the first row does not have column names), or a character vector of column names (the first row is assumed to not be column names, and the values of the character vector will be the resulting column names in the returned \code{GRanges} object). If there are columns in addition to the BED6 columns, it is recommended that a character vector is supplied so that columns can be referred to by downstream functions. Default \code{FALSE}. See documentation for \code{readr::read_tsv()} for more details.
+#' @param col.names Either \code{TRUE} (column names are given in the first row of the file), \code{FALSE} (the first row does not have column names), or a character vector of column names (the first row is assumed to not be column names, and the values of the character vector will be the resulting column names in the returned \code{GRanges} object). If \code{FALSE} and the file is not BED6, a warning will indicate that downstream functions may behave unexpectedly.
 #' @param genome Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'
 #' @param stranded Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file. Default \code{FALSE}
 #' @param use.score Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file. Default \code{FALSE}
@@ -38,6 +38,15 @@ read_bed <- function(file, col.names=FALSE, genome, stranded = FALSE, use.score 
         stop('Error: Third column of BED file must be integer valued.')
     }
 
+  # Deal with column names
+    if(class(col.names) != 'character' && col.names == FALSE) {
+      if(ncol(bed) == 6) {
+        colnames(bed) = c('chr','start','end','name','score','strand')
+      } else {
+        warning('Warning: Input file is not BED6, and no column names were given. Downstream functions may behave oddly.')
+      }
+    }
+
   # Retrieve chromosome sizes for the genome
   size_code = sprintf('%s_chrom_sizes', genome)
   data(list = size_code, package = "annotatr")
@@ -55,15 +64,31 @@ read_bed <- function(file, col.names=FALSE, genome, stranded = FALSE, use.score 
 
   # Construct the appropriate mcols data.frame
   if(use.score && ncol(bed) == 6) {
+    # This is the vanilla use.score case. This overwrites column name information.
     mcols = data.frame(name = bed[[4]], score = bed[[5]], stringsAsFactors=F)
   } else if (!use.score && ncol(bed) == 6) {
+    # This is the !use.score case.
     mcols = data.frame(name = bed[[4]], stringsAsFactors=F)
-  } else if (!use.score && ncol(bed) == 3) {
+  } else if (!use.score && ncol(bed) < 6) {
+    # Shrink to BED3 case
     mcols = NULL
   } else if (use.score && ncol(bed) > 6) {
+    # This is the multiple data column case. name column remains so named.
+    # We are expecting the user to name their columns, otherwise we
+    # won't possibly know what to do in summarize and visualize.
     mcols = data.frame(name = bed[[4]], bed[c(5,7:ncol(bed))], stringsAsFactors=F)
+  } else if (!use.score && ncol(bed) > 6) {
+    # This is the multiple data column case. name column remains so named.
+    # It is conceivable that the user may just tack on data columns to an
+    # existing BED file, hence skipping over column 5 (score)
+    # if it's all 1000s like in a narrowPeak.
+    mcols = data.frame(name = bed[[4]], bed[c(7:ncol(bed))], stringsAsFactors=F)
+  } else {
+    # Shrink to BED3 case
+    mcols = NULL
   }
 
+  # Construct the GRanges object
   if(!is.null(mcols)) {
     gr <- GenomicRanges::GRanges(
         seqnames = bed[[1]],

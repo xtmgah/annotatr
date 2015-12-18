@@ -211,7 +211,7 @@ fill_order = c(
 # Make a barplot of the data class where each bar
 # is composed of the counts of CpG annotations.
 visualize_cpgs = visualize_name(
-  summarized_names=name_summarized_annotations, x='data_name', fill='annot_type',
+  summarized_names=name_summarized_annotations, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack',
   plot_title = 'DM Status by CpG Annotation Counts',
   legend_title = 'Annotations',
@@ -227,7 +227,7 @@ print(visualize_cpgs)
 # Make a barplot of the data class where each bar
 # is composed of the *proportion* of CpG annotations.
 visualize_cpgs = visualize_name(
-  summarized_names=name_summarized_annotations, x='data_name', fill='annot_type',
+  summarized_names=name_summarized_annotations, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill',
   plot_title = 'DM Status by CpG Annotation Proportions',
   legend_title = 'Annotations',
@@ -253,7 +253,7 @@ fill_order = c(
   'hypo',
   'none')
 visualize_genes = visualize_name(
-  summarized_names=name_summarized_annotations, x='annot_type', fill='data_name',
+  summarized_names=name_summarized_annotations, x='annot_type', fill='name',
   x_order = x_order, fill_order = fill_order, position='fill',
   legend_title = 'DM Status',
   x_label = 'knownGene Annotations',
