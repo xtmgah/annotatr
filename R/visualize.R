@@ -277,11 +277,11 @@ visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=1
 #' x_order = c(
 #'   'hyper',
 #'   'hypo')
-#' v_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
+#' v_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='name', fill='annot_type',
 #'   x_order = x_order, fill_order = fill_order, position='stack')
-#' v_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
+#' v_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='name', fill='annot_type',
 #'   x_order = x_order, fill_order = fill_order, position='fill')
-#' v_cpgs_nofill_data = visualize_name(summarized_names=s, x='data_name', fill=NULL,
+#' v_cpgs_nofill_data = visualize_name(summarized_names=s, x='name', fill=NULL,
 #'   x_order = x_order, fill_order = fill_order, position='stack')
 #'
 #' x_order = c(
@@ -293,9 +293,9 @@ visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=1
 #'   'hyper',
 #'   'hypo',
 #'   'none')
-#' v_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
+#' v_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='name',
 #'   x_order = x_order, fill_order = fill_order, position='stack')
-#' v_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
+#' v_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='name',
 #'   x_order = x_order, fill_order = fill_order, position='fill')
 #' v_cpgs_nofill_annot = visualize_name(summarized_names=s, x='annot_type', fill=NULL,
 #'   x_order = x_order, fill_order = fill_order, position='stack')
