@@ -69,18 +69,17 @@ print(regions)
 
 ## Annotating Regions
 
-Users may select annotations a la carte via the accessors listed with `supported_annotations()`, or via shortcuts. The `cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `basic_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `detailed_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `basic_genes` and `detailed_genes` shortcuts may not be used at the same time.
+Users may select annotations a la carte via the accessors listed with `supported_annotations()`, or via shortcuts. The `hg19_cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `hg19_basicgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `hg19_detailedgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `hg19_basicgenes` and `hg19_detailedgenes` shortcuts may not be used at the same time. Shortcuts for other `supported_genomes()` are accessed in the same way, replacing `hg19` with one of `hg38`, `mm9`, or `mm10`.
 
 `annotate_regions()` requires a `GRanges` object (either the result of `read_bed()` or an object the user already has), a character vector indicating the `annotations` to annotate the regions with, the `genome` as above, a logical value indicating whether to `ignore.strand` when calling `GenomicRanges::findOverlaps()`, and a logical value indicating whether to `use.score`.
 
 ```{r}
 # Select annotations for intersection with regions
-annots = c('cpgs','basic_genes')
+annots = c('hg19_cpgs','hg19_basicgenes')
 # Intersect the regions we read in with the annotations
 annotated_regions = annotate_regions(
   regions = regions,
   annotations = annots,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = TRUE)
 # A dplyr::tbl_df object is returned

@@ -38,14 +38,13 @@ Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summ
 \examples{
 # An example of differentially methylated regions classified as DM up, DM down, or no DM
 bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
-annotations = c('basic_genes','cpgs')
+annotations = c('hg19_basicgenes','hg19_cpgs')
 
 d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
   annotations = annotations,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = TRUE)
 
@@ -59,11 +58,11 @@ fill_order = c(
 x_order = c(
   'hyper',
   'hypo')
-v_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
+v_hg19_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack')
-v_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='data_name', fill='annot_type',
+v_hg19_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill')
-v_cpgs_nofill_data = visualize_name(summarized_names=s, x='data_name', fill=NULL,
+v_hg19_cpgs_nofill_data = visualize_name(summarized_names=s, x='name', fill=NULL,
   x_order = x_order, fill_order = fill_order, position='stack')
 
 x_order = c(
@@ -75,11 +74,11 @@ fill_order = c(
   'hyper',
   'hypo',
   'none')
-v_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
+v_hg19_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='name',
   x_order = x_order, fill_order = fill_order, position='stack')
-v_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='data_name',
+v_hg19_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='name',
   x_order = x_order, fill_order = fill_order, position='fill')
-v_cpgs_nofill_annot = visualize_name(summarized_names=s, x='annot_type', fill=NULL,
+v_hg19_cpgs_nofill_annot = visualize_name(summarized_names=s, x='annot_type', fill=NULL,
   x_order = x_order, fill_order = fill_order, position='stack')
 
 }

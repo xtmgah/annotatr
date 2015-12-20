@@ -30,25 +30,24 @@ Given a \code{dplyr::grouped_df} of score aggregated annotations (from \code{sum
 ########################################################################
 # An example of ChIP-seq peaks with signalValue used for score
 bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
-annotations = c('basic_genes','cpgs')
+annotations = c('hg19_basicgenes','hg19_cpgs')
 
 d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
   annotations = annotations,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = TRUE)
 
 s = summarize_score(i)
 
-cpgs_order = c(
+hg19_cpgs_order = c(
   'hg19_cpg_islands',
   'hg19_cpg_shores',
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
-v_cpgs = visualize_score(s, cpgs_order)
+v_hg19_cpgs = visualize_score(s, hg19_cpgs_order)
 
 genes_order = c(
   'hg19_knownGenes_1to5kb',
@@ -62,25 +61,24 @@ v_genes = visualize_score(s, genes_order, bin_width=30)
 ########################################################################
 # An example of percent methylation at CpG sites
 bed = system.file('extdata', '2607_mc_hmc_perc_meth_chr21.txt.gz', package = 'annotatr')
-annotations = c('basic_genes','cpgs')
+annotations = c('hg19_basicgenes','hg19_cpgs')
 
 d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
   annotations = annotations,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = TRUE)
 
 s = summarize_score(i)
 
-cpgs_order = c(
+hg19_cpgs_order = c(
   'hg19_cpg_islands',
   'hg19_cpg_shores',
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
-v_cpgs = visualize_score(s, cpgs_order)
+v_hg19_cpgs = visualize_score(s, hg19_cpgs_order)
 
 genes_order = c(
   'hg19_knownGenes_1to5kb',

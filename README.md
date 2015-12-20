@@ -20,9 +20,9 @@ Genomic regions resulting from next-generation sequencing experiments and bioinf
 
 # Installation
 
-You've already located the package source for `annotatr`. The package can be installed directly from GitHub with the [`devtools`](https://cran.r-project.org/web/packages/devtools/index.html) package.
+`annotatr` package source is available at [http://www.github.com/rcavalcante/annotatr](http://www.github.com/rcavalcante/annotatr). The package can be installed directly from GitHub with the [`devtools`](https://cran.r-project.org/web/packages/devtools/index.html) package.
 
-```{r}
+```{r, eval=FALSE}
 devtools::install_github('rcavalcante/annotatr')
 ```
 
@@ -38,7 +38,7 @@ The base CpG island (CGI) track serves as our CpG island annotations. CpG shores
 
 The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, exons, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, and 3'UTR introns. The schematic below gives an idea of how the location coordinates in the knownGene files can be used to determine the annotations.
 
-![Schematic of knownGene annotations in vignettes/](vignettes/annotatr_knownGenes.jpeg)
+![Schematic of knownGene annotations.](annotatr_knownGenes.jpeg)
 
 # Usage
 
@@ -46,7 +46,11 @@ The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter 
 
 `annotatr` reads in genomic regions of interest encoded as [BED6](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) using the `read_bed()` function. The `name` column may be a non-unique character vector indicating some classification for each region (e.g. hyper-methylated and hypo-methylated). The `score` column may take continuous or discrete numerical values that represent data associated with each region (e.g. the percent methylation).
 
-`read_bed()` requires the `filename` of the file to be read, a `genome` (one of hg19, hg38, mm9, or mm10), a logical value indicating whether the data is `stranded`, and a logical value indicating whether the `score` column should be used.
+`read_bed()` requires the `file` name to be read, a `genome` (one of hg19, hg38, mm9, or mm10), a logical value indicating whether the data is `stranded`, and a logical value indicating whether the `score` column should be used.
+
+```{r, echo=FALSE}
+suppressWarnings(devtools::load_all())
+```
 
 ```{r}
 # This file in inst/extdata represents differentially methylated
@@ -57,7 +61,8 @@ dm_file = system.file(
   'IDH2mut_v_NBM_names_scores_chr9.txt.gz',
   package='annotatr')
 regions = read_bed(
-  filename = dm_file,
+  file = dm_file,
+  col.names = FALSE,
   genome = 'hg19',
   stranded = FALSE,
   use.score = TRUE)
@@ -66,18 +71,17 @@ print(regions)
 
 ## Annotating Regions
 
-Users may select annotations a la carte via the accessors listed with `supported_annotations()`, or via shortcuts. The `cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `basic_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `detailed_genes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `basic_genes` and `detailed_genes` shortcuts may not be used at the same time.
+Users may select annotations a la carte via the accessors listed with `supported_annotations()`, or via shortcuts. The `hg19_cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `hg19_basicgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `hg19_detailedgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `hg19_basicgenes` and `hg19_detailedgenes` shortcuts may not be used at the same time. Shortcuts for other `supported_genomes()` are accessed in the same way, replacing `hg19` with one of `hg38`, `mm9`, or `mm10`.
 
 `annotate_regions()` requires a `GRanges` object (either the result of `read_bed()` or an object the user already has), a character vector indicating the `annotations` to annotate the regions with, the `genome` as above, a logical value indicating whether to `ignore.strand` when calling `GenomicRanges::findOverlaps()`, and a logical value indicating whether to `use.score`.
 
 ```{r}
 # Select annotations for intersection with regions
-annots = c('cpgs','basic_genes')
+annots = c('hg19_cpgs','hg19_basicgenes')
 # Intersect the regions we read in with the annotations
 annotated_regions = annotate_regions(
   regions = regions,
   annotations = annots,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = TRUE)
 # A dplyr::tbl_df object is returned
@@ -114,7 +118,7 @@ print(name_summarized_annotations)
 
 `annotatr` has three visualization functions (`visualize_annotation()`, `visualize_score()` and `visualize_name()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
 
-```{r}
+```{r, eval=FALSE}
 # Usage of visualization functions
 
 visualize_annotation(summarized_annotations, annotation_order = NULL,
@@ -130,7 +134,7 @@ visualize_name(summarized_names, x, fill = NULL, x_order = NULL,
 
 All visualizations use an internal function, `tidy_annotations()`, on `annotation_order`, `x_order`, and `fill_order` parameters, which cleans annotation accessors for visualization. Each visualization function is designed to work with a small number of parameters. Order parameters are not required; when `NULL`, all values are displayed. Parameters for plot titles, legend titles, and axis labels are likewise optional, and will default to object name attributes if `NULL`.
 
-```{r}
+```{r, fig.align='center', fig.cap='Number of DM regions per annotation.', fig.height=5, fig.width=5, fig.show = 'hold'}
 # View the number of regions per annotation. This function
 # is useful when there is no classification or data
 # associated with the regions.
@@ -150,7 +154,7 @@ visualize_knownGene_annotations = visualize_annotation(
 print(visualize_knownGene_annotations)
 ```
 
-```{r}
+```{r, fig.align='center', fig.cap='Methylation difference distributions across the CpG annotations.', fig.height=6, fig.width=6, fig.show = 'hold'}
 # View the score summarized over the CpG annotations
 
 # A subset of cpgs_order could be chosen to display
@@ -169,7 +173,7 @@ visualize_score_cpgs = visualize_score(
 print(visualize_score_cpgs)
 ```
 
-```{r}
+```{r, fig.align='center', fig.cap='Methylation difference distributions across the basic genes annotation.', fig.height=6.5, fig.width=6.5, fig.show='hold'}
 # View the score summarized over the knownGene annotations.
 
 # A subset of genes_order could be chosen to display
@@ -190,7 +194,7 @@ visualize_score_genes = visualize_score(
 print(visualize_score_genes)
 ```
 
-```{r}
+```{r, fig.align='center', fig.cap='Differential methylation classification with counts of CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
 # View the counts of CpG annotations in data classes
 
 # The orders for the x-axis labels. This is also a subset
@@ -208,7 +212,7 @@ fill_order = c(
 # Make a barplot of the data class where each bar
 # is composed of the counts of CpG annotations.
 visualize_cpgs = visualize_name(
-  summarized_names=name_summarized_annotations, x='data_name', fill='annot_type',
+  summarized_names=name_summarized_annotations, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack',
   plot_title = 'DM Status by CpG Annotation Counts',
   legend_title = 'Annotations',
@@ -217,14 +221,14 @@ visualize_cpgs = visualize_name(
 print(visualize_cpgs)
 ```
 
-```{r}
+```{r, fig.align='center', fig.cap='Differential methylation classification with proportion of CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
 # Use the same order vectors as the previous code block,
 # but use proportional fill instead of counts.
 
 # Make a barplot of the data class where each bar
 # is composed of the *proportion* of CpG annotations.
 visualize_cpgs = visualize_name(
-  summarized_names=name_summarized_annotations, x='data_name', fill='annot_type',
+  summarized_names=name_summarized_annotations, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill',
   plot_title = 'DM Status by CpG Annotation Proportions',
   legend_title = 'Annotations',
@@ -233,7 +237,7 @@ visualize_cpgs = visualize_name(
 print(visualize_cpgs)
 ```
 
-```{r}
+```{r, fig.align='center', fig.cap='Basic gene annotations with proportions of DM classification.', fig.height=6, fig.width=6, fig.show='hold'}
 # View the proportions of data classes in knownGene annotations
 
 # The orders for the x-axis labels.
@@ -250,7 +254,7 @@ fill_order = c(
   'hypo',
   'none')
 visualize_genes = visualize_name(
-  summarized_names=name_summarized_annotations, x='annot_type', fill='data_name',
+  summarized_names=name_summarized_annotations, x='annot_type', fill='name',
   x_order = x_order, fill_order = fill_order, position='fill',
   legend_title = 'DM Status',
   x_label = 'knownGene Annotations',

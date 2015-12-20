@@ -16,14 +16,13 @@ test_that('Test error on incorrect input class in summarize functions', {
 
 test_that('Test summarize_annotations()', {
   bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
-  annotations = c('cpgs')
+  annotations = c('hg19_cpgs')
 
   d = read_bed(file = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
   i = annotate_regions(
     regions = d,
     annotations = annotations,
-    genome = 'hg19',
     ignore.strand = T,
     use.score = T)
 
@@ -34,14 +33,13 @@ test_that('Test summarize_annotations()', {
 
 test_that('Test summarize_score()', {
   bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
-  annotations = c('basic_genes','cpgs')
+  annotations = c('hg19_basicgenes','hg19_cpgs')
 
   d = read_bed(file = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
   i = annotate_regions(
     regions = d,
     annotations = annotations,
-    genome = 'hg19',
     ignore.strand = T,
     use.score = T)
 
@@ -52,7 +50,7 @@ test_that('Test summarize_score()', {
 
 test_that('Test summarize_score() over multiple columns', {
   bed = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr21.txt.gz', package = 'annotatr')
-  annotations = c('basic_genes','cpgs')
+  annotations = c('hg19_basicgenes','hg19_cpgs')
 
   d = read_bed(
     file = bed,
@@ -64,7 +62,6 @@ test_that('Test summarize_score() over multiple columns', {
   i = annotate_regions(
     regions = d,
     annotations = annotations,
-    genome = 'hg19',
     ignore.strand = T,
     use.score = TRUE)
 
@@ -75,14 +72,13 @@ test_that('Test summarize_score() over multiple columns', {
 
 test_that('Test summarize_name()', {
   bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
-  annotations = c('basic_genes','cpgs')
+  annotations = c('hg19_basicgenes','hg19_cpgs')
 
   d = read_bed(file = bed, genome = 'hg19', stranded = F, use.score = TRUE)
 
   i = annotate_regions(
     regions = d,
     annotations = annotations,
-    genome = 'hg19',
     ignore.strand = T,
     use.score = TRUE)
 

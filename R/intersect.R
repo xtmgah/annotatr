@@ -6,8 +6,7 @@
 #' elements of the annotation data (subject).
 #'
 #' @param regions The GRanges object of the user-data returned by read_bed().
-#' @param annotations A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basic_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailed_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basic_genes and detailed_genes annotations cannot be done at the same time.
-#' @param genome One of the genomes in supported_genomes(). Should match argument used in read_bed()().
+#' @param annotations A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basicgenes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailedgenes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basicgenes and detailedgenes annotations cannot be done at the same time, and shortcuts need to be appended by the genome
 #' @param ignore.strand Logical variable indicating whether strandedness should be respected in findOverlaps(). Default FALSE.
 #' @param use.score Logical variable. Include the "score" for each genomic region in the tabulated results. Score can mean a variety of things, e.g. percent methylation of a CpG/region or fold-change of a ChIP-seq peak.
 #'
@@ -23,63 +22,31 @@
 #' i = annotate_regions(
 #'   regions = d,
 #'   annotations = annotations,
-#'   genome = 'hg19',
 #'   ignore.strand = TRUE,
 #'   use.score = FALSE)
 #'
 #' # A more complicated example using Gm12878 Pol2 ChIP-seq from ENCODE and an annotation shortcut
 #' bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
-#' annotations = c('basic_genes')
+#' annotations = c('hg19_basicgenes')
 #'
 #' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE)
 #'
 #' i = annotate_regions(
 #'   regions = d,
 #'   annotations = annotations,
-#'   genome = 'hg19',
 #'   ignore.strand = TRUE,
 #'   use.score = FALSE)
 #'
 #' @export
-annotate_regions = function(regions, annotations, genome, ignore.strand = TRUE, use.score) {
+annotate_regions = function(regions, annotations, ignore.strand = TRUE, use.score) {
   # Checks before moving forward
   if(class(regions)[1] != "GRanges") {
     stop('Error in annotate_regions(...): regions object is not GRanges.')
   }
 
-  if(!(genome %in% supported_genomes())) {
-    stop('Error in annotate_regions(...): unsupported genome given. See supported_genomes().')
-  }
-
-  # Check that the annotations are supported, tell the user which are unsupported
-  if(!all(annotations %in% c(supported_annotations(),'cpgs','basic_genes','detailed_genes'))) {
-    unsupported = base::setdiff(annotations, c(supported_annotations(),'cpgs','basic_genes','detailed_genes'))
-
-    stop(sprintf('Error in annotate_regions(...): "%s" is(are) not supported. See supported_annotations().',
-      paste(unsupported, collapse=', ')))
-  }
-
-  # Do not allow basic_genes and detailed_genes at the same time
-  if('basic_genes' %in% annotations && 'detailed_genes' %in% annotations) {
-    stop('Error in annotate_regions(...): please choose between basic_genes and detailed_genes annotations.')
-  }
-
-  if('basic_genes' %in% annotations || 'detailed_genes' %in% annotations || 'cpgs' %in% annotations) {
-    # Check for shortcut annotation accessors 'cpgs', 'basic_genes', or 'detailed_genes'
-    # and create the right annotations based on the genome
-    new_annotations = c()
-    if('cpgs' %in% annotations) {
-      new_annotations = paste(genome, 'cpg', c('islands','shores','shelves','inter'), sep='_')
-    }
-    if ('basic_genes' %in% annotations) {
-      new_annotations = c(new_annotations, paste(genome, 'knownGenes', c('1to5kb','promoters','5UTRs','exons','introns','3UTRs'), sep='_'))
-    }
-    if ('detailed_genes' %in% annotations) {
-      new_annotations = c(new_annotations, paste(genome, 'knownGenes',
-        c('1to5kb','promoters','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','exons3UTRs','introns3UTRs'), sep='_'))
-    }
-    annotations = setdiff(c(annotations, new_annotations), c('basic_genes','detailed_genes','cpgs'))
-  }
+  # Check annotations and expand any shortcuts
+  check_annotations(annotations)
+  annotations = expand_annotations(annotations)
 
   # Collect the annotation objects into a GRangesList
   data(list = annotations, package = 'annotatr')

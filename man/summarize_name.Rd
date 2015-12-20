@@ -10,22 +10,21 @@ summarize_name(annotated_regions)
 \item{annotated_regions}{The \code{tbl_df} result of \code{annotate_regions()}.}
 }
 \value{
-A \code{tbl_df} of the counts of (annot_type, data_name) pairs.
+A \code{tbl_df} of the counts of (annot_type, name) pairs.
 }
 \description{
-Given a \code{dplyr::tbl_df} of annotated regions, summarize names over (annot_type, data_name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
+Given a \code{dplyr::tbl_df} of annotated regions, summarize names over (annot_type, name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
 }
 \examples{
 # An example of differentially methylated regions classified as DM up, DM down, or no DM
 bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
-annotations = c('basic_genes','cpgs')
+annotations = c('hg19_basicgenes','hg19_cpgs')
 
 d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
   annotations = annotations,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = TRUE)
 

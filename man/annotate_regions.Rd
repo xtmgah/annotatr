@@ -4,15 +4,12 @@
 \alias{annotate_regions}
 \title{A function to intersect user data with annotation data}
 \usage{
-annotate_regions(regions, annotations, genome, ignore.strand = TRUE,
-  use.score)
+annotate_regions(regions, annotations, ignore.strand = TRUE, use.score)
 }
 \arguments{
 \item{regions}{The GRanges object of the user-data returned by read_bed().}
 
-\item{annotations}{A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basic_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailed_genes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basic_genes and detailed_genes annotations cannot be done at the same time.}
-
-\item{genome}{One of the genomes in supported_genomes(). Should match argument used in read_bed()().}
+\item{annotations}{A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basicgenes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailedgenes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basicgenes and detailedgenes annotations cannot be done at the same time, and shortcuts need to be appended by the genome}
 
 \item{ignore.strand}{Logical variable indicating whether strandedness should be respected in findOverlaps(). Default FALSE.}
 
@@ -37,20 +34,18 @@ d = read_bed(file = bed, genome = 'hg19', stranded = FALSE)
 i = annotate_regions(
   regions = d,
   annotations = annotations,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = FALSE)
 
 # A more complicated example using Gm12878 Pol2 ChIP-seq from ENCODE and an annotation shortcut
 bed = system.file('extdata', 'Gm12878_Pol2.narrowPeak.gz', package = 'annotatr')
-annotations = c('basic_genes')
+annotations = c('hg19_basicgenes')
 
 d = read_bed(file = bed, genome = 'hg19', stranded = FALSE)
 
 i = annotate_regions(
   regions = d,
   annotations = annotations,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = FALSE)
 

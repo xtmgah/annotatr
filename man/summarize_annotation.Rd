@@ -18,14 +18,13 @@ Given a \code{dplyr::tbl_df} of annotated regions, count the number of regions i
 \examples{
 # An example of ChIP-seq peaks with signalValue used for score
 bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
-annotations = c('basic_genes','cpgs')
+annotations = c('hg19_basicgenes','hg19_cpgs')
 
 d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
   annotations = annotations,
-  genome = 'hg19',
   ignore.strand = TRUE,
   use.score = TRUE)
 
