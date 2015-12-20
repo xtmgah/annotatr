@@ -14,16 +14,16 @@ context('Test visualization module')
     ignore.strand = T,
     use.score = TRUE)
 
-  chip_sa = summarize_annotation(chip_r)
+  chip_sa = summarize_annotations(chip_r)
 
 ################################################################################
-# Setup objects for visualize_score()
+# Setup objects for visualize_numerical()
 
-  # Use the same input file as above, but summarize_score instead
-  chip_ss = summarize_score(chip_r)
+  # Use the same input file as above, but summarize_numerical instead
+  chip_ss = summarize_numerical(chip_r)
 
 ################################################################################
-# Setup objects for visualize_name()
+# Setup objects for visualize_categorical()
 
   dm = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
   annotations = c('hg19_basicgenes','hg19_cpgs')
@@ -36,7 +36,7 @@ context('Test visualization module')
     ignore.strand = T,
     use.score = TRUE)
 
-  dm_sn = summarize_name(dm_r)
+  dm_sn = summarize_categorical(dm_r)
 
 ################################################################################
 # Setup order vectors and visualizations that will work
@@ -74,8 +74,8 @@ context('Test visualization module')
 
   test_that('Test error on incorrect input class in all visualize functions', {
     expect_error(visualize_annotation(chip), 'summarized_annotations must have class tbl_df')
-    expect_error(visualize_score(chip), 'summarized_scores must have class grouped_df')
-    expect_error(visualize_name(chip), 'summarized_names must have class grouped_df')
+    expect_error(visualize_numerical(chip), 'summarized_scores must have class grouped_df')
+    expect_error(visualize_categorical(chip), 'summarized_names must have class grouped_df')
   })
 
 ################################################################################
@@ -98,18 +98,18 @@ context('Test visualization module')
   })
 
 ################################################################################
-# Test visualize_score()
+# Test visualize_numerical()
 
-  test_that('Test visualize_score() errors', {
-    expect_error( visualize_score(chip_ss, dm_order), 'elements in col_order that are not present')
+  test_that('Test visualize_numerical() errors', {
+    expect_error( visualize_numerical(chip_ss, dm_order), 'elements in col_order that are not present')
   })
 
-  test_that('Test visualize_score() success', {
-    chip_vs_min = visualize_score(
+  test_that('Test visualize_numerical() success', {
+    chip_vs_min = visualize_numerical(
       summarized_scores = chip_ss,
       bin_width = 30)
 
-    chip_vs = visualize_score(
+    chip_vs = visualize_numerical(
       summarized_scores = chip_ss,
       annotation_order = genes_order,
       x_label = 'Test x-axis label')
@@ -119,35 +119,35 @@ context('Test visualization module')
   })
 
 ################################################################################
-# Test visualize_name()
+# Test visualize_categorical()
 
-  test_that('Test visualize_name() errors', {
+  test_that('Test visualize_categorical() errors', {
     expect_error(
-      visualize_name(summarized_names = dm_sn),
+      visualize_categorical(summarized_names = dm_sn),
       'argument "x" is missing')
 
     expect_error(
-      visualize_name(
+      visualize_categorical(
         summarized_names = dm_sn,
         x = 'testing'),
       'column name used for x does not exist in summarized_names')
 
     expect_error(
-      visualize_name(
+      visualize_categorical(
         summarized_names = dm_sn,
         x = 'name',
         fill = 'testing'),
       'column name used for fill does not exist in summarized_names')
 
     expect_error(
-      visualize_name(
+      visualize_categorical(
         summarized_names = dm_sn,
         x = 'name',
         fill = 'name'),
       'x cannot equal fill')
 
     expect_error(
-      visualize_name(
+      visualize_categorical(
         summarized_names = dm_sn,
         x = 'name',
         fill = 'annot_type',
@@ -155,7 +155,7 @@ context('Test visualization module')
       'position must be one of "stack", "fill"')
 
     expect_error(
-      visualize_name(
+      visualize_categorical(
         summarized_names = dm_sn,
         x = 'name',
         fill = 'annot_type',
@@ -163,7 +163,7 @@ context('Test visualization module')
       'elements in col_order that are not present')
 
     expect_error(
-      visualize_name(
+      visualize_categorical(
         summarized_names = dm_sn,
         x = 'name',
         fill = 'annot_type',
@@ -171,12 +171,12 @@ context('Test visualization module')
       'elements in col_order that are not present')
   })
 
-test_that('Test visualize_name() success', {
-  dm_vn_min = visualize_name(
+test_that('Test visualize_categorical() success', {
+  dm_vn_min = visualize_categorical(
     summarized_names = dm_sn,
     x = 'name')
 
-  dm_vn = visualize_name(
+  dm_vn = visualize_categorical(
     summarized_names = dm_sn,
     x = 'name',
     fill = 'annot_type',

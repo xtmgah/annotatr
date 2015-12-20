@@ -19,15 +19,15 @@
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_annotation(i)
+#' s = summarize_annotations(i)
 #'
 #' @export
-summarize_annotation = function(annotated_regions) {
+summarize_annotations = function(annotated_regions) {
   if(class(annotated_regions)[1] != "tbl_df") {
     stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_regions() into this function.')
   }
 
-  message('Summarizing scores over (annotation type, annotation ID) pairs')
+  message('Summarizing scores over annotation types')
   agg = dplyr::tally(
     dplyr::group_by(annotated_regions, annot_type)
   )
@@ -56,10 +56,10 @@ summarize_annotation = function(annotated_regions) {
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_score(i)
+#' s = summarize_numerical(i)
 #'
 #' @export
-summarize_score = function(annotated_regions) {
+summarize_numerical = function(annotated_regions) {
   if(class(annotated_regions)[1] != "tbl_df") {
     stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_regions() into this function.')
   }
@@ -96,10 +96,10 @@ summarize_score = function(annotated_regions) {
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_name(i)
+#' s = summarize_categorical(i)
 #'
 #' @export
-summarize_name = function(annotated_regions) {
+summarize_categorical = function(annotated_regions) {
   if(class(annotated_regions)[1] != "tbl_df") {
     stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_regions() into this function.')
   }

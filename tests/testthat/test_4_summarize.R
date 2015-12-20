@@ -6,9 +6,9 @@ context('Test summarize module')
 bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
 
 test_that('Test error on incorrect input class in summarize functions', {
-  expect_error(summarize_annotation(annotated_regions = bed), 'must have class tbl_df')
-  expect_error(summarize_score(annotated_regions = bed), 'must have class tbl_df')
-  expect_error(summarize_name(annotated_regions = bed), 'must have class tbl_df')
+  expect_error(summarize_annotations(annotated_regions = bed), 'must have class tbl_df')
+  expect_error(summarize_numerical(annotated_regions = bed), 'must have class tbl_df')
+  expect_error(summarize_categorical(annotated_regions = bed), 'must have class tbl_df')
 })
 
 ################################################################################
@@ -26,12 +26,12 @@ test_that('Test summarize_annotations()', {
     ignore.strand = T,
     use.score = T)
 
-  s = summarize_annotation(i)
+  s = summarize_annotations(i)
 
   expect_equal( sum(s[['n']]), expected = 2843)
 })
 
-test_that('Test summarize_score()', {
+test_that('Test summarize_numerical()', {
   bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
   annotations = c('hg19_basicgenes','hg19_cpgs')
 
@@ -43,12 +43,12 @@ test_that('Test summarize_score()', {
     ignore.strand = T,
     use.score = T)
 
-  s = summarize_score(i)
+  s = summarize_numerical(i)
 
   expect_equal( mean(s[['mean']]), expected = 25.19482, tolerance = 0.01)
 })
 
-test_that('Test summarize_score() over multiple columns', {
+test_that('Test summarize_numerical() over multiple columns', {
   bed = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr21.txt.gz', package = 'annotatr')
   annotations = c('hg19_basicgenes','hg19_cpgs')
 
@@ -65,12 +65,12 @@ test_that('Test summarize_score() over multiple columns', {
     ignore.strand = T,
     use.score = TRUE)
 
-  s = summarize_name(i)
+  s = summarize_categorical(i)
 
   expect_equal( sum(s[['n']]), expected = 13464)
 })
 
-test_that('Test summarize_name()', {
+test_that('Test summarize_categorical()', {
   bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
   annotations = c('hg19_basicgenes','hg19_cpgs')
 
@@ -82,7 +82,7 @@ test_that('Test summarize_name()', {
     ignore.strand = T,
     use.score = TRUE)
 
-  s = summarize_name(i)
+  s = summarize_categorical(i)
 
   expect_equal( sum(s[['n']]), expected = 19984)
 })

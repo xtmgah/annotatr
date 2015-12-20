@@ -8,7 +8,7 @@ visualize_annotation(summarized_annotations, annotation_order = NULL,
   plot_title = NULL, x_label = NULL, y_label = NULL)
 }
 \arguments{
-\item{summarized_annotations}{The \code{tbl_df} result of \code{summarize_annotation()}.}
+\item{summarized_annotations}{The \code{tbl_df} result of \code{summarize_annotations()}.}
 
 \item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering. If \code{NULL}, all annotations are displayed.}
 
@@ -22,7 +22,7 @@ visualize_annotation(summarized_annotations, annotation_order = NULL,
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Given a \code{dplyr::tbl_df} of counts of regions per annotation (from \code{summarize_annotation()}), visualize the counts per annotation as a bar graph.
+Given a \code{dplyr::tbl_df} of counts of regions per annotation (from \code{summarize_annotations()}), visualize the counts per annotation as a bar graph.
 }
 \examples{
 ########################################################################
@@ -38,7 +38,7 @@ i = annotate_regions(
   ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_annotation(i)
+s = summarize_annotations(i)
 
 annots_order = c(
   'hg19_cpg_islands',

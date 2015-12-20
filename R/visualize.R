@@ -1,8 +1,8 @@
 #' Visualize the number of regions per annotation
 #'
-#' Given a \code{dplyr::tbl_df} of counts of regions per annotation (from \code{summarize_annotation()}), visualize the counts per annotation as a bar graph.
+#' Given a \code{dplyr::tbl_df} of counts of regions per annotation (from \code{summarize_annotations()}), visualize the counts per annotation as a bar graph.
 #'
-#' @param summarized_annotations The \code{tbl_df} result of \code{summarize_annotation()}.
+#' @param summarized_annotations The \code{tbl_df} result of \code{summarize_annotations()}.
 #' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering. If \code{NULL}, all annotations are displayed.
 #' @param plot_title A string used for the title of the plot. Default \code{NULL}, no title is displayed.
 #' @param x_label A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.
@@ -24,7 +24,7 @@
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_annotation(i)
+#' s = summarize_annotations(i)
 #'
 #' annots_order = c(
 #'   'hg19_cpg_islands',
@@ -47,7 +47,7 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
   # Argument parsing and error handling
 
     if(class(summarized_annotations)[1] != "tbl_df") {
-      stop('Error: summarized_annotations must have class tbl_df. The best way to ensure this is to pass the result of summarize_annotation() into this function.')
+      stop('Error: summarized_annotations must have class tbl_df. The best way to ensure this is to pass the result of summarize_annotations() into this function.')
     }
 
   ########################################################################
@@ -81,9 +81,9 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 
 #' Visualize score distributions over annotations
 #'
-#' Given a \code{dplyr::grouped_df} of score aggregated annotations (from \code{summarize_score()}), visualize the distribution of scores over the annotation types.
+#' Given a \code{dplyr::grouped_df} of score aggregated annotations (from \code{summarize_numerical()}), visualize the distribution of scores over the annotation types.
 #'
-#' @param summarized_scores The \code{grouped_df} result of \code{summarize_score()}.
+#' @param summarized_scores The \code{grouped_df} result of \code{summarize_numerical()}.
 #' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.
 #' @param bin_width An integer indicating the bin width of the histogram used for score. Default 10. Select something appropriate for the data.
 #' @param plot_title A string used for the title of the plot. Default \code{NULL}, no title displayed.
@@ -106,14 +106,14 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_score(i)
+#' s = summarize_numerical(i)
 #'
 #' hg19_cpgs_order = c(
 #'   'hg19_cpg_islands',
 #'   'hg19_cpg_shores',
 #'   'hg19_cpg_shelves',
 #'   'hg19_cpg_inter')
-#' v_hg19_cpgs = visualize_score(s, hg19_cpgs_order)
+#' v_hg19_cpgs = visualize_numerical(s, hg19_cpgs_order)
 #'
 #' genes_order = c(
 #'   'hg19_knownGenes_1to5kb',
@@ -122,7 +122,7 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'   'hg19_knownGenes_exons',
 #'   'hg19_knownGenes_introns',
 #'   'hg19_knownGenes_3UTRs')
-#' v_genes = visualize_score(s, genes_order, bin_width=30)
+#' v_genes = visualize_numerical(s, genes_order, bin_width=30)
 #'
 #' ########################################################################
 #' # An example of percent methylation at CpG sites
@@ -137,14 +137,14 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_score(i)
+#' s = summarize_numerical(i)
 #'
 #' hg19_cpgs_order = c(
 #'   'hg19_cpg_islands',
 #'   'hg19_cpg_shores',
 #'   'hg19_cpg_shelves',
 #'   'hg19_cpg_inter')
-#' v_hg19_cpgs = visualize_score(s, hg19_cpgs_order)
+#' v_hg19_cpgs = visualize_numerical(s, hg19_cpgs_order)
 #'
 #' genes_order = c(
 #'   'hg19_knownGenes_1to5kb',
@@ -153,16 +153,16 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'   'hg19_knownGenes_exons',
 #'   'hg19_knownGenes_introns',
 #'   'hg19_knownGenes_3UTRs')
-#' v_genes = visualize_score(s, genes_order, bin_width=5)
+#' v_genes = visualize_numerical(s, genes_order, bin_width=5)
 #'
 #' @export
-visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=10,
+visualize_numerical = function(summarized_scores, annotation_order=NULL, bin_width=10,
   plot_title=NULL, x_label=NULL, y_label=NULL) {
 
   ########################################################################
   # Argument parsing and error handling
     if(class(summarized_scores)[1] != "grouped_df") {
-      stop('Error: summarized_scores must have class grouped_df. The best way to ensure this is to pass the result of summarize_score() into this function.')
+      stop('Error: summarized_scores must have class grouped_df. The best way to ensure this is to pass the result of summarize_numerical() into this function.')
     }
 
   ########################################################################
@@ -197,9 +197,9 @@ visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=1
 
 #' Visualize names over annotations
 #'
-#' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_name()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
+#' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
 #'
-#' @param summarized_names The \code{grouped_df} result of \code{summarize_name()}.
+#' @param summarized_names The \code{grouped_df} result of \code{summarize_categorical()}.
 #' @param x One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.
 #' @param fill One of 'annot_type', 'data_name', or \code{NULL}, indicating whether annotation classes or data classes will fill the bars. If \code{NULL} then the bars will be the total counts of the x classes.
 #' @param x_order A character vector that subsets and orders the x classes. Default \code{NULL}, uses existing values.
@@ -225,7 +225,7 @@ visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=1
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_name(i)
+#' s = summarize_categorical(i)
 #'
 #' fill_order = c(
 #'   'hg19_cpg_islands',
@@ -235,11 +235,11 @@ visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=1
 #' x_order = c(
 #'   'hyper',
 #'   'hypo')
-#' v_hg19_cpgs_counts_data_annot = visualize_name(summarized_names=s, x='name', fill='annot_type',
+#' v_hg19_cpgs_counts_data_annot = visualize_categorical(summarized_names=s, x='name', fill='annot_type',
 #'   x_order = x_order, fill_order = fill_order, position='stack')
-#' v_hg19_cpgs_proportions_data_annot = visualize_name(summarized_names=s, x='name', fill='annot_type',
+#' v_hg19_cpgs_proportions_data_annot = visualize_categorical(summarized_names=s, x='name', fill='annot_type',
 #'   x_order = x_order, fill_order = fill_order, position='fill')
-#' v_hg19_cpgs_nofill_data = visualize_name(summarized_names=s, x='name', fill=NULL,
+#' v_hg19_cpgs_nofill_data = visualize_categorical(summarized_names=s, x='name', fill=NULL,
 #'   x_order = x_order, fill_order = fill_order, position='stack')
 #'
 #' x_order = c(
@@ -251,15 +251,15 @@ visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=1
 #'   'hyper',
 #'   'hypo',
 #'   'none')
-#' v_hg19_cpgs_counts_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='name',
+#' v_hg19_cpgs_counts_annot_data = visualize_categorical(summarized_names=s, x='annot_type', fill='name',
 #'   x_order = x_order, fill_order = fill_order, position='stack')
-#' v_hg19_cpgs_proportions_annot_data = visualize_name(summarized_names=s, x='annot_type', fill='name',
+#' v_hg19_cpgs_proportions_annot_data = visualize_categorical(summarized_names=s, x='annot_type', fill='name',
 #'   x_order = x_order, fill_order = fill_order, position='fill')
-#' v_hg19_cpgs_nofill_annot = visualize_name(summarized_names=s, x='annot_type', fill=NULL,
+#' v_hg19_cpgs_nofill_annot = visualize_categorical(summarized_names=s, x='annot_type', fill=NULL,
 #'   x_order = x_order, fill_order = fill_order, position='stack')
 #'
 #' @export
-visualize_name = function(summarized_names, x, fill=NULL, x_order=NULL, fill_order=NULL,
+visualize_categorical = function(summarized_names, x, fill=NULL, x_order=NULL, fill_order=NULL,
   position = 'stack', plot_title=NULL, legend_title=NULL, x_label=NULL, y_label=NULL) {
 
   ########################################################################
@@ -267,7 +267,7 @@ visualize_name = function(summarized_names, x, fill=NULL, x_order=NULL, fill_ord
 
     # Check correct class of input
     if(class(summarized_names)[1] != "grouped_df") {
-      stop('Error: summarized_names must have class grouped_df. The best way to ensure this is to pass the result of summarize_name() into this function.')
+      stop('Error: summarized_names must have class grouped_df. The best way to ensure this is to pass the result of summarize_categorical() into this function.')
     }
 
     # Ensure the value of x is a column name in summarized_names

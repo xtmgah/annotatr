@@ -92,29 +92,29 @@ print(annotated_regions)
 
 The dataset used in the running example has a class (differential methylation status: hyper, hypo, none) and a score (methylation difference between two groups) associated with each region. We will employ all three summarization functions in preparation for visualization.
 
-The three summarization functions -- `summarize_annotation()`, `summarize_score()`, and `summarize_name()` -- all take the `tbl_df` objects output from `annotate_regions()` as their input, and output either a `dplyr::tbl_df` (for `summarize_annotation()`) or `dplyr::grouped_df` (for the others).
+The three summarization functions -- `summarize_annotations()`, `summarize_numerical()`, and `summarize_categorical()` -- all take the `tbl_df` objects output from `annotate_regions()` as their input, and output either a `dplyr::tbl_df` (for `summarize_annotations()`) or `dplyr::grouped_df` (for the others).
 
-When there is no class (`name` column) or score (`score` column) information associated with the regions, `summarize_annotation()` is the only possible function to use. It gives the counts of regions in each annotation type (see example below). If there is class or score information, then `summarize_score()` and/or `summarize_name()` may be used.
+When there is no class (`name` column) or score (`score` column) information associated with the regions, `summarize_annotations()` is the only possible function to use. It gives the counts of regions in each annotation type (see example below). If there is class and/or score information, then `summarize_numerical()` and/or `summarize_categorical()` may be used.
 
 ```{r}
 # Find the number of regions per annotation type
-summarized_annotations = summarize_annotation(annotated_regions)
+summarized_annotations = summarize_annotations(annotated_regions)
 print(summarized_annotations)
 
 # Take the mean of the score column across all regions
 # occurring in an annotation.
-score_summarized_annotations = summarize_score(annotated_regions)
+score_summarized_annotations = summarize_numerical(annotated_regions)
 print(score_summarized_annotations)
 
 # Count the occurrences of classifications in the name
 # column across the annotations.
-name_summarized_annotations = summarize_name(annotated_regions)
+name_summarized_annotations = summarize_categorical(annotated_regions)
 print(name_summarized_annotations)
 ```
 
 ## Visualizing Over Annotations
 
-`annotatr` has three visualization functions (`visualize_annotation()`, `visualize_score()` and `visualize_name()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
+`annotatr` has three visualization functions (`visualize_annotation()`, `visualize_numerical()` and `visualize_categorical()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
 
 ```{r, eval=FALSE}
 # Usage of visualization functions
@@ -122,10 +122,10 @@ print(name_summarized_annotations)
 visualize_annotation(summarized_annotations, annotation_order = NULL,
   plot_title = NULL, x_label = NULL, y_label = NULL)
 
-visualize_score(summarized_scores, annotation_order = NULL, bin_width = 10,
+visualize_numerical(summarized_scores, annotation_order = NULL, bin_width = 10,
   plot_title = NULL, x_label = NULL, y_label = NULL)
 
-visualize_name(summarized_names, x, fill = NULL, x_order = NULL,
+visualize_categorical(summarized_names, x, fill = NULL, x_order = NULL,
   fill_order = NULL, position = "stack", plot_title = NULL,
   legend_title = NULL, x_label = NULL, y_label = NULL)
 ```
@@ -162,13 +162,13 @@ cpgs_order = c(
   'hg19_cpg_shores',
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
-visualize_score_cpgs = visualize_score(
+visualize_numerical_cpgs = visualize_numerical(
   summarized_scores = score_summarized_annotations,
   annotation_order = cpgs_order,
   bin_width = 10,
   plot_title = 'Group Meth. Diffs. Across CpG Annotations',
   x_label = 'Mean Diff. in Meth. Over Annotations')
-print(visualize_score_cpgs)
+print(visualize_numerical_cpgs)
 ```
 
 ```{r, fig.align='center', fig.cap='Methylation difference distributions across the basic genes annotation.', fig.height=6.5, fig.width=6.5, fig.show='hold'}
@@ -183,13 +183,13 @@ genes_order = c(
   'hg19_knownGenes_exons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
-visualize_score_genes = visualize_score(
+visualize_numerical_genes = visualize_numerical(
   summarized_scores = score_summarized_annotations,
   annotation_order = genes_order,
   bin_width = 10,
   plot_title = 'Group Meth. Diffs. Across knownGene Annotations',
   x_label = 'Mean Diff. in Meth. Over Annotations')
-print(visualize_score_genes)
+print(visualize_numerical_genes)
 ```
 
 ```{r, fig.align='center', fig.cap='Differential methylation classification with counts of CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
@@ -209,7 +209,7 @@ fill_order = c(
   'hg19_cpg_inter')
 # Make a barplot of the data class where each bar
 # is composed of the counts of CpG annotations.
-visualize_cpgs = visualize_name(
+visualize_cpgs = visualize_categorical(
   summarized_names=name_summarized_annotations, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack',
   plot_title = 'DM Status by CpG Annotation Counts',
@@ -225,7 +225,7 @@ print(visualize_cpgs)
 
 # Make a barplot of the data class where each bar
 # is composed of the *proportion* of CpG annotations.
-visualize_cpgs = visualize_name(
+visualize_cpgs = visualize_categorical(
   summarized_names=name_summarized_annotations, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill',
   plot_title = 'DM Status by CpG Annotation Proportions',
@@ -251,7 +251,7 @@ fill_order = c(
   'hyper',
   'hypo',
   'none')
-visualize_genes = visualize_name(
+visualize_genes = visualize_categorical(
   summarized_names=name_summarized_annotations, x='annot_type', fill='name',
   x_order = x_order, fill_order = fill_order, position='fill',
   legend_title = 'DM Status',
