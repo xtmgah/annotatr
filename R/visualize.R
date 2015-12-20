@@ -52,26 +52,7 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 
   ########################################################################
   # Order and subset the annotations if annotation_order is not NULL
-
-    if(!is.null(annotation_order)) {
-      # Collect all annotation types
-      all_annot_types = unique(summarized_annotations[['annot_type']])
-
-      # Check set equality of annot_types in the summarized_scores and the annotation_order
-      if( !dplyr::setequal(all_annot_types, annotation_order) ) {
-        if( all(annotation_order %in% all_annot_types) ) {
-          summarized_annotations = subset(summarized_annotations, summarized_annotations[['annot_type']] %in% annotation_order)
-        } else {
-          stop('There are annotations in annotation_order that are not present in annot_type column of summarized_annotations.')
-        }
-      }
-
-      # Convert annot_type to a vector with the levels in the desired order
-      summarized_annotations[['annot_type']] = factor(
-        summarized_annotations[['annot_type']],
-        levels = annotation_order)
-      levels(summarized_annotations[['annot_type']]) = tidy_annotations(annotation_order)
-    }
+  summarized_annotations = order_subset_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
 
   ########################################################################
   # Construct the plot
@@ -186,26 +167,7 @@ visualize_score = function(summarized_scores, annotation_order=NULL, bin_width=1
 
   ########################################################################
   # Order and subset the annotations if annotation_order is not NULL
-
-    if(!is.null(annotation_order)) {
-      # Collect all annotation types
-      all_annot_types = unique(summarized_scores[['annot_type']])
-
-      # Check set equality of annot_types in the summarized_scores and the annotation_order
-      if( !dplyr::setequal(all_annot_types, annotation_order) ) {
-        if( all(annotation_order %in% all_annot_types) ) {
-          summarized_scores = subset(summarized_scores, summarized_scores[['annot_type']] %in% annotation_order)
-        } else {
-          stop('There are annotations in annotation_order that are not present in annot_type column of summarized_annotations.')
-        }
-      }
-
-      # Convert annot_type to a vector with the levels in the desired order
-      summarized_scores[['annot_type']] = factor(
-        summarized_scores[['annot_type']],
-        levels = annotation_order)
-      levels(summarized_scores[['annot_type']]) = tidy_annotations(annotation_order)
-    }
+  summarized_scores = order_subset_summary(summary = summarized_scores, col = 'annot_type', col_order = annotation_order)
 
   ########################################################################
   # Construct the plot
@@ -331,57 +293,11 @@ visualize_name = function(summarized_names, x, fill=NULL, x_order=NULL, fill_ord
 
   ########################################################################
   # Order and subset x if x_order isn't NULL
-
-    if(!is.null(x_order)) {
-      # Collect all x types
-      all_x_types = unique(summarized_names[[x]])
-
-      # Check set equality of x in the summarized_scores and the x_order
-      if( !dplyr::setequal(all_x_types, x_order) ) {
-        if( all(x_order %in% all_x_types) ) {
-          summarized_names = subset(summarized_names, summarized_names[[x]] %in% x_order)
-        } else {
-          stop('There are elements in x_order that are not present in the corresponding column of summarized_names.')
-        }
-      }
-
-      # Convert x to factor with levels in the correct order
-      # Also convert the levels to tidy names if x is annotations
-      summarized_names[[x]] = factor(
-        summarized_names[[x]],
-        levels = x_order)
-      if(x == 'annot_type') {
-        levels(summarized_names[[x]]) = tidy_annotations(x_order)
-      }
-    }
+  summarized_names = order_subset_summary(summary = summarized_names, col = x, col_order = x_order)
 
   ########################################################################
   # Order and subset fill if fill and fill_order are not NULL
-
-    if(!is.null(fill)) {
-      if(!is.null(fill_order)) {
-        # Collect all fill types
-        all_fill_names = unique(summarized_names[[fill]])
-
-        # Check set equality of fill in the summarized_scores and the data_order
-        if( !dplyr::setequal(all_fill_names, fill_order) ) {
-          if( all(fill_order %in% all_fill_names) ) {
-            summarized_names = subset(summarized_names, summarized_names[[fill]] %in% fill_order)
-          } else {
-            stop('There are elements in fill_order that are not present in the corresponding column of summarized_names.')
-          }
-        }
-
-        # Convert fill to factor with levels in the correct order
-        # Also convert the levels to tidy names if fill is annotations
-        summarized_names[[fill]] = factor(
-          summarized_names[[fill]],
-          levels = fill_order)
-        if(fill == 'annot_type') {
-          levels(summarized_names[[fill]]) = tidy_annotations(fill_order)
-        }
-      }
-    }
+  summarized_names = order_subset_summary(summary = summarized_names, col = fill, col_order = fill_order)
 
   ########################################################################
   # Construct the plot

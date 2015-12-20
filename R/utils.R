@@ -128,3 +128,36 @@ expand_annotations = function(annotations) {
 
   return(annotations)
 }
+
+#' Function to order and subset
+#'
+#' @param summary A \code{tbl_df} or \code{grouped_df} result from a \code{summarized} function.
+#' @param col A string indicating which column of of \code{summary} to subset and/or order
+#' @param col_order A character vector indicating the order of \code{col}.
+#'
+#' @return A modified version of \code{summary} with \code{col} turned into a factor with levels ordered by \code{col_order}.
+order_subset_summary = function(summary, col, col_order) {
+  if(!is.null(col)) {
+    if(!is.null(col_order)) {
+      # Collect all types in the column
+      all_col_names = unique(summary[[col]])
+
+      # Check set equality of fill in the summarized_scores and the data_order
+      if( !dplyr::setequal(all_col_names, col_order) ) {
+        if( all(col_order %in% all_col_names) ) {
+          summary = subset(summary, summary[[col]] %in% col_order)
+        } else {
+          stop('There are elements in col_order that are not present in the corresponding column of summary.')
+        }
+      }
+
+      # Convert fill to factor with levels in the correct order
+      # Also convert the levels to tidy names if fill is annotations
+      summary[[col]] = factor(summary[[col]], levels = col_order)
+      if(col == 'annot_type') {
+        levels(summary[[col]]) = tidy_annotations(col_order)
+      }
+    }
+  }
+  return(summary)
+}

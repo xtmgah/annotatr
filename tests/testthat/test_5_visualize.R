@@ -82,7 +82,7 @@ context('Test visualization module')
 # Test visualize_annotation()
 
   test_that('Test visualize_annotation() errors', {
-    expect_error( visualize_annotation(chip_sa, dm_order), 'annotations in annotation_order that are not present')
+    expect_error( visualize_annotation(chip_sa, dm_order), 'elements in col_order that are not present')
   })
 
   test_that('Test visualize_annotation() success', {
@@ -101,7 +101,7 @@ context('Test visualization module')
 # Test visualize_score()
 
   test_that('Test visualize_score() errors', {
-    expect_error( visualize_score(chip_ss, dm_order), 'annotations in annotation_order that are not present')
+    expect_error( visualize_score(chip_ss, dm_order), 'elements in col_order that are not present')
   })
 
   test_that('Test visualize_score() success', {
@@ -160,7 +160,7 @@ context('Test visualization module')
         x = 'name',
         fill = 'annot_type',
         x_order = cpgs_order),
-      'are elements in x_order that are not present')
+      'elements in col_order that are not present')
 
     expect_error(
       visualize_name(
@@ -168,7 +168,7 @@ context('Test visualization module')
         x = 'name',
         fill = 'annot_type',
         fill_order = dm_order),
-      'elements in fill_order that are not present')
+      'elements in col_order that are not present')
   })
 
 test_that('Test visualize_name() success', {
