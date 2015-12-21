@@ -4,12 +4,12 @@
 \alias{visualize_categorical}
 \title{Visualize names over annotations}
 \usage{
-visualize_categorical(summarized_names, x, fill = NULL, x_order = NULL,
+visualize_categorical(summarized_cats, x, fill = NULL, x_order = NULL,
   fill_order = NULL, position = "stack", plot_title = NULL,
   legend_title = NULL, x_label = NULL, y_label = NULL)
 }
 \arguments{
-\item{summarized_names}{The \code{grouped_df} result of \code{summarize_categorical()}.}
+\item{summarized_cats}{The \code{grouped_df} result of \code{summarize_categorical()}.}
 
 \item{x}{One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.}
 
@@ -36,50 +36,48 @@ A \code{ggplot} object which can be viewed by calling it, or saved with \code{gg
 Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
 }
 \examples{
-# An example of differentially methylated regions classified as DM up, DM down, or no DM
-bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
+dm = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr9.txt.gz', package = 'annotatr')
 annotations = c('hg19_basicgenes','hg19_cpgs')
 
-d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+dm_d = read_bed(
+  file = dm,
+  col.names=c('chr','start','end','DM_status','pval','strand','diff_meth','mu1','mu0'),
+  genome = 'hg19',
+  stranded = FALSE,
+  use.score = TRUE)
 
-i = annotate_regions(
-  regions = d,
+dm_r = annotate_regions(
+  regions = dm_d,
   annotations = annotations,
   ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_categorical(i)
+dm_sc = summarize_categorical(
+  annotated_regions = dm_r,
+  by = c('annot_type', 'name'))
 
-fill_order = c(
-  'hg19_cpg_islands',
-  'hg19_cpg_shores',
-  'hg19_cpg_shelves',
-  'hg19_cpg_inter')
-x_order = c(
-  'hyper',
-  'hypo')
-v_hg19_cpgs_counts_data_annot = visualize_categorical(summarized_names=s, x='name', fill='annot_type',
-  x_order = x_order, fill_order = fill_order, position='stack')
-v_hg19_cpgs_proportions_data_annot = visualize_categorical(summarized_names=s, x='name', fill='annot_type',
-  x_order = x_order, fill_order = fill_order, position='fill')
-v_hg19_cpgs_nofill_data = visualize_categorical(summarized_names=s, x='name', fill=NULL,
-  x_order = x_order, fill_order = fill_order, position='stack')
-
-x_order = c(
-  'hg19_cpg_islands',
-  'hg19_cpg_shores',
-  'hg19_cpg_shelves',
-  'hg19_cpg_inter')
-fill_order = c(
+dm_order = c(
   'hyper',
   'hypo',
   'none')
-v_hg19_cpgs_counts_annot_data = visualize_categorical(summarized_names=s, x='annot_type', fill='name',
-  x_order = x_order, fill_order = fill_order, position='stack')
-v_hg19_cpgs_proportions_annot_data = visualize_categorical(summarized_names=s, x='annot_type', fill='name',
-  x_order = x_order, fill_order = fill_order, position='fill')
-v_hg19_cpgs_nofill_annot = visualize_categorical(summarized_names=s, x='annot_type', fill=NULL,
-  x_order = x_order, fill_order = fill_order, position='stack')
+genes_order = c(
+  'hg19_knownGenes_1to5kb',
+  'hg19_knownGenes_promoters',
+  'hg19_knownGenes_5UTRs',
+  'hg19_knownGenes_exons',
+  'hg19_knownGenes_introns',
+  'hg19_knownGenes_3UTRs')
+
+dm_vn = visualize_categorical(
+  summarized_cats = dm_sc,
+  x = 'name',
+  fill = 'annot_type',
+  x_order = dm_order,
+  fill_order = genes_order,
+  position = 'fill',
+  legend_title = 'knownGene Annotations',
+  x_label = 'DM status',
+  y_label = 'Proportion')
 
 }
 

@@ -147,7 +147,7 @@ order_subset_summary = function(summary, col, col_order) {
         if( all(col_order %in% all_col_names) ) {
           summary = subset(summary, summary[[col]] %in% col_order)
         } else {
-          stop('There are elements in col_order that are not present in the corresponding column of summary.')
+          stop('There are elements in col_order that are not present in the corresponding column. Check for typos, and check that the elements in col_order do not have 0 tallies in the summarization.')
         }
       }
 

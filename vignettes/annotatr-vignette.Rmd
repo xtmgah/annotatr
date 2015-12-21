@@ -51,20 +51,23 @@ suppressWarnings(devtools::load_all())
 ```
 
 ```{r}
-# This file in inst/extdata represents differentially methylated
-# regions between two conditions. The name column is the DM
-# classification, and the score column is the methylation difference.
+# This file in inst/extdata represents regions tested for differential
+# methylation between two conditions. Additionally, there are columns
+# reporting the p-value on the test for differential meth., the
+# meth. difference between the two groups, and the group meth. rates.
 dm_file = system.file(
   'extdata',
-  'IDH2mut_v_NBM_names_scores_chr9.txt.gz',
+  'IDH2mut_v_NBM_multi_data_chr9.txt.gz',
   package='annotatr')
-regions = read_bed(
+dm_regions = read_bed(
   file = dm_file,
-  col.names = FALSE,
+  col.names= c(
+    'chr','start','end','DM_status','pval',
+    'strand','diff_meth','mu1','mu0'),
   genome = 'hg19',
   stranded = FALSE,
   use.score = TRUE)
-print(regions)
+print(dm_regions)
 ```
 
 ## Annotating Regions
@@ -77,15 +80,15 @@ Users may select annotations a la carte via the accessors listed with `supported
 # Select annotations for intersection with regions
 annots = c('hg19_cpgs','hg19_basicgenes')
 # Intersect the regions we read in with the annotations
-annotated_regions = annotate_regions(
-  regions = regions,
+dm_annotated = annotate_regions(
+  regions = dm_regions,
   annotations = annots,
   ignore.strand = TRUE,
   use.score = TRUE)
 # A dplyr::tbl_df object is returned
 # NOTE: tbl_df has a special print method that displays
-# a tidy version of the tbl_df.
-print(annotated_regions)
+# a tidy version of the tbl_df, variables not shown are listed below.
+print(dm_annotated)
 ```
 
 ## Summarizing Over Annotations
@@ -94,43 +97,95 @@ The dataset used in the running example has a class (differential methylation st
 
 The three summarization functions -- `summarize_annotations()`, `summarize_numerical()`, and `summarize_categorical()` -- all take the `tbl_df` objects output from `annotate_regions()` as their input, and output either a `dplyr::tbl_df` (for `summarize_annotations()`) or `dplyr::grouped_df` (for the others).
 
+```{r, eval=FALSE}
+# Usage of summarize functions with defaults
+summarize_annotations(annotated_regions)
+
+summarize_numerical(
+  annotated_regions,
+  by = c("annot_type", "annot_id"),
+  over = "score")
+
+summarize_categorical(
+  annotated_regions,
+  by = c("annot_type", "annot_id"))
+```
+
 When there is no class (`name` column) or score (`score` column) information associated with the regions, `summarize_annotations()` is the only possible function to use. It gives the counts of regions in each annotation type (see example below). If there is class and/or score information, then `summarize_numerical()` and/or `summarize_categorical()` may be used.
 
 ```{r}
 # Find the number of regions per annotation type
-summarized_annotations = summarize_annotations(annotated_regions)
-print(summarized_annotations)
+dm_annsum = summarize_annotations(annotated_regions = dm_annotated)
+print(dm_annsum)
 
 # Take the mean of the score column across all regions
 # occurring in an annotation.
-score_summarized_annotations = summarize_numerical(annotated_regions)
-print(score_summarized_annotations)
+dm_numsum = summarize_numerical(
+  annotated_regions = dm_annotated,
+  by = c('annot_type', 'annot_id'),
+  over = c('diff_meth'))
+print(dm_numsum)
 
 # Count the occurrences of classifications in the name
-# column across the annotations.
-name_summarized_annotations = summarize_categorical(annotated_regions)
-print(name_summarized_annotations)
+# column across the annotation types.
+dm_catsum = summarize_categorical(
+  annotated_regions = dm_annotated,
+  by = c('annot_type', 'name'))
+print(dm_catsum)
 ```
 
-## Visualizing Over Annotations
+## Visualizing
 
 `annotatr` has three visualization functions (`visualize_annotation()`, `visualize_numerical()` and `visualize_categorical()`) that are matched with the summarization functions. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
 
 ```{r, eval=FALSE}
-# Usage of visualization functions
+# Usage of visualization functions with defaults
 
 visualize_annotation(summarized_annotations, annotation_order = NULL,
   plot_title = NULL, x_label = NULL, y_label = NULL)
 
-visualize_numerical(summarized_scores, annotation_order = NULL, bin_width = 10,
-  plot_title = NULL, x_label = NULL, y_label = NULL)
+visualize_numerical(tbl, x, y = NULL, facet = "annot_type",
+  facet_order = NULL, bin_width = 10, plot_title = NULL, x_label = NULL,
+  y_label = NULL)
 
-visualize_categorical(summarized_names, x, fill = NULL, x_order = NULL,
+visualize_categorical(summarized_cats, x, fill = NULL, x_order = NULL,
   fill_order = NULL, position = "stack", plot_title = NULL,
   legend_title = NULL, x_label = NULL, y_label = NULL)
 ```
 
 All visualizations use an internal function, `tidy_annotations()`, on `annotation_order`, `x_order`, and `fill_order` parameters, which cleans annotation accessors for visualization. Each visualization function is designed to work with a small number of parameters. Order parameters are not required; when `NULL`, all values are displayed. Parameters for plot titles, legend titles, and axis labels are likewise optional, and will default to object name attributes if `NULL`.
+
+### Visualizing Over Regions
+
+With numerical data, the `visualize_numerical()` function allows for the plotting of a single variable (histogram) or of two variables (scatterplot) at the region level, faceting over the annotations, rather than summarizing over them.
+
+```{r, fig.align='center', fig.cap='Methylation Rates in Regions Over Gene Features in Control Group.', fig.height=6, fig.width=6, fig.show='hold'}
+dm_vs_regions_annot = visualize_numerical(
+  tbl = dm_annotated,
+  x = 'mu0',
+  facet = 'annot_type',
+  facet_order = c('hg19_knownGenes_1to5kb','hg19_knownGenes_promoters','hg19_knownGenes_5UTRs','hg19_knownGenes_3UTRs'),
+  plot_title = 'Group 0 Region Methylation In Genes',
+  x_label = 'Group 0')
+print(dm_vs_regions_annot)
+```
+
+```{r, fig.align='center', fig.cap='Methylation Rates in Regions Over DM Status in Group 0 vs Group 1.', fig.height=5, fig.width=7, fig.show='hold'}
+dm_vs_regions_name = visualize_numerical(
+  tbl = dm_annotated,
+  x = 'mu0',
+  y = 'mu1',
+  facet = 'name',
+  facet_order = c('hyper','hypo','none'),
+  plot_title = 'Region Methylation: Group 0 vs Group 1',
+  x_label = 'Group 0',
+  y_label = 'Group 1')
+print(dm_vs_regions_name)
+```
+
+### Visualizing Over Summaries
+
+In some instances, it is more helpful to visualized the summarized data.
 
 ```{r, fig.align='center', fig.cap='Number of DM regions per annotation.', fig.height=5, fig.width=5, fig.show = 'hold'}
 # View the number of regions per annotation. This function
@@ -143,13 +198,13 @@ annots_order = c(
   'hg19_knownGenes_exons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
-visualize_knownGene_annotations = visualize_annotation(
-  summarized_annotations = summarized_annotations,
+dm_vs_kg_annotations = visualize_annotation(
+  summarized_annotations = dm_annsum,
   annotation_order = annots_order,
   plot_title = 'Number of Sites Tested for DM on chr9',
   x_label = 'knownGene Annotations',
   y_label = 'Count')
-print(visualize_knownGene_annotations)
+print(dm_vs_kg_annotations)
 ```
 
 ```{r, fig.align='center', fig.cap='Methylation difference distributions across the CpG annotations.', fig.height=6, fig.width=6, fig.show = 'hold'}
@@ -162,13 +217,15 @@ cpgs_order = c(
   'hg19_cpg_shores',
   'hg19_cpg_shelves',
   'hg19_cpg_inter')
-visualize_numerical_cpgs = visualize_numerical(
-  summarized_scores = score_summarized_annotations,
-  annotation_order = cpgs_order,
-  bin_width = 10,
+dm_vs_cpg_num = visualize_numerical(
+  tbl = dm_numsum,
+  x = 'mean',
+  facet = 'annot_type',
+  facet_order = cpgs_order,
+  bin_width = 5,
   plot_title = 'Group Meth. Diffs. Across CpG Annotations',
   x_label = 'Mean Diff. in Meth. Over Annotations')
-print(visualize_numerical_cpgs)
+print(dm_vs_cpg_num)
 ```
 
 ```{r, fig.align='center', fig.cap='Methylation difference distributions across the basic genes annotation.', fig.height=6.5, fig.width=6.5, fig.show='hold'}
@@ -183,13 +240,15 @@ genes_order = c(
   'hg19_knownGenes_exons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
-visualize_numerical_genes = visualize_numerical(
-  summarized_scores = score_summarized_annotations,
-  annotation_order = genes_order,
-  bin_width = 10,
+dm_vs_kg_num = visualize_numerical(
+  tbl = dm_numsum,
+  x = 'mean',
+  facet = 'annot_type',
+  facet_order = genes_order,
+  bin_width = 5,
   plot_title = 'Group Meth. Diffs. Across knownGene Annotations',
   x_label = 'Mean Diff. in Meth. Over Annotations')
-print(visualize_numerical_genes)
+print(dm_vs_kg_num)
 ```
 
 ```{r, fig.align='center', fig.cap='Differential methylation classification with counts of CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
@@ -209,14 +268,14 @@ fill_order = c(
   'hg19_cpg_inter')
 # Make a barplot of the data class where each bar
 # is composed of the counts of CpG annotations.
-visualize_cpgs = visualize_categorical(
-  summarized_names=name_summarized_annotations, x='name', fill='annot_type',
+dm_vs_cpg_cat1 = visualize_categorical(
+  summarized_cats=dm_catsum, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack',
   plot_title = 'DM Status by CpG Annotation Counts',
   legend_title = 'Annotations',
   x_label = 'DM status',
   y_label = 'Count')
-print(visualize_cpgs)
+print(dm_vs_cpg_cat1)
 ```
 
 ```{r, fig.align='center', fig.cap='Differential methylation classification with proportion of CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
@@ -225,14 +284,14 @@ print(visualize_cpgs)
 
 # Make a barplot of the data class where each bar
 # is composed of the *proportion* of CpG annotations.
-visualize_cpgs = visualize_categorical(
-  summarized_names=name_summarized_annotations, x='name', fill='annot_type',
+dm_vs_cpg_cat2 = visualize_categorical(
+  summarized_cats=dm_catsum, x='name', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill',
   plot_title = 'DM Status by CpG Annotation Proportions',
   legend_title = 'Annotations',
   x_label = 'DM status',
   y_label = 'Proportion')
-print(visualize_cpgs)
+print(dm_vs_cpg_cat2)
 ```
 
 ```{r, fig.align='center', fig.cap='Basic gene annotations with proportions of DM classification.', fig.height=6, fig.width=6, fig.show='hold'}
@@ -251,11 +310,11 @@ fill_order = c(
   'hyper',
   'hypo',
   'none')
-visualize_genes = visualize_categorical(
-  summarized_names=name_summarized_annotations, x='annot_type', fill='name',
+dm_vs_kg_cat = visualize_categorical(
+  summarized_cats=dm_catsum, x='annot_type', fill='name',
   x_order = x_order, fill_order = fill_order, position='fill',
   legend_title = 'DM Status',
   x_label = 'knownGene Annotations',
   y_label = 'Proportion')
-print(visualize_genes)
+print(dm_vs_kg_cat)
 ```

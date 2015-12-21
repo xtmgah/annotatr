@@ -2,25 +2,35 @@
 % Please edit documentation in R/summarize.R
 \name{summarize_numerical}
 \alias{summarize_numerical}
-\title{Summarize scores over annotations}
+\title{Summarize numerical data over groupings of annotated regions}
 \usage{
-summarize_numerical(annotated_regions)
+summarize_numerical(annotated_regions, by = c("annot_type", "annot_id"),
+  over = "score")
 }
 \arguments{
 \item{annotated_regions}{The \code{tbl_df} result of \code{annotate_regions()}.}
+
+\item{by}{A character vector of the columns to group over. Default is \code{c(annot_type, annot_id)}.}
+
+\item{over}{A character vector of which columns to \code{count}, take the \code{mean}, and take the \code{sd} over after grouping according to the \code{by} column. Default is \code{score}. NOTE: If more than one value is used, the naming scheme for the resuling \code{dplyr::tbl} summary columns are \code{COLNAME_n}, \code{COLNAME_mean}, \code{COLNAME_sd}. If \code{over} has length one, then the column names are \code{n}, \code{mean}, \code{sd}.}
 }
 \value{
-A \code{tbl_df} of the mean of scores over (annot_type, annot_id) pairs.
+A \code{dplyr::tbl} with groups, and the \code{count}, \code{mean}, and \code{sd} of the \code{cols} \code{by} the groupings.
 }
 \description{
-Given a \code{dplyr::tbl_df} of annotated regions, summarize scores over (annot_type, annot_id) pairs.
+Given a \code{dplyr::tbl_df} of annotated regions, summarize numerical data columns based on a grouping.
 }
 \examples{
-# An example of ChIP-seq peaks with signalValue used for score
-bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
-annotations = c('hg19_basicgenes','hg19_cpgs')
+# Test on a very simple bed file to demonstrate different options
+bed = system.file('extdata', 'test_read_multiple_data_head.bed', package = 'annotatr')
+annotations = c('hg19_cpg_islands', 'hg19_knownGenes_promoters')
 
-d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+d = read_bed(
+  file = bed,
+  col.names=TRUE,
+  genome = 'hg19',
+  stranded = FALSE,
+  use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
@@ -28,7 +38,17 @@ i = annotate_regions(
   ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_numerical(i)
+# Testing over normal by
+sn1 = summarize_numerical(
+  annotated_regions = i,
+  by = c('annot_type', 'annot_id'),
+  over = c('score', 'mu1', 'mu0'))
+
+# Testing over a different by
+sn2 = summarize_numerical(
+  annotated_regions = i,
+  by = c('name'),
+  over = c('score', 'mu1', 'mu0'))
 
 }
 

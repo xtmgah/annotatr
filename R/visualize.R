@@ -79,13 +79,14 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
   return(plot)
 }
 
-#' Visualize score distributions over annotations
+#' Visualize numerical data over regions or regions summarized over annotations
 #'
-#' Given a \code{dplyr::grouped_df} of score aggregated annotations (from \code{summarize_numerical()}), visualize the distribution of scores over the annotation types.
-#'
-#' @param summarized_scores The \code{grouped_df} result of \code{summarize_numerical()}.
-#' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering.
-#' @param bin_width An integer indicating the bin width of the histogram used for score. Default 10. Select something appropriate for the data.
+#' @param tbl A \code{dplyr::tbl} returned from \code{annotate_regions()} or \code{summarize_numerical()}. If the data is not summarized, the data is at the region level. If it is summarized, it represents the average or standard deviation of the regions by the character vector used for \code{by} in \code{summarize_numerical()}.
+#' @param x A string indicating the column of the \code{tbl} to use for the x-axis.
+#' @param y A string indicating the column of the \code{tbl} to use for the y-axis. Default is \code{NULL}, meaning a histogram over \code{x} will be plotted. If it is not \code{NULL}, a scatterplot is plotted.
+#' @param facet A string indicating which categorical variable in the \code{tbl} to make \code{ggplot2} facets over. Default is \code{annot_type}.
+#' @param facet_order A character vector which give the order of the facets, and can be used to subset the column in the \code{tbl} used for the \code{facet}. For example, if \code{facet = 'annot_type'}, then the annotations maybe subsetted to just CpG annotations. Default is \code{NULL}, meaning all annotations in their default order are used.
+#' @param bin_width An integer indicating the bin width of the histogram used for score. Default 10. Select something appropriate for the data. NOTE: This is only used if \code{y} is \code{NULL}.
 #' @param plot_title A string used for the title of the plot. Default \code{NULL}, no title displayed.
 #' @param x_label A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.
 #' @param y_label A string used for the y-axis label. Default \code{NULL}, corresponding variable name used.
@@ -93,92 +94,99 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #' @return A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 #'
 #' @examples
-#' ########################################################################
-#' # An example of ChIP-seq peaks with signalValue used for score
-#' bed = system.file('extdata', 'Gm12878_Ezh2_sorted_scores.narrowPeak.gz', package = 'annotatr')
+#' # An example with multi-columned data
+#' dm = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr9.txt.gz', package = 'annotatr')
 #' annotations = c('hg19_basicgenes','hg19_cpgs')
 #'
-#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+#' dm_d = read_bed(
+#'   file = dm,
+#'   col.names=c('chr','start','end','DM_status','pval','strand','diff_meth','mu1','mu0'),
+#'   genome = 'hg19',
+#'   stranded = FALSE,
+#'   use.score = TRUE)
 #'
-#' i = annotate_regions(
-#'   regions = d,
+#' # Annotate the regions
+#' dm_r = annotate_regions(
+#'   regions = dm_d,
 #'   annotations = annotations,
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_numerical(i)
+#' # Summarize a numerical column over the annotations
+#' dm_sn = summarize_numerical(
+#'   annotated_regions = dm_r,
+#'   by = c('annot_type', 'annot_id'),
+#'   over = 'diff_meth')
 #'
-#' hg19_cpgs_order = c(
-#'   'hg19_cpg_islands',
-#'   'hg19_cpg_shores',
-#'   'hg19_cpg_shelves',
-#'   'hg19_cpg_inter')
-#' v_hg19_cpgs = visualize_numerical(s, hg19_cpgs_order)
+#' # Plot histograms of the mean methylation differences
+#' # of regions in annotations and facet on annotations.
+#' dm_vs_sumnum = visualize_numerical(
+#'   tbl = dm_sn,
+#'   x = 'mean',
+#'   facet = 'annot_type',
+#'   facet_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter'),
+#'   bin_width = 5,
+#'   plot_title = 'Mean Meth. Diff. over CpG Annots.',
+#'   x_label = 'Methylation Difference')
 #'
-#' genes_order = c(
-#'   'hg19_knownGenes_1to5kb',
-#'   'hg19_knownGenes_promoters',
-#'   'hg19_knownGenes_5UTRs',
-#'   'hg19_knownGenes_exons',
-#'   'hg19_knownGenes_introns',
-#'   'hg19_knownGenes_3UTRs')
-#' v_genes = visualize_numerical(s, genes_order, bin_width=30)
+#' # Can also use the result of annotate_regions() to plot two numerical
+#' # data columns against each other for each region, and facet by annotations.
+#' dm_vs_regions_annot = visualize_numerical(
+#'   tbl = dm_r,
+#'   x = 'mu0',
+#'   y = 'mu1',
+#'   facet = 'annot_type',
+#'   facet_order = c('hg19_knownGenes_1to5kb','hg19_knownGenes_promoters','hg19_knownGenes_5UTRs','hg19_knownGenes_3UTRs'),
+#'   plot_title = 'Region Methylation: Group 0 vs Group 1',
+#'   x_label = 'Group 0',
+#'   y_label = 'Group 1')
 #'
-#' ########################################################################
-#' # An example of percent methylation at CpG sites
-#' bed = system.file('extdata', '2607_mc_hmc_perc_meth_chr21.txt.gz', package = 'annotatr')
-#' annotations = c('hg19_basicgenes','hg19_cpgs')
-#'
-#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
-#'
-#' i = annotate_regions(
-#'   regions = d,
-#'   annotations = annotations,
-#'   ignore.strand = TRUE,
-#'   use.score = TRUE)
-#'
-#' s = summarize_numerical(i)
-#'
-#' hg19_cpgs_order = c(
-#'   'hg19_cpg_islands',
-#'   'hg19_cpg_shores',
-#'   'hg19_cpg_shelves',
-#'   'hg19_cpg_inter')
-#' v_hg19_cpgs = visualize_numerical(s, hg19_cpgs_order)
-#'
-#' genes_order = c(
-#'   'hg19_knownGenes_1to5kb',
-#'   'hg19_knownGenes_promoters',
-#'   'hg19_knownGenes_5UTRs',
-#'   'hg19_knownGenes_exons',
-#'   'hg19_knownGenes_introns',
-#'   'hg19_knownGenes_3UTRs')
-#' v_genes = visualize_numerical(s, genes_order, bin_width=5)
+#' # Another example, but using differential methylation status as the facets.
+#' dm_vs_regions_name = visualize_numerical(
+#'   tbl = dm_r,
+#'   x = 'mu0',
+#'   y = 'mu1',
+#'   facet = 'name',
+#'   facet_order = c('hyper','hypo','none'),
+#'   plot_title = 'Region Methylation: Group 0 vs Group 1',
+#'   x_label = 'Group 0',
+#'   y_label = 'Group 1')
 #'
 #' @export
-visualize_numerical = function(summarized_scores, annotation_order=NULL, bin_width=10,
+visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order = NULL, bin_width=10,
   plot_title=NULL, x_label=NULL, y_label=NULL) {
 
   ########################################################################
   # Argument parsing and error handling
-    if(class(summarized_scores)[1] != "grouped_df") {
-      stop('Error: summarized_scores must have class grouped_df. The best way to ensure this is to pass the result of summarize_numerical() into this function.')
+    if(!(class(tbl)[1] == "tbl_df" || class(tbl)[1] == "grouped_df")) {
+      stop('Error: tbl must have class tbl_df or grouped_df. Valid inputs can come from annotate_regions() or summarize_numerical().')
     }
 
   ########################################################################
-  # Order and subset the annotations if annotation_order is not NULL
-  summarized_scores = order_subset_summary(summary = summarized_scores, col = 'annot_type', col_order = annotation_order)
+  # Order and subset the annotations if facet_order is not NULL
+  if(facet == 'annot_type' && is.null(facet_order)) {
+    facet_order = unique(tbl[[facet]])
+  }
+  tbl = order_subset_summary(summary = tbl, col = facet, col_order = facet_order)
 
   ########################################################################
   # Construct the plot
 
-    # Make the base ggplot
-    # NOTE: binwidth may need to be a parameter
-    plot =
-      ggplot(summarized_scores, aes(mean)) +
-      geom_histogram(binwidth=bin_width, aes(y=..density..)) +
-      facet_wrap(~annot_type) +
-      theme_bw()
+    if(is.null(y)) {
+      # Make the base histogram ggplot
+      # NOTE: binwidth may need to be a parameter
+      plot =
+        ggplot(tbl, aes_string(x=x)) +
+        geom_histogram(binwidth=bin_width, aes(y=..density..)) +
+        facet_wrap( as.formula(paste("~", facet)) ) +
+        theme_bw()
+    } else {
+      # Make the base scatter ggplot
+      plot = ggplot(tbl, aes_string(x=x, y=y)) +
+        geom_point(alpha = 1/8, size = 1) +
+        facet_wrap( as.formula(paste("~", facet)) ) +
+        theme_bw()
+    }
 
     # Add any user defined labels to the plot if their values are not NULL
     # if they are NULL, ggplot() will use defaults
@@ -199,7 +207,7 @@ visualize_numerical = function(summarized_scores, annotation_order=NULL, bin_wid
 #'
 #' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
 #'
-#' @param summarized_names The \code{grouped_df} result of \code{summarize_categorical()}.
+#' @param summarized_cats The \code{grouped_df} result of \code{summarize_categorical()}.
 #' @param x One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.
 #' @param fill One of 'annot_type', 'data_name', or \code{NULL}, indicating whether annotation classes or data classes will fill the bars. If \code{NULL} then the bars will be the total counts of the x classes.
 #' @param x_order A character vector that subsets and orders the x classes. Default \code{NULL}, uses existing values.
@@ -213,73 +221,71 @@ visualize_numerical = function(summarized_scores, annotation_order=NULL, bin_wid
 #' @return A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 #'
 #' @examples
-#' # An example of differentially methylated regions classified as DM up, DM down, or no DM
-#' bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
+#' dm = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr9.txt.gz', package = 'annotatr')
 #' annotations = c('hg19_basicgenes','hg19_cpgs')
 #'
-#' d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+#' dm_d = read_bed(
+#'   file = dm,
+#'   col.names=c('chr','start','end','DM_status','pval','strand','diff_meth','mu1','mu0'),
+#'   genome = 'hg19',
+#'   stranded = FALSE,
+#'   use.score = TRUE)
 #'
-#' i = annotate_regions(
-#'   regions = d,
+#' dm_r = annotate_regions(
+#'   regions = dm_d,
 #'   annotations = annotations,
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_categorical(i)
+#' dm_sc = summarize_categorical(
+#'   annotated_regions = dm_r,
+#'   by = c('annot_type', 'name'))
 #'
-#' fill_order = c(
-#'   'hg19_cpg_islands',
-#'   'hg19_cpg_shores',
-#'   'hg19_cpg_shelves',
-#'   'hg19_cpg_inter')
-#' x_order = c(
-#'   'hyper',
-#'   'hypo')
-#' v_hg19_cpgs_counts_data_annot = visualize_categorical(summarized_names=s, x='name', fill='annot_type',
-#'   x_order = x_order, fill_order = fill_order, position='stack')
-#' v_hg19_cpgs_proportions_data_annot = visualize_categorical(summarized_names=s, x='name', fill='annot_type',
-#'   x_order = x_order, fill_order = fill_order, position='fill')
-#' v_hg19_cpgs_nofill_data = visualize_categorical(summarized_names=s, x='name', fill=NULL,
-#'   x_order = x_order, fill_order = fill_order, position='stack')
-#'
-#' x_order = c(
-#'   'hg19_cpg_islands',
-#'   'hg19_cpg_shores',
-#'   'hg19_cpg_shelves',
-#'   'hg19_cpg_inter')
-#' fill_order = c(
+#' dm_order = c(
 #'   'hyper',
 #'   'hypo',
 #'   'none')
-#' v_hg19_cpgs_counts_annot_data = visualize_categorical(summarized_names=s, x='annot_type', fill='name',
-#'   x_order = x_order, fill_order = fill_order, position='stack')
-#' v_hg19_cpgs_proportions_annot_data = visualize_categorical(summarized_names=s, x='annot_type', fill='name',
-#'   x_order = x_order, fill_order = fill_order, position='fill')
-#' v_hg19_cpgs_nofill_annot = visualize_categorical(summarized_names=s, x='annot_type', fill=NULL,
-#'   x_order = x_order, fill_order = fill_order, position='stack')
+#' genes_order = c(
+#'   'hg19_knownGenes_1to5kb',
+#'   'hg19_knownGenes_promoters',
+#'   'hg19_knownGenes_5UTRs',
+#'   'hg19_knownGenes_exons',
+#'   'hg19_knownGenes_introns',
+#'   'hg19_knownGenes_3UTRs')
+#'
+#' dm_vn = visualize_categorical(
+#'   summarized_cats = dm_sc,
+#'   x = 'name',
+#'   fill = 'annot_type',
+#'   x_order = dm_order,
+#'   fill_order = genes_order,
+#'   position = 'fill',
+#'   legend_title = 'knownGene Annotations',
+#'   x_label = 'DM status',
+#'   y_label = 'Proportion')
 #'
 #' @export
-visualize_categorical = function(summarized_names, x, fill=NULL, x_order=NULL, fill_order=NULL,
+visualize_categorical = function(summarized_cats, x, fill=NULL, x_order=NULL, fill_order=NULL,
   position = 'stack', plot_title=NULL, legend_title=NULL, x_label=NULL, y_label=NULL) {
 
   ########################################################################
   # Argument parsing and error handling
 
     # Check correct class of input
-    if(class(summarized_names)[1] != "grouped_df") {
-      stop('Error: summarized_names must have class grouped_df. The best way to ensure this is to pass the result of summarize_categorical() into this function.')
+    if(class(summarized_cats)[1] != "grouped_df") {
+      stop('Error: summarized_cats must have class grouped_df. The best way to ensure this is to pass the result of summarize_categorical() into this function.')
     }
 
-    # Ensure the value of x is a column name in summarized_names
-    if( !(x %in% colnames(summarized_names)) ) {
-      stop('The column name used for x does not exist in summarized_names. Try using "annot_type" or "data_name".')
+    # Ensure the value of x is a column name in summarized_cats
+    if( !(x %in% colnames(summarized_cats)) ) {
+      stop('The column name used for x does not exist in summarized_cats. Try using "annot_type" or "data_name".')
     }
 
-    # Ensure the value of fill is a column name in summarized_names if it isn't NULL
+    # Ensure the value of fill is a column name in summarized_cats if it isn't NULL
     # Also ensure fill != x
     if( !is.null(fill) ) {
-      if( !(fill %in% colnames(summarized_names)) ) {
-        stop('The column name used for fill does not exist in summarized_names. Try using "annot_type" or "data_name".')
+      if( !(fill %in% colnames(summarized_cats)) ) {
+        stop('The column name used for fill does not exist in summarized_cats. Try using "annot_type" or "data_name".')
       }
       if( x == fill ) {
         stop('Error: x cannot equal fill')
@@ -293,18 +299,24 @@ visualize_categorical = function(summarized_names, x, fill=NULL, x_order=NULL, f
 
   ########################################################################
   # Order and subset x if x_order isn't NULL
-  summarized_names = order_subset_summary(summary = summarized_names, col = x, col_order = x_order)
+  if(x == 'annot_type' && is.null(x_order)) {
+    x_order = unique(summarized_cats[[x]])
+  }
+  summarized_cats = order_subset_summary(summary = summarized_cats, col = x, col_order = x_order)
 
   ########################################################################
   # Order and subset fill if fill and fill_order are not NULL
-  summarized_names = order_subset_summary(summary = summarized_names, col = fill, col_order = fill_order)
+  if(!is.null(fill) && fill == 'annot_type' && is.null(fill_order)) {
+    fill_order = unique(summarized_cats[[fill]])
+  }
+  summarized_cats = order_subset_summary(summary = summarized_cats, col = fill, col_order = fill_order)
 
   ########################################################################
   # Construct the plot
 
     # Make base ggplot
     plot =
-      ggplot(summarized_names, aes_string(x=x, y='n', fill=fill)) +
+      ggplot(summarized_cats, aes_string(x=x, y='n', fill=fill)) +
       geom_bar(stat='identity', position=position, aes_string(order = fill), width=0.5) +
       theme(axis.text.x = element_text(angle = 30, hjust = 1))
 

@@ -64,7 +64,8 @@ context('Test read module')
     file = system.file('extdata', 'test_read_multiple_data_head.bed', package='annotatr')
     gr = read_bed(file, col.names = TRUE, genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
-    expect_equal( dplyr::setequal(colnames(GenomicRanges::mcols(gr)), c('name','diff_meth','pval','mu1','mu0')), expected = TRUE )
+    expect_equal(
+      dplyr::setequal(colnames(GenomicRanges::mcols(gr)), c('name','score','pval','mu1','mu0','diff_exp')), expected = TRUE )
   })
 
   test_that('Test multiple data columns without header',{
@@ -108,7 +109,7 @@ context('Test read module')
   })
 
   test_that('Test multiple column data', {
-    file = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr21.txt.gz', package = 'annotatr')
+    file = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr9.txt.gz', package = 'annotatr')
     gr = read_bed(
       file,
       col.names=c('chr','start','end','name','pval','strand','diff_meth','mu1','mu0'),

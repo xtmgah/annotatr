@@ -43,18 +43,20 @@ test_that('Test summarize_numerical()', {
     ignore.strand = T,
     use.score = T)
 
-  s = summarize_numerical(i)
+  s = summarize_numerical(
+    annotated_regions = i,
+    by = c('annot_type', 'annot_id'))
 
   expect_equal( mean(s[['mean']]), expected = 25.19482, tolerance = 0.01)
 })
 
-test_that('Test summarize_numerical() over multiple columns', {
-  bed = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr21.txt.gz', package = 'annotatr')
-  annotations = c('hg19_basicgenes','hg19_cpgs')
+test_that('Test summarize_numerical() and summarize_categorical() over small data', {
+  bed = system.file('extdata', 'test_read_multiple_data_head.bed', package = 'annotatr')
+  annotations = c('hg19_cpg_islands', 'hg19_knownGenes_promoters')
 
   d = read_bed(
     file = bed,
-    col.names=c('chr','start','end','name','pval','strand','diff_meth','mu1','mu0'),
+    col.names=TRUE,
     genome = 'hg19',
     stranded = FALSE,
     use.score = TRUE)
@@ -65,24 +67,32 @@ test_that('Test summarize_numerical() over multiple columns', {
     ignore.strand = T,
     use.score = TRUE)
 
-  s = summarize_categorical(i)
+  # Testing summarize_numerical()
+    sn1 = summarize_numerical(
+      annotated_regions = i,
+      by = c('annot_type', 'annot_id'))
+    sn2 = summarize_numerical(
+      annotated_regions = i,
+      by = c('name'),
+      over = c('score', 'mu1', 'mu0'))
 
-  expect_equal( sum(s[['n']]), expected = 13464)
-})
+  # Testing summarize_categorical()
+    sc1 = summarize_categorical(
+      annotated_regions = i,
+      by = c('annot_type', 'name'))
+    sc2 = summarize_categorical(
+      annotated_regions = i,
+      by = c('annot_type', 'diff_exp'))
+    sc3 = summarize_categorical(
+      annotated_regions = i,
+      by = c('name','diff_exp'))
 
-test_that('Test summarize_categorical()', {
-  bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
-  annotations = c('hg19_basicgenes','hg19_cpgs')
+  expect_equal( sn1[[which(sn1[,'annot_id'] == 'uc010nxq.1'), 'mean']], expected = 66)
+  expect_equal( sn1[[which(sn1[,'annot_id'] == 'island:1'), 'mean']], expected = 48)
+  expect_equal( sn2[[which(sn2[,'name'] == 'A'), 'mu0_mean']], expected = 25)
+  expect_equal( sn2[[which(sn2[,'name'] == 'B'), 'mu1_mean']], expected = 95)
 
-  d = read_bed(file = bed, genome = 'hg19', stranded = F, use.score = TRUE)
-
-  i = annotate_regions(
-    regions = d,
-    annotations = annotations,
-    ignore.strand = T,
-    use.score = TRUE)
-
-  s = summarize_categorical(i)
-
-  expect_equal( sum(s[['n']]), expected = 19984)
+  expect_equal( sc1[[which(sc1[,'annot_type'] == 'hg19_knownGenes_promoters' & sc1[,'name'] == 'A'), 'n']], expected = 2)
+  expect_equal( sc2[[which(sc2[,'annot_type'] == 'hg19_cpg_islands' & sc2[,'diff_exp'] == 'Y'), 'n']], expected = 2)
+  expect_equal( sc3[[which(sc3[,'name'] == 'A' & sc3[,'diff_exp'] == 'N'), 'n']], expected = 1)
 })

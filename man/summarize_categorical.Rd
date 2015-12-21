@@ -2,25 +2,31 @@
 % Please edit documentation in R/summarize.R
 \name{summarize_categorical}
 \alias{summarize_categorical}
-\title{Summarize scores over annotations}
+\title{Summarize categoricals over groupings of annotated regions}
 \usage{
-summarize_categorical(annotated_regions)
+summarize_categorical(annotated_regions, by = c("annot_type", "annot_id"))
 }
 \arguments{
 \item{annotated_regions}{The \code{tbl_df} result of \code{annotate_regions()}.}
+
+\item{by}{A character vector to group the data by and tally over. Default is \code{c(annot_type, annot_id)}.}
 }
 \value{
-A \code{tbl_df} of the counts of (annot_type, name) pairs.
+A \code{tbl_df} of the counts of groupings according to the \code{by} vector.
 }
 \description{
 Given a \code{dplyr::tbl_df} of annotated regions, summarize names over (annot_type, name) pairs. The assumption is that the name column in the input BED file consists of a set of non-unique names effectively serving as a label for the region.
 }
 \examples{
-# An example of differentially methylated regions classified as DM up, DM down, or no DM
-bed = system.file('extdata', 'IDH2mut_v_NBM_names_scores_chr9.txt.gz', package = 'annotatr')
-annotations = c('hg19_basicgenes','hg19_cpgs')
+bed = system.file('extdata', 'test_read_multiple_data_head.bed', package = 'annotatr')
+annotations = c('hg19_cpg_islands', 'hg19_knownGenes_promoters')
 
-d = read_bed(file = bed, genome = 'hg19', stranded = FALSE, use.score = TRUE)
+d = read_bed(
+  file = bed,
+  col.names=TRUE,
+  genome = 'hg19',
+  stranded = FALSE,
+  use.score = TRUE)
 
 i = annotate_regions(
   regions = d,
@@ -28,7 +34,15 @@ i = annotate_regions(
   ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_categorical(i)
+sc1 = summarize_categorical(
+  annotated_regions = i,
+  by = c('annot_type', 'name'))
+sc2 = summarize_categorical(
+  annotated_regions = i,
+  by = c('annot_type', 'diff_exp'))
+sc3 = summarize_categorical(
+  annotated_regions = i,
+  by = c('name','diff_exp'))
 
 }
 
