@@ -40,7 +40,7 @@ The base CpG island (CGI) track serves as our CpG island annotations. CpG shores
 
 The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, exons, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, and 3'UTR introns. The schematic below gives an idea of how the location coordinates in the knownGene files can be used to determine the annotations.
 
-![Schematic of knownGene annotations.](annotatr_knownGenes.jpeg)
+![Schematic of knownGene annotations.](https://github.com/rcavalcante/annotatr/blob/master/vignettes/annotatr_knownGenes.jpeg)
 
 # Usage
 
