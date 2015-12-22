@@ -2,105 +2,125 @@
 #'
 #' \code{read_bed} reads in data from a BED6 file, checks to see if it follows the appropriate BED (Browser Extensible Data) format, and checks validity of genome. If valid, reads file data into a GenomicRanges object. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
 #'
-#' @param filename Path to the file with data. File must exist and be in correct format.
+#' @param file Path to the file with data. File must exist and be in correct format.
+#' @param col.names Either \code{TRUE} (column names are given in the first row of the file), \code{FALSE} (the first row does not have column names), or a character vector of column names (the first row is assumed to not be column names, and the values of the character vector will be the resulting column names in the returned \code{GRanges} object). If \code{FALSE} and the file is not BED6, a warning will indicate that downstream functions may behave unexpectedly.
 #' @param genome Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'
-#' @param stranded Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file.
-#' @param use.score Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file.
+#' @param stranded Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file. Default \code{FALSE}
+#' @param use.score Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file. Default \code{FALSE}
 #'
-#' @return A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{regionName} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
+#' @return A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{name} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
 #'
 #' @examples
 #' file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
-#' read_bed(filename = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
+#' read_bed(file = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 #'
 #' @export
-read_bed <- function(filename, genome, stranded = FALSE, use.score = FALSE){
-    if (!file.exists(filename)){
-        stop(paste("In read_bed(filename, genome, stranded): filename",
-                   filename, " not found"))
+read_bed <- function(file, col.names=FALSE, genome, stranded = FALSE, use.score = FALSE){
+  # Error checking pre-read
+    if (!file.exists(file)){
+      stop(sprintf('Error: File, %s, not found.', file))
     }
-
     if (! genome %in% c('hg19','hg38','mm9','mm10')){
-        stop("in read_bed(filename, genome, stranded): Invalid Genome")
+      stop('Error: Invalid genome.')
     }
 
-    bed <- readr::read_tsv(file = filename, col_names = FALSE)
+  # Read
+  bed <- readr::read_tsv(file = file, col_names = col.names)
 
+  # Error checking post-read
     if (!all(grepl("chr", bed[[1]]))){
-        stop("in read_bed(filename, genome, stranded): file not in
-             correct format, missing chr numbers")
+      stop('Error: First column of BED file does not appear to be chromsome.')
     }
-
     if (typeof(head(bed[[2]])) != "integer"){
-        stop("in read_bed(filename, genome, stranded): file not in
-             correct format, second column not integer")
+        stop('Error: Second column of BED file must be integer valued.')
     }
-
     if (typeof(head(bed[[3]]))!= "integer"){
-        stop("in read_bed(filename, genome, stranded): file not in
-             correct format, third column not integer")
+        stop('Error: Third column of BED file must be integer valued.')
     }
 
-    size_code = sprintf('%s_chrom_sizes', genome)
-    data(list = size_code, package = "annotatr")
-    seqlengths = get(size_code)
-
-    if(stranded){
-        if(length(base::setdiff( unique(bed[[6]]), c("+","-") ) > 0)) {
-            stop("In read_bed(filename, genome, stranded): with stranded = T,
-                 strand column should contain +/- only.")
-        }
-        if(use.score) {
-            gR <- GenomicRanges::GRanges(
-                seqnames = bed[[1]],
-                ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-                strand = bed[[6]],
-                regionName = bed[[4]],
-                score = bed[[5]],
-                seqlengths = seqlengths)
-        } else{
-            gR <- GenomicRanges::GRanges(
-                seqnames = bed[[1]],
-                ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-                strand = bed[[6]],
-                regionName = bed[[4]],
-                seqlengths = seqlengths)
-        }
-    } else {
-        if(use.score) {
-            gR <- GenomicRanges::GRanges(
-                seqnames = bed[[1]],
-                ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-                strand = '*',
-                regionName = bed[[4]],
-                score = bed[[5]],
-                seqlengths = seqlengths)
-        } else{
-            gR <- GenomicRanges::GRanges(
-                seqnames = bed[[1]],
-                ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-                strand = '*',
-                regionName = bed[[4]],
-                seqlengths = seqlengths)
-        }
-    }
-    # Assign the genome metadata
-    GenomeInfoDb::genome(gR) = genome
-
-    # Ensure the ranges do not exceed the chromosome lengths for the genome
-    gR <- GenomicRanges::trim(gR)
-
-    # Check if gR is sorted and sort it if it isn't
-    # Not sure what the story with this warning is when we do is.unsorted()
-    # Might have to do with the is.circular column being NA...
-    # "In is.na(x) : is.na() applied to non-(list or vector) of type 'S4'"
-    if(suppressWarnings(is.unsorted(gR))) {
-        # NOTE: The "natural order" for the elements of a GenomicRanges object is to order them (a) first by sequence level, (b) then by strand, (c) then by start, (d) and finally by width. This way, the space of genomic ranges is totally ordered.
-        gR <- sort(gR)
+  # Deal with column names
+    if(class(col.names) != 'character' && col.names == FALSE) {
+      if(ncol(bed) == 6) {
+        colnames(bed) = c('chr','start','end','name','score','strand')
+      } else {
+        warning('Warning: Input file is not BED6, and no column names were given. Downstream functions may behave oddly.')
+      }
     }
 
-    # Enforce uniqueness of regions
-    gR <- unique(gR)
+  # Retrieve chromosome sizes for the genome
+  size_code = sprintf('%s_chrom_sizes', genome)
+  data(list = size_code, package = "annotatr")
+  seqlengths = get(size_code)
 
-    gR
+  # Construct the appropriate strand vector
+  if(stranded){
+    if(length(base::setdiff( unique(bed[[6]]), c("+","-") ) > 0)) {
+      stop("Error: When stranded = T, strand column should contain +/- only.")
+    }
+    strand = bed[[6]]
+  } else {
+    strand = rep.int('*', nrow(bed))
+  }
+
+  # Construct the appropriate mcols data.frame
+  if(use.score && ncol(bed) == 6) {
+    # This is the vanilla use.score case. This overwrites column name information.
+    mcols = data.frame(name = bed[[4]], score = bed[[5]], stringsAsFactors=F)
+  } else if (!use.score && ncol(bed) == 6) {
+    # This is the !use.score case.
+    mcols = data.frame(name = bed[[4]], stringsAsFactors=F)
+  } else if (!use.score && ncol(bed) < 6) {
+    # Shrink to BED3 case
+    mcols = NULL
+  } else if (use.score && ncol(bed) > 6) {
+    # This is the multiple data column case. name column remains so named.
+    # We are expecting the user to name their columns, otherwise we
+    # won't possibly know what to do in summarize and visualize.
+    mcols = data.frame(name = bed[[4]], bed[c(5,7:ncol(bed))], stringsAsFactors=F)
+  } else if (!use.score && ncol(bed) > 6) {
+    # This is the multiple data column case. name column remains so named.
+    # It is conceivable that the user may just tack on data columns to an
+    # existing BED file, hence skipping over column 5 (score)
+    # if it's all 1000s like in a narrowPeak.
+    mcols = data.frame(name = bed[[4]], bed[c(7:ncol(bed))], stringsAsFactors=F)
+  } else {
+    # Shrink to BED3 case
+    mcols = NULL
+  }
+
+  # Construct the GRanges object
+  if(!is.null(mcols)) {
+    gr <- GenomicRanges::GRanges(
+        seqnames = bed[[1]],
+        ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
+        strand = strand,
+        seqlengths = seqlengths)
+    GenomicRanges::mcols(gr) = mcols
+  } else {
+    gr <- GenomicRanges::GRanges(
+        seqnames = bed[[1]],
+        ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
+        strand = strand,
+        seqlengths = seqlengths)
+  }
+
+  # Assign the genome metadata
+  GenomeInfoDb::genome(gr) = genome
+
+  # Ensure the ranges do not exceed the chromosome lengths for the genome
+  gr <- GenomicRanges::trim(gr)
+
+  # Check if gr is sorted and sort it if it isn't
+  # Not sure what the story with this warning is when we do is.unsorted()
+  # Might have to do with the is.circular column being NA...
+  # "In is.na(x) : is.na() applied to non-(list or vector) of type 'S4'"
+  if(suppressWarnings(is.unsorted(gr))) {
+      # NOTE: The "natural order" for the elements of a GenomicRanges object is to order them (a) first by sequence level, (b) then by strand, (c) then by start, (d) and finally by width. This way, the space of genomic ranges is totally ordered.
+      gr <- sort(gr)
+  }
+
+  # Enforce uniqueness of regions
+  gr <- unique(gr)
+
+  gr
 }

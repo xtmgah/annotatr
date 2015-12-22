@@ -1,0 +1,4 @@
+chrom	start	end	name	score	strand
+chr1	10900	11000	test1	87	*
+chr1	26800	28000	test2	34	*
+chr1	28800	29000	test3	62	*

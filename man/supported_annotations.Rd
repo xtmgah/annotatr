@@ -2,15 +2,15 @@
 % Please edit documentation in R/utils.R
 \name{supported_annotations}
 \alias{supported_annotations}
-\title{Function to inform the user which annotations are available.}
+\title{Function listing which annotations are available.}
 \usage{
 supported_annotations()
 }
 \value{
-A character vector of accessors for use with data() to load annotations.
+A character vector of available annotations.
 }
 \description{
-Function to inform the user which annotations are available.
+This includes the shortcuts, which cannot be used in the data(...) calls. To call a shortcut, need to use \code{expand_annotations()}.
 }
 \examples{
 supported_annotations()
