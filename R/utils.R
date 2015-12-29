@@ -48,9 +48,15 @@ tidy_annotations = function(annotations) {
         return(paste('CpG', tokens[3]))
       }
     } else if (tokens[2] == 'knownGenes') {
-      return(tokens[3])
+      if(tokens[3] == 'firstexons') {
+        return('first exons')
+      } else if (tokens[3] == 'firstintrons') {
+        return('first introns')
+      } else {
+        return(tokens[3])
+      }
     } else if (tokens[2] == 'enhancers') {
-      return('Enhancers')
+      return('enhancers')
     }
   })
 

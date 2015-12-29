@@ -11,6 +11,8 @@ for(file in kg_files) {
     genome = unlist(strsplit(gsub('tmp_', '', basename(file)), '_'))[1]
     exons_file = gsub('coding', 'exons', file)
     introns_file = gsub('coding', 'introns', file)
+    firstexons_file = gsub('coding', 'firstexons', file)
+    firstintrons_file = gsub('coding', 'firstintrons', file)
 
   # Get tmp data
     tmp_data = read.table(file, sep='\t', header=F, stringsAsFactors=F)
@@ -24,18 +26,62 @@ for(file in kg_files) {
 
       tmp = tmp_data[i,]
 
+      tmp_exonstarts = unlist(strsplit(tmp$exonStarts, ','))
+      tmp_exonends = unlist(strsplit(tmp$exonEnds, ','))
+
+      if(tmp$strand == '+') {
+        firstexons = data.frame(
+          chrom = tmp$chrom,
+          start = tmp_exonstarts[1],
+          end = tmp_exonends[1],
+          name = tmp$name,
+          strand = tmp$strand,
+          stringsAsFactors=F
+        )
+      } else if (tmp$strand == '-') {
+        firstexons = data.frame(
+          chrom = tmp$chrom,
+          start = tmp_exonstarts[length(tmp_exonstarts)],
+          end = tmp_exonends[length(tmp_exonends)],
+          name = tmp$name,
+          strand = tmp$strand,
+          stringsAsFactors=F
+        )
+      }
+      write.table(firstexons, file=firstexons_file, sep='\t', quote=F, append=T, col.names=F, row.names=F)
+
       exons = data.frame(
         chrom = tmp$chrom,
-        start = unlist(strsplit(tmp$exonStarts, ',')),
-        end = unlist(strsplit(tmp$exonEnds, ',')),
+        start = tmp_exonstarts,
+        end = tmp_exonends,
         name = tmp$name,
         strand = tmp$strand,
         stringsAsFactors=F
       )
-
       write.table(exons, file=exons_file, sep='\t', quote=F, append=T, col.names=F, row.names=F)
 
       if(nrow(exons) > 1) {
+        if(tmp$strand == '+') {
+          firstintrons = data.frame(
+            chrom = tmp$chrom,
+            start = as.integer(exons$end[1]),
+            end = as.integer(exons$start[2]),
+            name = tmp$name,
+            strand = tmp$strand,
+            stringsAsFactors=F
+          )
+        } else if (tmp$strand == '-') {
+          firstintrons = data.frame(
+            chrom = tmp$chrom,
+            start = as.integer(exons$end[length(exons$end)-1]),
+            end = as.integer(exons$start[length(exons$start)]),
+            name = tmp$name,
+            strand = tmp$strand,
+            stringsAsFactors=F
+          )
+        }
+        write.table(firstintrons, file=firstintrons_file, sep='\t', quote=F, append=T, col.names=F, row.names=F)
+
         introns = data.frame(
           chrom = tmp$chrom,
           start = as.integer(exons$end[-length(exons$end)]),
@@ -44,7 +90,6 @@ for(file in kg_files) {
           strand = tmp$strand,
           stringsAsFactors=F
         )
-
         write.table(introns, file=introns_file, sep='\t', quote=F, append=T, col.names=F, row.names=F)
       }
     }

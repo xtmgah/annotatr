@@ -1,9 +1,7 @@
 Package: annotatr
 Title: Annotation of Genomic Regions to Genomic Annotations
-Version: 2.0.0
-Authors@R: c(
-  person("Raymond", "Cavalcante", email = "rcavalca@umich.edu", role = c("aut", "cre")),
-  person("Hani", "Habra", email = "hhani@umich.edu", role = c("aut")))
+Version: 2.1.0
+Authors@R: c(person("Raymond", "G.", "Cavalcante", email = "rcavalca@umich.edu", role = c("aut", "cre")))
 Description: Given a set of genomic sites/regions (e.g. ChIP-seq peaks, CpGs,
     differentially methylated CpGs or regions, SNPs, etc.) it is often of interest
     to investigate the intersecting genomic annotations. Such annotations

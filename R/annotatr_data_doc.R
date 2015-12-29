@@ -1,3 +1,15 @@
+#' hg19_enhancers_fantom
+#' 
+#' A GenomicRanges object for hg19_enhancers_fantom annotations.
+#' 
+#' Permissive enhancers are taken from the FANTOM5 consortium (http://enhancer.binf.ku.dk/presets/). Description of methods that result in the enhancers can be found in the paper corresponding paper (http://www.ncbi.nlm.nih.gov/pubmed/24670763).
+#' 
+#' @format A GenomicRanges object.
+#' @name hg19_enhancers_fantom
+#' @keywords datasets
+#' @usage data(hg19_enhancers_fantom)
+NULL
+
 #' hg19_cpg_inter
 #' 
 #' A GenomicRanges object for hg19_cpg_inter annotations.
@@ -195,7 +207,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_1to5kb annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_1to5kb
@@ -208,7 +220,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_3UTRs
@@ -221,7 +233,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_5UTRs
@@ -234,7 +246,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_CDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_CDSs
@@ -247,7 +259,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_exons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_exons
@@ -260,7 +272,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_exons3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_exons3UTRs
@@ -273,7 +285,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_exons5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_exons5UTRs
@@ -286,7 +298,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_exonsCDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_exonsCDSs
@@ -294,12 +306,38 @@ NULL
 #' @usage data(hg19_knownGenes_exonsCDSs)
 NULL
 
+#' hg19_knownGenes_firstexons
+#' 
+#' A GenomicRanges object for hg19_knownGenes_firstexons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' @format A GenomicRanges object.
+#' @name hg19_knownGenes_firstexons
+#' @keywords datasets
+#' @usage data(hg19_knownGenes_firstexons)
+NULL
+
+#' hg19_knownGenes_firstintrons
+#' 
+#' A GenomicRanges object for hg19_knownGenes_firstintrons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' @format A GenomicRanges object.
+#' @name hg19_knownGenes_firstintrons
+#' @keywords datasets
+#' @usage data(hg19_knownGenes_firstintrons)
+NULL
+
 #' hg19_knownGenes_introns
 #' 
 #' A GenomicRanges object for hg19_knownGenes_introns annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_introns
@@ -312,7 +350,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_introns3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_introns3UTRs
@@ -325,7 +363,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_introns5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_introns5UTRs
@@ -338,7 +376,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_intronsCDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_intronsCDSs
@@ -351,7 +389,7 @@ NULL
 #' A GenomicRanges object for hg19_knownGenes_promoters annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_promoters
@@ -364,7 +402,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_1to5kb annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_1to5kb
@@ -377,7 +415,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_3UTRs
@@ -390,7 +428,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_5UTRs
@@ -403,7 +441,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_CDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_CDSs
@@ -416,7 +454,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_exons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_exons
@@ -429,7 +467,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_exons3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_exons3UTRs
@@ -442,7 +480,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_exons5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_exons5UTRs
@@ -455,7 +493,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_exonsCDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_exonsCDSs
@@ -463,12 +501,38 @@ NULL
 #' @usage data(hg38_knownGenes_exonsCDSs)
 NULL
 
+#' hg38_knownGenes_firstexons
+#' 
+#' A GenomicRanges object for hg38_knownGenes_firstexons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' @format A GenomicRanges object.
+#' @name hg38_knownGenes_firstexons
+#' @keywords datasets
+#' @usage data(hg38_knownGenes_firstexons)
+NULL
+
+#' hg38_knownGenes_firstintrons
+#' 
+#' A GenomicRanges object for hg38_knownGenes_firstintrons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' @format A GenomicRanges object.
+#' @name hg38_knownGenes_firstintrons
+#' @keywords datasets
+#' @usage data(hg38_knownGenes_firstintrons)
+NULL
+
 #' hg38_knownGenes_introns
 #' 
 #' A GenomicRanges object for hg38_knownGenes_introns annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_introns
@@ -481,7 +545,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_introns3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_introns3UTRs
@@ -494,7 +558,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_introns5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_introns5UTRs
@@ -507,7 +571,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_intronsCDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_intronsCDSs
@@ -520,7 +584,7 @@ NULL
 #' A GenomicRanges object for hg38_knownGenes_promoters annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_promoters
@@ -533,7 +597,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_1to5kb annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_1to5kb
@@ -546,7 +610,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_3UTRs
@@ -559,7 +623,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_5UTRs
@@ -572,7 +636,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_CDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_CDSs
@@ -585,7 +649,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_exons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_exons
@@ -598,7 +662,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_exons3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_exons3UTRs
@@ -611,7 +675,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_exons5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_exons5UTRs
@@ -624,7 +688,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_exonsCDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_exonsCDSs
@@ -632,12 +696,38 @@ NULL
 #' @usage data(mm10_knownGenes_exonsCDSs)
 NULL
 
+#' mm10_knownGenes_firstexons
+#' 
+#' A GenomicRanges object for mm10_knownGenes_firstexons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' @format A GenomicRanges object.
+#' @name mm10_knownGenes_firstexons
+#' @keywords datasets
+#' @usage data(mm10_knownGenes_firstexons)
+NULL
+
+#' mm10_knownGenes_firstintrons
+#' 
+#' A GenomicRanges object for mm10_knownGenes_firstintrons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' @format A GenomicRanges object.
+#' @name mm10_knownGenes_firstintrons
+#' @keywords datasets
+#' @usage data(mm10_knownGenes_firstintrons)
+NULL
+
 #' mm10_knownGenes_introns
 #' 
 #' A GenomicRanges object for mm10_knownGenes_introns annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_introns
@@ -650,7 +740,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_introns3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_introns3UTRs
@@ -663,7 +753,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_introns5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_introns5UTRs
@@ -676,7 +766,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_intronsCDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_intronsCDSs
@@ -689,7 +779,7 @@ NULL
 #' A GenomicRanges object for mm10_knownGenes_promoters annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_promoters
@@ -702,7 +792,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_1to5kb annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_1to5kb
@@ -715,7 +805,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_3UTRs
@@ -728,7 +818,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_5UTRs
@@ -741,7 +831,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_CDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_CDSs
@@ -754,7 +844,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_exons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_exons
@@ -767,7 +857,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_exons3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_exons3UTRs
@@ -780,7 +870,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_exons5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_exons5UTRs
@@ -793,7 +883,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_exonsCDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_exonsCDSs
@@ -801,12 +891,38 @@ NULL
 #' @usage data(mm9_knownGenes_exonsCDSs)
 NULL
 
+#' mm9_knownGenes_firstexons
+#' 
+#' A GenomicRanges object for mm9_knownGenes_firstexons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' @format A GenomicRanges object.
+#' @name mm9_knownGenes_firstexons
+#' @keywords datasets
+#' @usage data(mm9_knownGenes_firstexons)
+NULL
+
+#' mm9_knownGenes_firstintrons
+#' 
+#' A GenomicRanges object for mm9_knownGenes_firstintrons annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' @format A GenomicRanges object.
+#' @name mm9_knownGenes_firstintrons
+#' @keywords datasets
+#' @usage data(mm9_knownGenes_firstintrons)
+NULL
+
 #' mm9_knownGenes_introns
 #' 
 #' A GenomicRanges object for mm9_knownGenes_introns annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_introns
@@ -819,7 +935,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_introns3UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_introns3UTRs
@@ -832,7 +948,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_introns5UTRs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_introns5UTRs
@@ -845,7 +961,7 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_intronsCDSs annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_intronsCDSs
@@ -858,23 +974,11 @@ NULL
 #' A GenomicRanges object for mm9_knownGenes_promoters annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
-#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_promoters
 #' @keywords datasets
 #' @usage data(mm9_knownGenes_promoters)
-NULL
-
-#' hg19_enhancers_fantom
-#' 
-#' A GenomicRanges object for hg19_enhancers_fantom annotations.
-#' 
-#' Permissive enhancers are taken from the FANTOM5 consortium (http://enhancer.binf.ku.dk/presets/). Description of methods that result in the enhancers can be found in the paper corresponding paper (http://www.ncbi.nlm.nih.gov/pubmed/24670763).
-#' 
-#' @format A GenomicRanges object.
-#' @name hg19_enhancers_fantom
-#' @keywords datasets
-#' @usage data(hg19_enhancers_fantom)
 NULL
 

@@ -1,6 +1,6 @@
 ---
 title: "`annotatr`: Making sense of genomic regions"
-author: "Raymond G. Cavalcante and Hani Habra"
+author: "Raymond G. Cavalcante"
 date: "`r Sys.Date()`"
 output:
   BiocStyle::html_document
@@ -38,7 +38,7 @@ The base CpG island (CGI) track serves as our CpG island annotations. CpG shores
 
 ## UCSC knownGenes
 
-The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, exons, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, and 3'UTR introns. The schematic below gives an idea of how the location coordinates in the knownGene files can be used to determine the annotations.
+The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, first exons, exons, first introns, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, and 3'UTR introns. The schematic below gives an idea of how the location coordinates in the knownGene files can be used to determine the annotations.
 
 ![Schematic of knownGene annotations.](annotatr_knownGenes.jpeg)
 
@@ -82,7 +82,8 @@ Users may select annotations a la carte via the accessors listed with `supported
 
 ```{r}
 # Select annotations for intersection with regions
-annots = c('hg19_cpgs','hg19_basicgenes','hg19_enhancers_fantom')
+annots = c('hg19_cpgs','hg19_basicgenes','hg19_enhancers_fantom',
+  'hg19_knownGenes_firstexons','hg19_knownGenes_firstintrons')
 # Intersect the regions we read in with the annotations
 dm_annotated = annotate_regions(
   regions = dm_regions,
@@ -196,10 +197,13 @@ In some instances, it is more helpful to visualized the summarized data.
 # is useful when there is no classification or data
 # associated with the regions.
 annots_order = c(
+  'hg19_enhancers_fantom',
   'hg19_knownGenes_1to5kb',
   'hg19_knownGenes_promoters',
   'hg19_knownGenes_5UTRs',
+  'hg19_knownGenes_firstexons',
   'hg19_knownGenes_exons',
+  'hg19_knownGenes_firstintrons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
 dm_vs_kg_annotations = visualize_annotation(
@@ -297,6 +301,33 @@ dm_vs_cpg_cat2 = visualize_categorical(
   x_label = 'DM status',
   y_label = 'Proportion')
 print(dm_vs_cpg_cat2)
+```
+
+```{r, fig.align='center', fig.cap='Differential methylation classification with proportion of promoter, first exons, and first introns.', fig.height=6, fig.width=6, fig.show='hold'}
+# View the proportions of promoters, first exons, and first introns
+
+# The orders for the x-axis labels. This is also a subset
+# of the labels (hyper, hypo, none).
+x_order = c(
+  'hyper',
+  'hypo',
+  'none')
+# The orders for the fill labels. Can also use this
+# parameter to subset annotation types to fill.
+fill_order = c(
+  'hg19_knownGenes_promoters',
+  'hg19_knownGenes_firstexons',
+  'hg19_knownGenes_firstintrons')
+# Make a barplot of the data class where each bar
+# is composed of the proportions.
+dm_vs_cpg_cat3 = visualize_categorical(
+  summarized_cats=dm_catsum, x='name', fill='annot_type',
+  x_order = x_order, fill_order = fill_order, position='fill',
+  plot_title = 'DM Status by knownGenes Annotations',
+  legend_title = 'Annotations',
+  x_label = 'DM status',
+  y_label = 'Count')
+print(dm_vs_cpg_cat3)
 ```
 
 ```{r, fig.align='center', fig.cap='Basic gene annotations with proportions of DM classification.', fig.height=6, fig.width=6, fig.show='hold'}
