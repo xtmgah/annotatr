@@ -26,7 +26,11 @@ devtools::install_github('rcavalcante/annotatr')
 
 # Annotations
 
-We downloaded CpG island and UCSC knownGene tracks (for hg19, hg38, mm9, and mm10) from the UCSC Genome Browser. The package source stores these files in `data-raw/`. The package source also contains scripts (in `data-raw/`) used to transform the raw data into `GenomicRanges` objects. The final annotations are bundled with the package and are located in `data/`. Supported annotations are listed with `supported_annotations()` after loading the `annotatr` package.
+We downloaded CpG island and UCSC knownGene tracks (for hg19, hg38, mm9, and mm10) from the UCSC Genome Browser. FANTOM5 consortium permissive enhancers were downloaded from the [PrESSTo Human Enhancers](http://enhancer.binf.ku.dk/presets/). The package source stores these files in `data-raw/`. The package source also contains scripts (in `data-raw/`) used to transform the raw data into `GenomicRanges` objects. The final annotations are bundled with the package and are located in `data/`. Supported annotations are listed with `supported_annotations()` after loading the `annotatr` package.
+
+## FANTOM5 Permissive Enhancers
+
+The FANTOM5 permissive enhancers were determined from bi-directional CAGE transcription as in [Andersson et al. (2014)](http://www.nature.com/nature/journal/v507/n7493/full/nature12787.html). The enhancers occur across multiple cell types and are with respect to the hg19 genome only.
 
 ## CpG Annotations
 
@@ -78,7 +82,7 @@ Users may select annotations a la carte via the accessors listed with `supported
 
 ```{r}
 # Select annotations for intersection with regions
-annots = c('hg19_cpgs','hg19_basicgenes')
+annots = c('hg19_cpgs','hg19_basicgenes','hg19_enhancers_fantom')
 # Intersect the regions we read in with the annotations
 dm_annotated = annotate_regions(
   regions = dm_regions,
@@ -234,6 +238,7 @@ print(dm_vs_cpg_num)
 # A subset of genes_order could be chosen to display
 # the data distribution only in those annotations.
 genes_order = c(
+  'hg19_enhancers_fantom',
   'hg19_knownGenes_1to5kb',
   'hg19_knownGenes_promoters',
   'hg19_knownGenes_5UTRs',
@@ -299,6 +304,7 @@ print(dm_vs_cpg_cat2)
 
 # The orders for the x-axis labels.
 x_order = c(
+  'hg19_enhancers_fantom',
   'hg19_knownGenes_1to5kb',
   'hg19_knownGenes_promoters',
   'hg19_knownGenes_5UTRs',
