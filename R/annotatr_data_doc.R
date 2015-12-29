@@ -866,3 +866,15 @@ NULL
 #' @usage data(mm9_knownGenes_promoters)
 NULL
 
+#' hg19_enhancers_fantom
+#' 
+#' A GenomicRanges object for hg19_enhancers_fantom annotations.
+#' 
+#' Permissive enhancers are taken from the FANTOM5 consortium (http://enhancer.binf.ku.dk/presets/). Description of methods that result in the enhancers can be found in the paper corresponding paper (http://www.ncbi.nlm.nih.gov/pubmed/24670763).
+#' 
+#' @format A GenomicRanges object.
+#' @name hg19_enhancers_fantom
+#' @keywords datasets
+#' @usage data(hg19_enhancers_fantom)
+NULL
+

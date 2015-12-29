@@ -6,6 +6,15 @@ set -o pipefail
 # Usage: bash build_data.sh builds tmp files and runs build_data.R to Construct
 # GenomicRanges objects in data/
 
+################################################################
+# hg19 Enhancers
+################################################################
+
+echo Processing hg19 Fantom5 Permissive Enhancers
+awk -v OFS='\t' '{print $1, $2, $3, "enhancer:"NR}' hg19_enhancers_fantom.bed \
+| sort -T . -k1,1 -k2,2n \
+> renhtmp_hg19_enhancers_fantom.txt
+
 # Process the CpG annotations
 for genome in {'hg19','hg38','mm9','mm10'}
 do
