@@ -76,13 +76,13 @@ read_bed <- function(file, col.names=FALSE, genome, stranded = FALSE, use.score 
     # This is the multiple data column case. name column remains so named.
     # We are expecting the user to name their columns, otherwise we
     # won't possibly know what to do in summarize and visualize.
-    mcols = data.frame(name = bed[[4]], bed[c(5,7:ncol(bed))], stringsAsFactors=F)
+    mcols = data.frame(bed[c(4:5,7:ncol(bed))], stringsAsFactors=F)
   } else if (!use.score && ncol(bed) > 6) {
     # This is the multiple data column case. name column remains so named.
     # It is conceivable that the user may just tack on data columns to an
     # existing BED file, hence skipping over column 5 (score)
     # if it's all 1000s like in a narrowPeak.
-    mcols = data.frame(name = bed[[4]], bed[c(7:ncol(bed))], stringsAsFactors=F)
+    mcols = data.frame(bed[c(4,7:ncol(bed))], stringsAsFactors=F)
   } else {
     # Shrink to BED3 case
     mcols = NULL

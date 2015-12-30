@@ -135,7 +135,7 @@ print(dm_numsum)
 # column across the annotation types.
 dm_catsum = summarize_categorical(
   annotated_regions = dm_annotated,
-  by = c('annot_type', 'name'))
+  by = c('annot_type', 'DM_status'))
 print(dm_catsum)
 ```
 
@@ -180,7 +180,7 @@ dm_vs_regions_name = visualize_numerical(
   tbl = dm_annotated,
   x = 'mu0',
   y = 'mu1',
-  facet = 'name',
+  facet = 'DM_status',
   facet_order = c('hyper','hypo','none'),
   plot_title = 'Region Methylation: Group 0 vs Group 1',
   x_label = 'Group 0',
@@ -278,7 +278,7 @@ fill_order = c(
 # Make a barplot of the data class where each bar
 # is composed of the counts of CpG annotations.
 dm_vs_cpg_cat1 = visualize_categorical(
-  summarized_cats=dm_catsum, x='name', fill='annot_type',
+  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack',
   plot_title = 'DM Status by CpG Annotation Counts',
   legend_title = 'Annotations',
@@ -294,7 +294,7 @@ print(dm_vs_cpg_cat1)
 # Make a barplot of the data class where each bar
 # is composed of the *proportion* of CpG annotations.
 dm_vs_cpg_cat2 = visualize_categorical(
-  summarized_cats=dm_catsum, x='name', fill='annot_type',
+  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill',
   plot_title = 'DM Status by CpG Annotation Proportions',
   legend_title = 'Annotations',
@@ -321,7 +321,7 @@ fill_order = c(
 # Make a barplot of the data class where each bar
 # is composed of the proportions.
 dm_vs_cpg_cat3 = visualize_categorical(
-  summarized_cats=dm_catsum, x='name', fill='annot_type',
+  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill',
   plot_title = 'DM Status by knownGenes Annotations',
   legend_title = 'Annotations',
@@ -348,7 +348,7 @@ fill_order = c(
   'hypo',
   'none')
 dm_vs_kg_cat = visualize_categorical(
-  summarized_cats=dm_catsum, x='annot_type', fill='name',
+  summarized_cats=dm_catsum, x='annot_type', fill='DM_status',
   x_order = x_order, fill_order = fill_order, position='fill',
   legend_title = 'DM Status',
   x_label = 'knownGene Annotations',

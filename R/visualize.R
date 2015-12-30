@@ -146,7 +146,7 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'   tbl = dm_r,
 #'   x = 'mu0',
 #'   y = 'mu1',
-#'   facet = 'name',
+#'   facet = 'DM_status',
 #'   facet_order = c('hyper','hypo','none'),
 #'   plot_title = 'Region Methylation: Group 0 vs Group 1',
 #'   x_label = 'Group 0',
@@ -239,7 +239,7 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 #'
 #' dm_sc = summarize_categorical(
 #'   annotated_regions = dm_r,
-#'   by = c('annot_type', 'name'))
+#'   by = c('annot_type', 'DM_status'))
 #'
 #' dm_order = c(
 #'   'hyper',
@@ -255,7 +255,7 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 #'
 #' dm_vn = visualize_categorical(
 #'   summarized_cats = dm_sc,
-#'   x = 'name',
+#'   x = 'DM_status',
 #'   fill = 'annot_type',
 #'   x_order = dm_order,
 #'   fill_order = genes_order,

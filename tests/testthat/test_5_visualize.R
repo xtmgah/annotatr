@@ -49,7 +49,7 @@ context('Test visualization module')
 
   dm_sc = summarize_categorical(
     annotated_regions = dm_r,
-    by = c('annot_type', 'name'))
+    by = c('annot_type', 'DM_status'))
 
 ################################################################################
 # Setup order vectors and visualizations that will work
@@ -149,7 +149,7 @@ context('Test visualization module')
       tbl = dm_r,
       x = 'mu0',
       y = 'mu1',
-      facet = 'name',
+      facet = 'DM_status',
       facet_order = c('hyper','hypo','none'),
       plot_title = 'Region Methylation: Group 0 vs Group 1',
       x_label = 'Group 0',
@@ -189,21 +189,21 @@ context('Test visualization module')
     expect_error(
       visualize_categorical(
         summarized_cats = dm_sc,
-        x = 'name',
+        x = 'DM_status',
         fill = 'testing'),
       'column name used for fill does not exist in summarized_cats')
 
     expect_error(
       visualize_categorical(
         summarized_cats = dm_sc,
-        x = 'name',
-        fill = 'name'),
+        x = 'DM_status',
+        fill = 'DM_status'),
       'x cannot equal fill')
 
     expect_error(
       visualize_categorical(
         summarized_cats = dm_sc,
-        x = 'name',
+        x = 'DM_status',
         fill = 'annot_type',
         position = 'no'),
       'position must be one of "stack", "fill"')
@@ -211,7 +211,7 @@ context('Test visualization module')
     expect_error(
       visualize_categorical(
         summarized_cats = dm_sc,
-        x = 'name',
+        x = 'DM_status',
         fill = 'annot_type',
         x_order = cpgs_order),
       'elements in col_order that are not present')
@@ -219,7 +219,7 @@ context('Test visualization module')
     expect_error(
       visualize_categorical(
         summarized_cats = dm_sc,
-        x = 'name',
+        x = 'DM_status',
         fill = 'annot_type',
         fill_order = dm_order),
       'elements in col_order that are not present')
@@ -232,7 +232,7 @@ test_that('Test visualize_categorical() success', {
 
   dm_vn = visualize_categorical(
     summarized_cats = dm_sc,
-    x = 'name',
+    x = 'DM_status',
     fill = 'annot_type',
     x_order = dm_order,
     fill_order = genes_order,
