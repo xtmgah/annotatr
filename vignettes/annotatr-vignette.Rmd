@@ -1,6 +1,6 @@
 ---
 title: "`annotatr`: Making sense of genomic regions"
-author: "Raymond G. Cavalcante and Hani Habra"
+author: "Raymond G. Cavalcante"
 date: "`r Sys.Date()`"
 output:
   BiocStyle::html_document
@@ -26,7 +26,11 @@ devtools::install_github('rcavalcante/annotatr')
 
 # Annotations
 
-We downloaded CpG island and UCSC knownGene tracks (for hg19, hg38, mm9, and mm10) from the UCSC Genome Browser. The package source stores these files in `data-raw/`. The package source also contains scripts (in `data-raw/`) used to transform the raw data into `GenomicRanges` objects. The final annotations are bundled with the package and are located in `data/`. Supported annotations are listed with `supported_annotations()` after loading the `annotatr` package.
+We downloaded CpG island and UCSC knownGene tracks (for hg19, hg38, mm9, and mm10) from the UCSC Genome Browser. FANTOM5 consortium permissive enhancers were downloaded from the [PrESSTo Human Enhancers](http://enhancer.binf.ku.dk/presets/). The package source stores these files in `data-raw/`. The package source also contains scripts (in `data-raw/`) used to transform the raw data into `GenomicRanges` objects. The final annotations are bundled with the package and are located in `data/`. Supported annotations are listed with `supported_annotations()` after loading the `annotatr` package.
+
+## FANTOM5 Permissive Enhancers
+
+The FANTOM5 permissive enhancers were determined from bi-directional CAGE transcription as in [Andersson et al. (2014)](http://www.nature.com/nature/journal/v507/n7493/full/nature12787.html). The enhancers occur across multiple cell types and are with respect to the hg19 genome only.
 
 ## CpG Annotations
 
@@ -34,7 +38,7 @@ The base CpG island (CGI) track serves as our CpG island annotations. CpG shores
 
 ## UCSC knownGenes
 
-The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, exons, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, and 3'UTR introns. The schematic below gives an idea of how the location coordinates in the knownGene files can be used to determine the annotations.
+The UCSC knownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, first exons, exons, first introns, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, and 3'UTR introns. The schematic below gives an idea of how the location coordinates in the knownGene files can be used to determine the annotations.
 
 ![Schematic of knownGene annotations.](annotatr_knownGenes.jpeg)
 
@@ -78,7 +82,8 @@ Users may select annotations a la carte via the accessors listed with `supported
 
 ```{r}
 # Select annotations for intersection with regions
-annots = c('hg19_cpgs','hg19_basicgenes')
+annots = c('hg19_cpgs','hg19_basicgenes','hg19_enhancers_fantom',
+  'hg19_knownGenes_firstexons','hg19_knownGenes_firstintrons')
 # Intersect the regions we read in with the annotations
 dm_annotated = annotate_regions(
   regions = dm_regions,
@@ -130,7 +135,7 @@ print(dm_numsum)
 # column across the annotation types.
 dm_catsum = summarize_categorical(
   annotated_regions = dm_annotated,
-  by = c('annot_type', 'name'))
+  by = c('annot_type', 'DM_status'))
 print(dm_catsum)
 ```
 
@@ -175,7 +180,7 @@ dm_vs_regions_name = visualize_numerical(
   tbl = dm_annotated,
   x = 'mu0',
   y = 'mu1',
-  facet = 'name',
+  facet = 'DM_status',
   facet_order = c('hyper','hypo','none'),
   plot_title = 'Region Methylation: Group 0 vs Group 1',
   x_label = 'Group 0',
@@ -192,10 +197,13 @@ In some instances, it is more helpful to visualized the summarized data.
 # is useful when there is no classification or data
 # associated with the regions.
 annots_order = c(
+  'hg19_enhancers_fantom',
   'hg19_knownGenes_1to5kb',
   'hg19_knownGenes_promoters',
   'hg19_knownGenes_5UTRs',
+  'hg19_knownGenes_firstexons',
   'hg19_knownGenes_exons',
+  'hg19_knownGenes_firstintrons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
 dm_vs_kg_annotations = visualize_annotation(
@@ -234,6 +242,7 @@ print(dm_vs_cpg_num)
 # A subset of genes_order could be chosen to display
 # the data distribution only in those annotations.
 genes_order = c(
+  'hg19_enhancers_fantom',
   'hg19_knownGenes_1to5kb',
   'hg19_knownGenes_promoters',
   'hg19_knownGenes_5UTRs',
@@ -269,7 +278,7 @@ fill_order = c(
 # Make a barplot of the data class where each bar
 # is composed of the counts of CpG annotations.
 dm_vs_cpg_cat1 = visualize_categorical(
-  summarized_cats=dm_catsum, x='name', fill='annot_type',
+  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack',
   plot_title = 'DM Status by CpG Annotation Counts',
   legend_title = 'Annotations',
@@ -285,7 +294,7 @@ print(dm_vs_cpg_cat1)
 # Make a barplot of the data class where each bar
 # is composed of the *proportion* of CpG annotations.
 dm_vs_cpg_cat2 = visualize_categorical(
-  summarized_cats=dm_catsum, x='name', fill='annot_type',
+  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill',
   plot_title = 'DM Status by CpG Annotation Proportions',
   legend_title = 'Annotations',
@@ -294,11 +303,39 @@ dm_vs_cpg_cat2 = visualize_categorical(
 print(dm_vs_cpg_cat2)
 ```
 
+```{r, fig.align='center', fig.cap='Differential methylation classification with proportion of promoter, first exons, and first introns.', fig.height=6, fig.width=6, fig.show='hold'}
+# View the proportions of promoters, first exons, and first introns
+
+# The orders for the x-axis labels. This is also a subset
+# of the labels (hyper, hypo, none).
+x_order = c(
+  'hyper',
+  'hypo',
+  'none')
+# The orders for the fill labels. Can also use this
+# parameter to subset annotation types to fill.
+fill_order = c(
+  'hg19_knownGenes_promoters',
+  'hg19_knownGenes_firstexons',
+  'hg19_knownGenes_firstintrons')
+# Make a barplot of the data class where each bar
+# is composed of the proportions.
+dm_vs_cpg_cat3 = visualize_categorical(
+  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
+  x_order = x_order, fill_order = fill_order, position='fill',
+  plot_title = 'DM Status by knownGenes Annotations',
+  legend_title = 'Annotations',
+  x_label = 'DM status',
+  y_label = 'Count')
+print(dm_vs_cpg_cat3)
+```
+
 ```{r, fig.align='center', fig.cap='Basic gene annotations with proportions of DM classification.', fig.height=6, fig.width=6, fig.show='hold'}
 # View the proportions of data classes in knownGene annotations
 
 # The orders for the x-axis labels.
 x_order = c(
+  'hg19_enhancers_fantom',
   'hg19_knownGenes_1to5kb',
   'hg19_knownGenes_promoters',
   'hg19_knownGenes_5UTRs',
@@ -311,7 +348,7 @@ fill_order = c(
   'hypo',
   'none')
 dm_vs_kg_cat = visualize_categorical(
-  summarized_cats=dm_catsum, x='annot_type', fill='name',
+  summarized_cats=dm_catsum, x='annot_type', fill='DM_status',
   x_order = x_order, fill_order = fill_order, position='fill',
   legend_title = 'DM Status',
   x_label = 'knownGene Annotations',

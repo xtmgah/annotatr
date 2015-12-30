@@ -6,6 +6,15 @@ set -o pipefail
 # Usage: bash build_data.sh builds tmp files and runs build_data.R to Construct
 # GenomicRanges objects in data/
 
+################################################################
+# hg19 Enhancers
+################################################################
+
+echo Processing hg19 Fantom5 Permissive Enhancers
+awk -v OFS='\t' '{print $1, $2, $3, "enhancer:"NR}' hg19_enhancers_fantom.bed \
+| sort -T . -k1,1 -k2,2n \
+> renhtmp_hg19_enhancers_fantom.txt
+
 # Process the CpG annotations
 for genome in {'hg19','hg38','mm9','mm10'}
 do
@@ -170,6 +179,13 @@ do
 
     sort -T . -k1,1 -k2,2n tmp_${genome}_introns_${strand}_strand_knownGenes.txt > tmp_${genome}_introns_${strand}_strand_sorted.txt
     mv tmp_${genome}_introns_${strand}_strand_sorted.txt tmp_${genome}_introns_${strand}_strand_knownGenes.txt
+
+    echo Sorting ${genome} first introns / first exons on ${strand} strand
+    sort -T . -k1,1 -k2,2n tmp_${genome}_firstexons_${strand}_strand_knownGenes.txt > tmp_${genome}_firstexons_${strand}_strand_sorted.txt
+    mv tmp_${genome}_firstexons_${strand}_strand_sorted.txt tmp_${genome}_firstexons_${strand}_strand_knownGenes.txt
+
+    sort -T . -k1,1 -k2,2n tmp_${genome}_firstintrons_${strand}_strand_knownGenes.txt > tmp_${genome}_firstintrons_${strand}_strand_sorted.txt
+    mv tmp_${genome}_firstintrons_${strand}_strand_sorted.txt tmp_${genome}_firstintrons_${strand}_strand_knownGenes.txt
   done
 done
 
@@ -217,7 +233,7 @@ done
 # Combine and sort strand annotations
 for genome in {'hg19','hg38','mm9','mm10'}
   do
-  for annot in {'1to5kb','promoters','5UTRs','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','CDSs','exons','introns','3UTRs','exons3UTRs','introns3UTRs'}
+  for annot in {'1to5kb','promoters','5UTRs','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','CDSs','firstexons','exons','firstintrons','introns','3UTRs','exons3UTRs','introns3UTRs'}
   do
     echo Combining ${genome} ${annot} across strands
     # Collapse, over all transcripts, features with identical coordinates

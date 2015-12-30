@@ -12,7 +12,7 @@ A GenomicRanges object for mm10_knownGenes_exons3UTRs annotations. KnownGenes ar
 Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 }
 \details{
-More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence.
+More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 }
 \keyword{datasets}
 

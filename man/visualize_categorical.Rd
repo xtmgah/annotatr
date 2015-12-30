@@ -54,7 +54,7 @@ dm_r = annotate_regions(
 
 dm_sc = summarize_categorical(
   annotated_regions = dm_r,
-  by = c('annot_type', 'name'))
+  by = c('annot_type', 'DM_status'))
 
 dm_order = c(
   'hyper',
@@ -70,7 +70,7 @@ genes_order = c(
 
 dm_vn = visualize_categorical(
   summarized_cats = dm_sc,
-  x = 'name',
+  x = 'DM_status',
   fill = 'annot_type',
   x_order = dm_order,
   fill_order = genes_order,

@@ -16,7 +16,7 @@ supported_annotations = function() {
   shortcuts = c('basicgenes','detailedgenes','cpgs')
 
   annots = data(package='annotatr')[['results']][,3]
-  annots = annots[grepl('cpg|knownGenes', annots)]
+  annots = annots[grepl('cpg|knownGenes|enhancers', annots)]
   annots = c(annots, apply(expand.grid(supported_genomes(), shortcuts, stringsAsFactors=F), 1, paste, collapse='_'))
   return(annots)
 }
@@ -48,7 +48,15 @@ tidy_annotations = function(annotations) {
         return(paste('CpG', tokens[3]))
       }
     } else if (tokens[2] == 'knownGenes') {
-      return(tokens[3])
+      if(tokens[3] == 'firstexons') {
+        return('first exons')
+      } else if (tokens[3] == 'firstintrons') {
+        return('first introns')
+      } else {
+        return(tokens[3])
+      }
+    } else if (tokens[2] == 'enhancers') {
+      return('enhancers')
     }
   })
 
