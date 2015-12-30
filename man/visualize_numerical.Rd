@@ -31,7 +31,7 @@ visualize_numerical(tbl, x, y = NULL, facet = "annot_type",
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Visualize numerical data over regions or regions summarized over annotations
+The \code{facet_order} vector also determines the categories used to create the background distribution that appears overlayed in red in each facet.
 }
 \examples{
 # An example with multi-columned data
@@ -60,6 +60,8 @@ dm_sn = summarize_numerical(
 
 # Plot histograms of the mean methylation differences
 # of regions in annotations and facet on annotations.
+# NOTE: Background distribution (everything in \\code{facet_order})
+# is plotted in each facet for comparison.
 dm_vs_sumnum = visualize_numerical(
   tbl = dm_sn,
   x = 'mean',
@@ -68,6 +70,18 @@ dm_vs_sumnum = visualize_numerical(
   bin_width = 5,
   plot_title = 'Mean Meth. Diff. over CpG Annots.',
   x_label = 'Methylation Difference')
+
+# Plot histogram of group 1 methylation rates across the CpG annotations.
+# NOTE: Background distribution (everything in \\code{facet_order})
+# is plotted in each facet for comparison.
+dm_vs_regions_mu1 = visualize_numerical(
+ tbl = dm_r,
+ x = 'mu1',
+ facet = 'annot_type',
+ facet_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter'),
+ bin_width = 5,
+ plot_title = 'Group 1 Methylation over CpG Annotations',
+ x_label = 'Group 1 Methylation')
 
 # Can also use the result of annotate_regions() to plot two numerical
 # data columns against each other for each region, and facet by annotations.

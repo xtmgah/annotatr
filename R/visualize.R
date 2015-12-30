@@ -52,7 +52,8 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 
   ########################################################################
   # Order and subset the annotations if annotation_order is not NULL
-  summarized_annotations = order_subset_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
+  summarized_annotations = subset_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
+  summarized_annotations = order_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
 
   ########################################################################
   # Construct the plot
@@ -80,6 +81,8 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 }
 
 #' Visualize numerical data over regions or regions summarized over annotations
+#'
+#' The \code{facet_order} vector also determines the categories used to create the background distribution that appears overlayed in red in each facet.
 #'
 #' @param tbl A \code{dplyr::tbl} returned from \code{annotate_regions()} or \code{summarize_numerical()}. If the data is not summarized, the data is at the region level. If it is summarized, it represents the average or standard deviation of the regions by the character vector used for \code{by} in \code{summarize_numerical()}.
 #' @param x A string indicating the column of the \code{tbl} to use for the x-axis.
@@ -120,6 +123,8 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'
 #' # Plot histograms of the mean methylation differences
 #' # of regions in annotations and facet on annotations.
+#' # NOTE: Background distribution (everything in \code{facet_order})
+#' # is plotted in each facet for comparison.
 #' dm_vs_sumnum = visualize_numerical(
 #'   tbl = dm_sn,
 #'   x = 'mean',
@@ -128,6 +133,18 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'   bin_width = 5,
 #'   plot_title = 'Mean Meth. Diff. over CpG Annots.',
 #'   x_label = 'Methylation Difference')
+#'
+#' # Plot histogram of group 1 methylation rates across the CpG annotations.
+#' # NOTE: Background distribution (everything in \code{facet_order})
+#' # is plotted in each facet for comparison.
+#' dm_vs_regions_mu1 = visualize_numerical(
+#'  tbl = dm_r,
+#'  x = 'mu1',
+#'  facet = 'annot_type',
+#'  facet_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter'),
+#'  bin_width = 5,
+#'  plot_title = 'Group 1 Methylation over CpG Annotations',
+#'  x_label = 'Group 1 Methylation')
 #'
 #' # Can also use the result of annotate_regions() to plot two numerical
 #' # data columns against each other for each region, and facet by annotations.
@@ -167,19 +184,24 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
   if(facet == 'annot_type' && is.null(facet_order)) {
     facet_order = unique(tbl[[facet]])
   }
-  tbl = order_subset_summary(summary = tbl, col = facet, col_order = facet_order)
+  tbl = subset_summary(summary = tbl, col = facet, col_order = facet_order)
+  tbl = order_summary(summary = tbl, col = facet, col_order = facet_order)
 
   ########################################################################
   # Construct the plot
+  # Note, data must be dplyr::ungroup()-ed before hand for the proper
+  # display of the background distribution.
 
     if(is.null(y)) {
       # Make the base histogram ggplot
-      # NOTE: binwidth may need to be a parameter
       plot =
-        ggplot(tbl, aes_string(x=x)) +
-        geom_histogram(binwidth=bin_width, aes(y=..density..)) +
+        ggplot(data = ungroup(tbl), aes_string(x=x, y='..density..')) +
+        geom_histogram(binwidth=bin_width, fill = 'black', alpha = 0.75) +
         facet_wrap( as.formula(paste("~", facet)) ) +
-        theme_bw()
+        geom_histogram(data = select(ungroup(tbl), -matches(facet)),
+          binwidth=bin_width, fill = 'red', alpha = 0.5) +
+        theme_bw() +
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
     } else {
       # Make the base scatter ggplot
       plot = ggplot(tbl, aes_string(x=x, y=y)) +
@@ -205,7 +227,7 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 
 #' Visualize names over annotations
 #'
-#' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
+#' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{fill} in \code{x}. A bar representing the distribution of all \code{fill} in \code{x} will be added according to the contents of \code{fill}. This serves as a background to compare against.
 #'
 #' @param summarized_cats The \code{grouped_df} result of \code{summarize_categorical()}.
 #' @param x One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.
@@ -298,18 +320,43 @@ visualize_categorical = function(summarized_cats, x, fill=NULL, x_order=NULL, fi
     }
 
   ########################################################################
-  # Order and subset x if x_order isn't NULL
+  # If x_order is NULL, inherit ordering from input summarized_cats
+  # Take the subset of summarized_cats by x_order
   if(x == 'annot_type' && is.null(x_order)) {
     x_order = unique(summarized_cats[[x]])
   }
-  summarized_cats = order_subset_summary(summary = summarized_cats, col = x, col_order = x_order)
+  summarized_cats = subset_summary(summary = summarized_cats, col = x, col_order = x_order)
+
+  ########################################################################
+  # Create an 'all' category representing the counts across each
+  # category in fill if fill is specified.
+
+  if(!is.null(fill)) {
+    all_fills = dplyr::summarize(dplyr::group_by_(summarized_cats, .dots = fill), 'n' = sum(n))
+    if(x == 'annot_type') {
+      # Need to do this dumb thing to make it work with tidy_annotations()
+      all_fills[[x]] = 'genome_placeholder_all'
+      x_order = c(x_order, 'genome_placeholder_all')
+    } else {
+      # If not, can just say 'all'
+      all_fills[[x]] = 'all'
+      x_order = c(x_order, 'all')
+    }
+    summarized_cats = dplyr::bind_rows(summarized_cats, all_fills)
+
+    summarized_cats = order_summary(summary = summarized_cats, col = x, col_order = x_order)
+  } else {
+    # If there is no fill, don't worry about creating an 'all' category
+    summarized_cats = order_summary(summary = summarized_cats, col = x, col_order = x_order)
+  }
 
   ########################################################################
   # Order and subset fill if fill and fill_order are not NULL
   if(!is.null(fill) && fill == 'annot_type' && is.null(fill_order)) {
     fill_order = unique(summarized_cats[[fill]])
   }
-  summarized_cats = order_subset_summary(summary = summarized_cats, col = fill, col_order = fill_order)
+  summarized_cats = subset_summary(summary = summarized_cats, col = fill, col_order = fill_order)
+  summarized_cats = order_summary(summary = summarized_cats, col = fill, col_order = fill_order)
 
   ########################################################################
   # Construct the plot

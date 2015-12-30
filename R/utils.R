@@ -57,6 +57,8 @@ tidy_annotations = function(annotations) {
       }
     } else if (tokens[2] == 'enhancers') {
       return('enhancers')
+    } else if (tokens[2] == 'placeholder') {
+      return('all')
     }
   })
 
@@ -137,20 +139,20 @@ expand_annotations = function(annotations) {
   return(annotations)
 }
 
-#' Function to order and subset
+#' Function to subset a tbl_df or grouped_df by a column
 #'
 #' @param summary A \code{tbl_df} or \code{grouped_df} result from a \code{summarized} function.
 #' @param col A string indicating which column of of \code{summary} to subset and/or order
 #' @param col_order A character vector indicating the order of \code{col}.
 #'
-#' @return A modified version of \code{summary} with \code{col} turned into a factor with levels ordered by \code{col_order}.
-order_subset_summary = function(summary, col, col_order) {
+#' @return A modified version of \code{summary} with \code{col} subsetted by \code{col_order}.
+subset_summary = function(summary, col, col_order) {
   if(!is.null(col)) {
     if(!is.null(col_order)) {
       # Collect all types in the column
       all_col_names = unique(summary[[col]])
 
-      # Check set equality of fill in the summarized_scores and the data_order
+      # Check set equality of col in the summary and the col_order
       if( !dplyr::setequal(all_col_names, col_order) ) {
         if( all(col_order %in% all_col_names) ) {
           summary = subset(summary, summary[[col]] %in% col_order)
@@ -158,7 +160,21 @@ order_subset_summary = function(summary, col, col_order) {
           stop('There are elements in col_order that are not present in the corresponding column. Check for typos, and check that the elements in col_order do not have 0 tallies in the summarization.')
         }
       }
+    }
+  }
+  return(summary)
+}
 
+#' Function to order a column of a tbl_df or grouped_df
+#'
+#' @param summary A \code{tbl_df} or \code{grouped_df} result from a \code{summarized} function.
+#' @param col A string indicating which column of \code{summary} to order
+#' @param col_order A character vector indicating the order of \code{col}.
+#'
+#' @return A modified version of \code{summary} with \code{col} turned into a factor with levels ordered by \code{col_order}.
+order_summary = function(summary, col, col_order) {
+  if(!is.null(col)) {
+    if(!is.null(col_order)) {
       # Convert fill to factor with levels in the correct order
       # Also convert the levels to tidy names if fill is annotations
       summary[[col]] = factor(summary[[col]], levels = col_order)

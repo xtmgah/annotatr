@@ -33,7 +33,7 @@ visualize_categorical(summarized_cats, x, fill = NULL, x_order = NULL,
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
+Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{fill} in \code{x}. A bar representing the distribution of all \code{fill} in \code{x} will be added according to the contents of \code{fill}. This serves as a background to compare against.
 }
 \examples{
 dm = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr9.txt.gz', package = 'annotatr')
