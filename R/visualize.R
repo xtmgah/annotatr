@@ -194,10 +194,10 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
       # Make the base histogram ggplot
       plot =
         ggplot(data = ungroup(tbl), aes_string(x=x, y='..density..')) +
-        geom_histogram(binwidth=bin_width, fill = 'black', alpha = 0.75, line = 0) +
+        geom_histogram(binwidth=bin_width, fill = 'black', alpha = 0.75) +
         facet_wrap( as.formula(paste("~", facet)) ) +
         geom_histogram(data = select(ungroup(tbl), -matches(facet)),
-          binwidth=bin_width, fill = 'red', alpha = 0.5, line = 0) +
+          binwidth=bin_width, fill = 'red', alpha = 0.5) +
         theme_bw() +
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
     } else {
