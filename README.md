@@ -195,7 +195,7 @@ print(dm_vs_regions_name)
 
 ### Visualizing Over Summaries
 
-In some instances, it is more helpful to visualized the summarized data.
+In some instances, it is more helpful to visualize the summarized data.
 
 ```{r, fig.align='center', fig.cap='Number of DM regions per annotation.', fig.height=5, fig.width=5, fig.show = 'hold'}
 # View the number of regions per annotation. This function

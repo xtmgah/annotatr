@@ -52,7 +52,8 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 
   ########################################################################
   # Order and subset the annotations if annotation_order is not NULL
-  summarized_annotations = order_subset_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
+  summarized_annotations = subset_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
+  summarized_annotations = order_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
 
   ########################################################################
   # Construct the plot
@@ -183,7 +184,8 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
   if(facet == 'annot_type' && is.null(facet_order)) {
     facet_order = unique(tbl[[facet]])
   }
-  tbl = order_subset_summary(summary = tbl, col = facet, col_order = facet_order)
+  tbl = subset_summary(summary = tbl, col = facet, col_order = facet_order)
+  tbl = order_summary(summary = tbl, col = facet, col_order = facet_order)
 
   ########################################################################
   # Construct the plot
@@ -225,7 +227,7 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 
 #' Visualize names over annotations
 #'
-#' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{annot_type} in \code{data_name}.
+#' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{fill} in \code{x}. A bar representing the distribution of all \code{fill} in \code{x} will be added according to the contents of \code{fill}. This serves as a background to compare against.
 #'
 #' @param summarized_cats The \code{grouped_df} result of \code{summarize_categorical()}.
 #' @param x One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.
@@ -318,18 +320,43 @@ visualize_categorical = function(summarized_cats, x, fill=NULL, x_order=NULL, fi
     }
 
   ########################################################################
-  # Order and subset x if x_order isn't NULL
+  # If x_order is NULL, inherit ordering from input summarized_cats
+  # Take the subset of summarized_cats by x_order
   if(x == 'annot_type' && is.null(x_order)) {
     x_order = unique(summarized_cats[[x]])
   }
-  summarized_cats = order_subset_summary(summary = summarized_cats, col = x, col_order = x_order)
+  summarized_cats = subset_summary(summary = summarized_cats, col = x, col_order = x_order)
+
+  ########################################################################
+  # Create an 'all' category representing the counts across each
+  # category in fill if fill is specified.
+
+  if(!is.null(fill)) {
+    all_fills = dplyr::summarize(dplyr::group_by_(summarized_cats, .dots = fill), 'n' = sum(n))
+    if(x == 'annot_type') {
+      # Need to do this dumb thing to make it work with tidy_annotations()
+      all_fills[[x]] = 'genome_placeholder_all'
+      x_order = c(x_order, 'genome_placeholder_all')
+    } else {
+      # If not, can just say 'all'
+      all_fills[[x]] = 'all'
+      x_order = c(x_order, 'all')
+    }
+    summarized_cats = dplyr::bind_rows(summarized_cats, all_fills)
+
+    summarized_cats = order_summary(summary = summarized_cats, col = x, col_order = x_order)
+  } else {
+    # If there is no fill, don't worry about creating an 'all' category
+    summarized_cats = order_summary(summary = summarized_cats, col = x, col_order = x_order)
+  }
 
   ########################################################################
   # Order and subset fill if fill and fill_order are not NULL
   if(!is.null(fill) && fill == 'annot_type' && is.null(fill_order)) {
     fill_order = unique(summarized_cats[[fill]])
   }
-  summarized_cats = order_subset_summary(summary = summarized_cats, col = fill, col_order = fill_order)
+  summarized_cats = subset_summary(summary = summarized_cats, col = fill, col_order = fill_order)
+  summarized_cats = order_summary(summary = summarized_cats, col = fill, col_order = fill_order)
 
   ########################################################################
   # Construct the plot
