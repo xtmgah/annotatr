@@ -81,6 +81,8 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 
 #' Visualize numerical data over regions or regions summarized over annotations
 #'
+#' The \code{facet_order} vector also determines the categories used to create the background distribution that appears overlayed in red in each facet.
+#'
 #' @param tbl A \code{dplyr::tbl} returned from \code{annotate_regions()} or \code{summarize_numerical()}. If the data is not summarized, the data is at the region level. If it is summarized, it represents the average or standard deviation of the regions by the character vector used for \code{by} in \code{summarize_numerical()}.
 #' @param x A string indicating the column of the \code{tbl} to use for the x-axis.
 #' @param y A string indicating the column of the \code{tbl} to use for the y-axis. Default is \code{NULL}, meaning a histogram over \code{x} will be plotted. If it is not \code{NULL}, a scatterplot is plotted.
@@ -120,6 +122,8 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'
 #' # Plot histograms of the mean methylation differences
 #' # of regions in annotations and facet on annotations.
+#' # NOTE: Background distribution (everything in \code{facet_order})
+#' # is plotted in each facet for comparison.
 #' dm_vs_sumnum = visualize_numerical(
 #'   tbl = dm_sn,
 #'   x = 'mean',
@@ -128,6 +132,18 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
 #'   bin_width = 5,
 #'   plot_title = 'Mean Meth. Diff. over CpG Annots.',
 #'   x_label = 'Methylation Difference')
+#'
+#' # Plot histogram of group 1 methylation rates across the CpG annotations.
+#' # NOTE: Background distribution (everything in \code{facet_order})
+#' # is plotted in each facet for comparison.
+#' dm_vs_regions_mu1 = visualize_numerical(
+#'  tbl = dm_r,
+#'  x = 'mu1',
+#'  facet = 'annot_type',
+#'  facet_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter'),
+#'  bin_width = 5,
+#'  plot_title = 'Group 1 Methylation over CpG Annotations',
+#'  x_label = 'Group 1 Methylation')
 #'
 #' # Can also use the result of annotate_regions() to plot two numerical
 #' # data columns against each other for each region, and facet by annotations.
@@ -171,15 +187,19 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 
   ########################################################################
   # Construct the plot
+  # Note, data must be dplyr::ungroup()-ed before hand for the proper
+  # display of the background distribution.
 
     if(is.null(y)) {
       # Make the base histogram ggplot
-      # NOTE: binwidth may need to be a parameter
       plot =
-        ggplot(tbl, aes_string(x=x)) +
-        geom_histogram(binwidth=bin_width, aes(y=..density..)) +
+        ggplot(data = ungroup(tbl), aes_string(x=x, y='..density..')) +
+        geom_histogram(binwidth=bin_width, fill = 'black', alpha = 0.75, line = 0) +
         facet_wrap( as.formula(paste("~", facet)) ) +
-        theme_bw()
+        geom_histogram(data = select(ungroup(tbl), -matches(facet)),
+          binwidth=bin_width, fill = 'red', alpha = 0.5, line = 0) +
+        theme_bw() +
+        theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
     } else {
       # Make the base scatter ggplot
       plot = ggplot(tbl, aes_string(x=x, y=y)) +

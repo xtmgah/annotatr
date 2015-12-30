@@ -167,7 +167,7 @@ All visualizations use an internal function, `tidy_annotations()`, on `annotatio
 
 ### Visualizing Over Regions
 
-With numerical data, the `visualize_numerical()` function allows for the plotting of a single variable (histogram) or of two variables (scatterplot) at the region level, faceting over the annotations, rather than summarizing over them.
+With numerical data, the `visualize_numerical()` function allows for the plotting of a single variable (histogram) or of two variables (scatterplot) at the region level, faceting over the annotations, rather than summarizing over them. Note, when the plot is a histogram, the background distribution (red overlay, considered to be the data over all elements of `facet_order`) is plotted within each facet.
 
 ```{r, fig.align='center', fig.cap='Methylation Rates in Regions Over Gene Features in Control Group.', fig.height=6, fig.width=6, fig.show='hold'}
 dm_vs_regions_annot = visualize_numerical(
@@ -214,14 +214,15 @@ annots_order = c(
 dm_vs_kg_annotations = visualize_annotation(
   summarized_annotations = dm_annsum,
   annotation_order = annots_order,
-  plot_title = 'Number of Sites Tested for DM on chr9',
+  plot_title = 'Number of Sites Tested for DM annotated on chr9',
   x_label = 'knownGene Annotations',
   y_label = 'Count')
 print(dm_vs_kg_annotations)
 ```
 
 ```{r, fig.align='center', fig.cap='Methylation difference distributions across the CpG annotations.', fig.height=6, fig.width=6, fig.show = 'hold'}
-# View the score summarized over the CpG annotations
+# View the methylation differences summarized over the CpG annotations
+# NOTE: Background distribution is plotted in each facet.
 
 # A subset of cpgs_order could be chosen to display
 # the data distribution only in those annotations.

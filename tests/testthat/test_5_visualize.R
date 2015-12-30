@@ -135,6 +135,15 @@ context('Test visualization module')
       facet_order = genes_order,
       x_label = 'Test x-axis label')
 
+    dm_vs_regions_mu1 = visualize_numerical(
+      tbl = dm_r,
+      x = 'mu1',
+      facet = 'annot_type',
+      facet_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter'),
+      bin_width = 5,
+      plot_title = 'Group 1 Methylation over CpG Annotations',
+      x_label = 'Group 1 Methylation')
+
     dm_vs_regions_annot = visualize_numerical(
       tbl = dm_r,
       x = 'mu0',
@@ -166,6 +175,7 @@ context('Test visualization module')
 
     expect_equal( dplyr::setequal(class(chip_vs_min), c('gg','ggplot')), expected = TRUE)
     expect_equal( dplyr::setequal(class(chip_vs), c('gg','ggplot')), expected = TRUE)
+    expect_equal( dplyr::setequal(class(dm_vs_regions_mu1), c('gg','ggplot')), expected = TRUE)
     expect_equal( dplyr::setequal(class(dm_vs_regions_annot), c('gg','ggplot')), expected = TRUE)
     expect_equal( dplyr::setequal(class(dm_vs_regions_name), c('gg','ggplot')), expected = TRUE)
     expect_equal( dplyr::setequal(class(dm_vs_sumnum), c('gg','ggplot')), expected = TRUE)
