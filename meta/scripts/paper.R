@@ -67,7 +67,7 @@ adm = annotate_regions(
 
 sdm = summarize_categorical(
   annotated_regions = adm,
-  by = c('annot_type','name'))
+  by = c('annot_type','DM_status'))
 
 adm[['logpval']] = -log10(adm[['pval']])
 
@@ -89,7 +89,7 @@ x_order = c('hyper','hypo')
 fill_order = c('hg19_cpg_islands','hg19_cpg_shores','hg19_cpg_shelves','hg19_cpg_inter')
 vdm_cpgs = visualize_categorical(
   summarized_cats = sdm,
-  x = 'name',
+  x = 'DM_status',
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
@@ -104,7 +104,7 @@ ggsave(filename='../paper/DM_in_cpgs.png',width=6, height=4, plot=vdm_cpgs, dpi=
 
 vdm_cpgs_fill = visualize_categorical(
   summarized_cats = sdm,
-  x = 'name',
+  x = 'DM_status',
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
@@ -129,7 +129,7 @@ fill_order = c(
 x_order = c('hyper','hypo')
 vdm_genes = visualize_categorical(
   summarized_cats = sdm,
-  x = 'name',
+  x = 'DM_status',
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
@@ -144,7 +144,7 @@ ggsave(filename='../paper/DM_in_genes.png',width=6, height=4, plot=vdm_genes, dp
 
 vdm_genes_fill = visualize_categorical(
   summarized_cats = sdm,
-  x = 'name',
+  x = 'DM_status',
   fill = 'annot_type',
   x_order = x_order,
   fill_order = fill_order,
