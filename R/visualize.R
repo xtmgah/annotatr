@@ -333,6 +333,13 @@ visualize_categorical = function(annotated_regions, x, fill=NULL, x_order=NULL, 
       plot = plot + scale_fill_brewer()
     }
 
+    # Deal with the x-axis labels to make sure the order is correct
+    if(x == 'annot_type') {
+      plot = plot + scale_x_discrete(limits = c('All', names(tidy_annotations(x_order))))
+    } else {
+      plot = plot + scale_x_discrete(limits = c('All', x_order))
+    }
+
     # Add any user defined labels to the plot if their values are not NULL
     # if they are NULL, ggplot() will use defaults
     if(!is.null(plot_title)) {
