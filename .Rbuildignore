@@ -4,3 +4,5 @@
 ^meta$
 ^\.travis\.yml$
 README\.md
+^packrat/
+^\.Rprofile$
