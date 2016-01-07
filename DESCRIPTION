@@ -1,6 +1,6 @@
 Package: annotatr
 Title: Annotation of Genomic Regions to Genomic Annotations
-Version: 2.2.0
+Version: 0.2.0
 Authors@R: c(person("Raymond", "G.", "Cavalcante", email = "rcavalca@umich.edu", role = c("aut", "cre")))
 Description: Given a set of genomic sites/regions (e.g. ChIP-seq peaks, CpGs,
     differentially methylated CpGs or regions, SNPs, etc.) it is often of interest
