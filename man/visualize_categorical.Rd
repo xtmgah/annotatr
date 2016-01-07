@@ -4,12 +4,12 @@
 \alias{visualize_categorical}
 \title{Visualize names over annotations}
 \usage{
-visualize_categorical(summarized_cats, x, fill = NULL, x_order = NULL,
+visualize_categorical(annotated_regions, x, fill = NULL, x_order = NULL,
   fill_order = NULL, position = "stack", plot_title = NULL,
   legend_title = NULL, x_label = NULL, y_label = NULL)
 }
 \arguments{
-\item{summarized_cats}{The \code{grouped_df} result of \code{summarize_categorical()}.}
+\item{annotated_regions}{The \code{grouped_df} result of \code{annotated_regions()}.}
 
 \item{x}{One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.}
 
@@ -33,7 +33,7 @@ visualize_categorical(summarized_cats, x, fill = NULL, x_order = NULL,
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{fill} in \code{x}. A bar representing the distribution of all \code{fill} in \code{x} will be added according to the contents of \code{fill}. This serves as a background to compare against.
+Given a \code{dplyr::tbl_df} of annotated regions (from \code{annotate_regions()}), visualize the the distribution of \code{fill} in \code{x}. A bar representing the distribution of all \code{fill} in \code{x} will be added according to the contents of \code{fill}. This serves as a background to compare against.
 }
 \examples{
 dm = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr9.txt.gz', package = 'annotatr')
@@ -52,10 +52,6 @@ dm_r = annotate_regions(
   ignore.strand = TRUE,
   use.score = TRUE)
 
-dm_sc = summarize_categorical(
-  annotated_regions = dm_r,
-  by = c('annot_type', 'DM_status'))
-
 dm_order = c(
   'hyper',
   'hypo',
@@ -69,7 +65,7 @@ genes_order = c(
   'hg19_knownGenes_3UTRs')
 
 dm_vn = visualize_categorical(
-  summarized_cats = dm_sc,
+  annotated_regions = dm_r,
   x = 'DM_status',
   fill = 'annot_type',
   x_order = dm_order,

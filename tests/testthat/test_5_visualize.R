@@ -14,8 +14,6 @@ context('Test visualization module')
     ignore.strand = T,
     use.score = TRUE)
 
-  chip_sa = summarize_annotations(chip_r)
-
 ################################################################################
 # Setup objects for visualize_numerical()
 
@@ -86,23 +84,23 @@ context('Test visualization module')
 # Test errors common to all functions
 
   test_that('Test error on incorrect input class in all visualize functions', {
-    expect_error(visualize_annotation(chip), 'summarized_annotations must have class tbl_df')
+    expect_error(visualize_annotation(chip), 'annotated_regions must have class tbl_df')
     expect_error(visualize_numerical(chip), 'tbl must have class tbl_df or grouped_df')
-    expect_error(visualize_categorical(chip), 'summarized_cats must have class grouped_df')
+    expect_error(visualize_categorical(chip), 'annotated_regions must have class tbl_df')
   })
 
 ################################################################################
 # Test visualize_annotation()
 
   test_that('Test visualize_annotation() errors', {
-    expect_error( visualize_annotation(chip_sa, dm_order), 'elements in col_order that are not present')
+    expect_error( visualize_annotation(chip_r, dm_order), 'elements in col_order that are not present')
   })
 
   test_that('Test visualize_annotation() success', {
-    chip_va_min = visualize_annotation(summarized_annotations = chip_sa)
+    chip_va_min = visualize_annotation(annotated_regions = chip_r)
 
     chip_va = visualize_annotation(
-      summarized_annotations = chip_sa,
+      annotated_regions = chip_r,
       annotation_order = all_order,
       plot_title = 'Testing plot title')
 
@@ -187,32 +185,32 @@ context('Test visualization module')
   test_that('Test visualize_categorical() errors', {
     expect_error(
       visualize_categorical(
-        summarized_cats = dm_sc),
+        annotated_regions = dm_r),
       'argument "x" is missing')
 
     expect_error(
       visualize_categorical(
-        summarized_cats = dm_sc,
+        annotated_regions = dm_r,
         x = 'testing'),
-      'column name used for x does not exist in summarized_cats')
+      'column name used for x does not exist in annotated_regions')
 
     expect_error(
       visualize_categorical(
-        summarized_cats = dm_sc,
+        annotated_regions = dm_r,
         x = 'DM_status',
         fill = 'testing'),
-      'column name used for fill does not exist in summarized_cats')
+      'column name used for fill does not exist in annotated_regions')
 
     expect_error(
       visualize_categorical(
-        summarized_cats = dm_sc,
+        annotated_regions = dm_r,
         x = 'DM_status',
         fill = 'DM_status'),
       'x cannot equal fill')
 
     expect_error(
       visualize_categorical(
-        summarized_cats = dm_sc,
+        annotated_regions = dm_r,
         x = 'DM_status',
         fill = 'annot_type',
         position = 'no'),
@@ -220,7 +218,7 @@ context('Test visualization module')
 
     expect_error(
       visualize_categorical(
-        summarized_cats = dm_sc,
+        annotated_regions = dm_r,
         x = 'DM_status',
         fill = 'annot_type',
         x_order = cpgs_order),
@@ -228,7 +226,7 @@ context('Test visualization module')
 
     expect_error(
       visualize_categorical(
-        summarized_cats = dm_sc,
+        annotated_regions = dm_r,
         x = 'DM_status',
         fill = 'annot_type',
         fill_order = dm_order),
@@ -237,11 +235,11 @@ context('Test visualization module')
 
 test_that('Test visualize_categorical() success', {
   dm_vn_min = visualize_categorical(
-    summarized_cats = dm_sc,
+    annotated_regions = dm_r,
     x = 'annot_type')
 
   dm_vn = visualize_categorical(
-    summarized_cats = dm_sc,
+    annotated_regions = dm_r,
     x = 'DM_status',
     fill = 'annot_type',
     x_order = dm_order,

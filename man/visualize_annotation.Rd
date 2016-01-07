@@ -4,11 +4,11 @@
 \alias{visualize_annotation}
 \title{Visualize the number of regions per annotation}
 \usage{
-visualize_annotation(summarized_annotations, annotation_order = NULL,
+visualize_annotation(annotated_regions, annotation_order = NULL,
   plot_title = NULL, x_label = NULL, y_label = NULL)
 }
 \arguments{
-\item{summarized_annotations}{The \code{tbl_df} result of \code{summarize_annotations()}.}
+\item{annotated_regions}{The \code{tbl_df} result of \code{annotate_regions()}.}
 
 \item{annotation_order}{A character vector which doubles as the subset of annotations desired for visualization as well as the ordering. If \code{NULL}, all annotations are displayed.}
 
@@ -38,8 +38,6 @@ i = annotate_regions(
   ignore.strand = TRUE,
   use.score = TRUE)
 
-s = summarize_annotations(i)
-
 annots_order = c(
   'hg19_cpg_islands',
   'hg19_cpg_shores',
@@ -51,7 +49,7 @@ annots_order = c(
   'hg19_knownGenes_exons',
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
-v_annots = visualize_annotation(s, annots_order)
+v_annots = visualize_annotation(i, annots_order)
 
 }
 
