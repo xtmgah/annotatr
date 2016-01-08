@@ -148,7 +148,8 @@ read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score =
 #'
 #' @examples
 #' file = system.file('extdata', 'test_annotations_5.bed', package='annotatr')
-#' hg19_custom_test = read_annotations(file = file, genome = 'hg19', annotation_name = 'test')
+#' read_annotations(file = file, genome = 'hg19', annotation_name = 'test')
+#' # Creates the object hg19_custom_test in the Global Environment
 #'
 #' @export
 read_annotations = function(file, genome, annotation_name) {
@@ -252,5 +253,6 @@ read_annotations = function(file, genome, annotation_name) {
       gr <- sort(gr)
   }
 
-  return(gr)
+  # This forces the object to act like those called from data(...)
+  assign(sprintf('%s_custom_%s', genome, annotation_name), gr, envir=.GlobalEnv)
 }

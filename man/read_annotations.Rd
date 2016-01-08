@@ -26,7 +26,8 @@ If the names for the annotations are not unique, they will be renamed in the for
 }
 \examples{
 file = system.file('extdata', 'test_annotations_5.bed', package='annotatr')
-hg19_custom_test = read_annotations(file = file, genome = 'hg19', annotation_name = 'test')
+read_annotations(file = file, genome = 'hg19', annotation_name = 'test')
+# Creates the object hg19_custom_test in the Global Environment
 
 }
 
