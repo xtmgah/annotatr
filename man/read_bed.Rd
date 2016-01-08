@@ -28,5 +28,10 @@ A GenomicRanges object with ranges limited by genome and BED file. The GenomicRa
 file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
 read_bed(file = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 
+file = system.file('extdata', 'test_read_multiple_data_nohead.bed', package = 'annotatr')
+read_bed(file = file,
+  col.names = c('chrom','start','end','name','score','strand','pval','mu1','mu0','diff_exp'),
+  genome = 'hg19', stranded = TRUE, use.score = TRUE)
+
 }
 
