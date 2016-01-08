@@ -57,8 +57,8 @@ tidy_annotations = function(annotations) {
       }
     } else if (tokens[2] == 'enhancers') {
       return('enhancers')
-    } else if (tokens[2] == 'placeholder') {
-      return('all')
+    } else if (tokens[2] == 'custom') {
+      return(tokens[3])
     }
   })
 
@@ -70,10 +70,14 @@ tidy_annotations = function(annotations) {
 
 #' Function to check for valid annotations
 #'
-#' Gives errors if any annotations are not in supported_annotations(), basicgenes and detailedgenes are used, or the genome prefixes are not the same for all annotations.
+#' Gives errors if any annotations are not in supported_annotations() (and they are not in the required custom format), basicgenes and detailedgenes are used, or the genome prefixes are not the same for all annotations.
 #'
 #' @param annotations A character vector of annotations possibly using the shortcuts
 check_annotations = function(annotations) {
+  # Pull out any custom annotations before checking
+  custom_annotations = grep('custom', annotations, value=T)
+  annotations = setdiff(annotations, custom_annotations)
+
   # Check that the annotations are supported, tell the user which are unsupported
   if( !all(annotations %in% supported_annotations()) ) {
     unsupported = base::setdiff(annotations, supported_annotations())
@@ -94,11 +98,6 @@ check_annotations = function(annotations) {
   # Check for same genome on all annotations
   if( length(unique(genomes)) != 1 ){
     stop('Error: genome prefix on all annotations must be the same.')
-  } else {
-    # Don't think we'll ever get to this message because it'll be an unsupported annotation.
-    if( !(unique(genomes) %in% supported_genomes()) ) {
-      stop('Error: unsupported genome given. See supported_genomes().')
-    }
   }
 }
 

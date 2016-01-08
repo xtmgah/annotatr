@@ -10,6 +10,6 @@ check_annotations(annotations)
 \item{annotations}{A character vector of annotations possibly using the shortcuts}
 }
 \description{
-Gives errors if any annotations are not in supported_annotations(), basicgenes and detailedgenes are used, or the genome prefixes are not the same for all annotations.
+Gives errors if any annotations are not in supported_annotations() (and they are not in the required custom format), basicgenes and detailedgenes are used, or the genome prefixes are not the same for all annotations.
 }
 
