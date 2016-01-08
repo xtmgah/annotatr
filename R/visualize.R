@@ -314,6 +314,9 @@ visualize_categorical = function(annotated_regions, x, fill=NULL, x_order=NULL, 
 
   ########################################################################
   # Order and subset based on x_order
+  if(is.null(x_order)) {
+    x_order = unique(annotated_regions[[x]])
+  }
   sub_annot_regions = subset_order_tbl(tbl = annotated_regions, col = x, col_order = x_order)
 
   ########################################################################
