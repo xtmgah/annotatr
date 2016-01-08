@@ -25,8 +25,8 @@ read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score =
     if(!file.exists(file)) {
       stop(sprintf('Error: File, %s, not found.', file))
     }
-    if(! genome %in% c('hg19','hg38','mm9','mm10')) {
-      stop('Error: Invalid genome.')
+    if(! genome %in% supported_genomes()) {
+      warning('Warning: %s is not a supported genome. In order to annotate regions, make sure to load custom annotations with read_annotations()', genome)
     }
 
   # Read
@@ -51,11 +51,6 @@ read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score =
         warning('Warning: Input file is not BED6, and no column names were given. Downstream functions may behave oddly.')
       }
     }
-
-  # Retrieve chromosome sizes for the genome
-  size_code = sprintf('%s_chrom_sizes', genome)
-  data(list = size_code, package = "annotatr")
-  seqlengths = get(size_code)
 
   # Construct the appropriate strand vector
   if(stranded) {
@@ -98,15 +93,22 @@ read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score =
     gr <- GenomicRanges::GRanges(
         seqnames = bed[[1]],
         ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-        strand = strand,
-        seqlengths = seqlengths)
+        strand = strand)
     GenomicRanges::mcols(gr) = mcols
   } else {
     gr <- GenomicRanges::GRanges(
         seqnames = bed[[1]],
         ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
-        strand = strand,
-        seqlengths = seqlengths)
+        strand = strand)
+  }
+
+  if(genome %in% supported_genomes()) {
+    # Retrieve chromosome sizes for the genome
+    size_code = sprintf('%s_chrom_sizes', genome)
+    data(list = size_code, package = "annotatr")
+    seqlengths = get(size_code)
+
+    GenomeInfoDb::seqlengths(gr) = seqlengths[GenomeInfoDb::seqlevelsInUse(gr)]
   }
 
   # Assign the genome metadata
@@ -232,6 +234,8 @@ read_annotations = function(file, genome, annotation_name) {
     seqlengths = get(size_code)
 
     GenomeInfoDb::seqlengths(gr) = seqlengths[GenomeInfoDb::seqlevelsInUse(gr)]
+  } else {
+    warning(sprintf('Warning: The %s genome is not supported, and cannot be used with any built-in annotations', genome))
   }
 
   # Ensure the ranges do not exceed the chromosome lengths for the genome

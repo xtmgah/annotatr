@@ -13,8 +13,8 @@ context('Test read module')
   test_that('Test invalid genome' , {
     file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
 
-    expect_error(read_bed(file, genome = 'hg99', stranded = TRUE, use.score = TRUE),
-      'Invalid genome')
+    expect_warning(read_bed(file, genome = 'hg99', stranded = FALSE, use.score = TRUE),
+      'not a supported genome. In order to annotate regions, make sure to load custom annotations with read_annotations()')
   })
 
   test_that('Test chromosome column error' , {
@@ -214,6 +214,11 @@ context('Test read module')
 
   test_that('Test 4 columns works', {
     file = system.file('extdata', 'test_annotations_4.bed', package='annotatr')
+
+    expect_warning(
+      read_annotations(file = file, genome='mm14', annotation_name = 'test'),
+      'genome is not supported, and cannot be used with any built-in annotations'
+      )
 
     mm14_custom_test = read_annotations(file = file, genome='mm14', annotation_name = 'test')
 
