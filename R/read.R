@@ -144,6 +144,8 @@ read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score =
 #'
 #' @return A GenomicRanges object with the name \code{[genome]_custom_[annotation_name]} for use in the \code{annotations} parameter in \code{annotate_regions()} along with built-in annotations.
 #'
+#' NOTE: The name of the object created by \code{read_annotations()} should have the form [genome]_custom_[annotation_name], where the genome is either supported (hg19, hg38, mm9, mm10) or not, and the annotation_name is the same as given in \code{read_annotations()}.
+#'
 #' @examples
 #' file = system.file('extdata', 'test_annotations_5.bed', package='annotatr')
 #' hg19_custom_test = read_annotations(file = file, genome = 'hg19', annotation_name = 'test')

@@ -15,6 +15,8 @@ read_annotations(file, genome, annotation_name)
 }
 \value{
 A GenomicRanges object with the name \code{[genome]_custom_[annotation_name]} for use in the \code{annotations} parameter in \code{annotate_regions()} along with built-in annotations.
+
+NOTE: The name of the object created by \code{read_annotations()} should have the form [genome]_custom_[annotation_name], where the genome is either supported (hg19, hg38, mm9, mm10) or not, and the annotation_name is the same as given in \code{read_annotations()}.
 }
 \description{
 Annotations are genomic regions given as 3, 4, or 5 columned tab-delimited files (chrom, start, end, name, strand). If the input is 3-columned, the annotations are assumed to be unstranded and unnamed. In this case, the strand is set to * and the names are set to the numbered sequence \code{annotation_name:n}. If the input is 4-columned, the content of the name column is used, and the strand is set to *. If the input is 5-columned, the name and strand columns are used. If the annotations are unstranded, use '*' for the strand column.
