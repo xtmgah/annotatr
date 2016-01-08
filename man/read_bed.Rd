@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{read_bed}
 \alias{read_bed}
-\title{Convert a bed file into a GenomicRanges object}
+\title{Convert a BED file into a GenomicRanges object}
 \usage{
 read_bed(file, col.names = FALSE, genome, stranded = FALSE,
   use.score = FALSE)
