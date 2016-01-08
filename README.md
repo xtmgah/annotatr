@@ -151,14 +151,14 @@ print(dm_catsum)
 ```{r, eval=FALSE}
 # Usage of visualization functions with defaults
 
-visualize_annotation(summarized_annotations, annotation_order = NULL,
+visualize_annotation(annotated_regions, annotation_order = NULL,
   plot_title = NULL, x_label = NULL, y_label = NULL)
 
 visualize_numerical(tbl, x, y = NULL, facet = "annot_type",
   facet_order = NULL, bin_width = 10, plot_title = NULL, x_label = NULL,
   y_label = NULL)
 
-visualize_categorical(summarized_cats, x, fill = NULL, x_order = NULL,
+visualize_categorical(annotated_regions, x, fill = NULL, x_order = NULL,
   fill_order = NULL, position = "stack", plot_title = NULL,
   legend_title = NULL, x_label = NULL, y_label = NULL)
 ```
@@ -180,7 +180,7 @@ dm_vs_regions_annot = visualize_numerical(
 print(dm_vs_regions_annot)
 ```
 
-```{r, fig.align='center', fig.cap='Methylation Rates in Regions Over DM Status in Group 0 vs Group 1.', fig.height=5, fig.width=7, fig.show='hold'}
+```{r, fig.align='center', fig.cap='Methylation Rates in Regions Over DM Status in Group 0 vs Group 1.', fig.height=3, fig.width=8, fig.show='hold'}
 dm_vs_regions_name = visualize_numerical(
   tbl = dm_annotated,
   x = 'mu0',
@@ -212,7 +212,7 @@ annots_order = c(
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
 dm_vs_kg_annotations = visualize_annotation(
-  summarized_annotations = dm_annsum,
+  annotated_regions = dm_annotated,
   annotation_order = annots_order,
   plot_title = 'Number of Sites Tested for DM annotated on chr9',
   x_label = 'knownGene Annotations',
@@ -284,7 +284,7 @@ fill_order = c(
 # Make a barplot of the data class where each bar
 # is composed of the counts of CpG annotations.
 dm_vs_cpg_cat1 = visualize_categorical(
-  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
+  annotated_regions = dm_annotated, x='DM_status', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='stack',
   plot_title = 'DM Status by CpG Annotation Counts',
   legend_title = 'Annotations',
@@ -300,40 +300,13 @@ print(dm_vs_cpg_cat1)
 # Make a barplot of the data class where each bar
 # is composed of the *proportion* of CpG annotations.
 dm_vs_cpg_cat2 = visualize_categorical(
-  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
+  annotated_regions = dm_annotated, x='DM_status', fill='annot_type',
   x_order = x_order, fill_order = fill_order, position='fill',
   plot_title = 'DM Status by CpG Annotation Proportions',
   legend_title = 'Annotations',
   x_label = 'DM status',
   y_label = 'Proportion')
 print(dm_vs_cpg_cat2)
-```
-
-```{r, fig.align='center', fig.cap='Differential methylation classification with proportion of promoter, first exons, and first introns.', fig.height=6, fig.width=6, fig.show='hold'}
-# View the proportions of promoters, first exons, and first introns
-
-# The orders for the x-axis labels. This is also a subset
-# of the labels (hyper, hypo, none).
-x_order = c(
-  'hyper',
-  'hypo',
-  'none')
-# The orders for the fill labels. Can also use this
-# parameter to subset annotation types to fill.
-fill_order = c(
-  'hg19_knownGenes_promoters',
-  'hg19_knownGenes_firstexons',
-  'hg19_knownGenes_firstintrons')
-# Make a barplot of the data class where each bar
-# is composed of the proportions.
-dm_vs_cpg_cat3 = visualize_categorical(
-  summarized_cats=dm_catsum, x='DM_status', fill='annot_type',
-  x_order = x_order, fill_order = fill_order, position='fill',
-  plot_title = 'DM Status by knownGenes Annotations',
-  legend_title = 'Annotations',
-  x_label = 'DM status',
-  y_label = 'Count')
-print(dm_vs_cpg_cat3)
 ```
 
 ```{r, fig.align='center', fig.cap='Basic gene annotations with proportions of DM classification.', fig.height=6, fig.width=6, fig.show='hold'}
@@ -354,7 +327,7 @@ fill_order = c(
   'hypo',
   'none')
 dm_vs_kg_cat = visualize_categorical(
-  summarized_cats=dm_catsum, x='annot_type', fill='DM_status',
+  annotated_regions = dm_annotated, x='annot_type', fill='DM_status',
   x_order = x_order, fill_order = fill_order, position='fill',
   legend_title = 'DM Status',
   x_label = 'knownGene Annotations',
