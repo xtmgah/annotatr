@@ -31,7 +31,7 @@ read_bed(file = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 file = system.file('extdata', 'test_read_multiple_data_nohead.bed', package = 'annotatr')
 read_bed(file = file,
   col.names = c('chrom','start','end','name','score','strand','pval','mu1','mu0','diff_exp'),
-  genome = 'hg19', stranded = TRUE, use.score = TRUE)
+  genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 }
 

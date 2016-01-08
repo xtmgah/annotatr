@@ -17,7 +17,7 @@
 #' file = system.file('extdata', 'test_read_multiple_data_nohead.bed', package = 'annotatr')
 #' read_bed(file = file,
 #'   col.names = c('chrom','start','end','name','score','strand','pval','mu1','mu0','diff_exp'),
-#'   genome = 'hg19', stranded = TRUE, use.score = TRUE)
+#'   genome = 'hg19', stranded = FALSE, use.score = TRUE)
 #'
 #' @export
 read_bed <- function(file, col.names=FALSE, genome, stranded = FALSE, use.score = FALSE){
