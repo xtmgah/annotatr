@@ -2,7 +2,7 @@
 #'
 #' Given a \code{dplyr::tbl_df} of counts of regions per annotation (from \code{summarize_annotations()}), visualize the counts per annotation as a bar graph.
 #'
-#' @param summarized_annotations The \code{tbl_df} result of \code{summarize_annotations()}.
+#' @param annotated_regions The \code{tbl_df} result of \code{annotate_regions()}.
 #' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering. If \code{NULL}, all annotations are displayed.
 #' @param plot_title A string used for the title of the plot. Default \code{NULL}, no title is displayed.
 #' @param x_label A string used for the x-axis label. Default \code{NULL}, corresponding variable name used.
@@ -24,8 +24,6 @@
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' s = summarize_annotations(i)
-#'
 #' annots_order = c(
 #'   'hg19_cpg_islands',
 #'   'hg19_cpg_shores',
@@ -37,23 +35,22 @@
 #'   'hg19_knownGenes_exons',
 #'   'hg19_knownGenes_introns',
 #'   'hg19_knownGenes_3UTRs')
-#' v_annots = visualize_annotation(s, annots_order)
+#' v_annots = visualize_annotation(i, annots_order)
 #'
 #' @export
-visualize_annotation = function(summarized_annotations, annotation_order=NULL,
+visualize_annotation = function(annotated_regions, annotation_order=NULL,
   plot_title=NULL, x_label=NULL, y_label=NULL) {
 
   ########################################################################
   # Argument parsing and error handling
 
-    if(class(summarized_annotations)[1] != "tbl_df") {
-      stop('Error: summarized_annotations must have class tbl_df. The best way to ensure this is to pass the result of summarize_annotations() into this function.')
+    if(class(annotated_regions)[1] != "tbl_df") {
+      stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_regions() into this function.')
     }
 
   ########################################################################
-  # Order and subset the annotations if annotation_order is not NULL
-  summarized_annotations = subset_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
-  summarized_annotations = order_summary(summary = summarized_annotations, col='annot_type', col_order=annotation_order)
+  # Order and subset the annotations
+  annotated_regions = subset_order_tbl(tbl = annotated_regions, col='annot_type', col_order=annotation_order)
 
   ########################################################################
   # Construct the plot
@@ -61,8 +58,8 @@ visualize_annotation = function(summarized_annotations, annotation_order=NULL,
     # Make the base ggplot
     # NOTE: binwidth may need to be a parameter
     plot =
-      ggplot(summarized_annotations, aes(x=annot_type, y=n)) +
-      geom_bar(stat='identity') +
+      ggplot(annotated_regions, aes(x=annot_type)) +
+      geom_bar() +
       theme(axis.text.x = element_text(angle = 30, hjust = 1))
 
     # Add any user defined labels to the plot if their values are not NULL
@@ -180,12 +177,8 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
     }
 
   ########################################################################
-  # Order and subset the annotations if facet_order is not NULL
-  if(facet == 'annot_type' && is.null(facet_order)) {
-    facet_order = unique(tbl[[facet]])
-  }
-  tbl = subset_summary(summary = tbl, col = facet, col_order = facet_order)
-  tbl = order_summary(summary = tbl, col = facet, col_order = facet_order)
+  # Order and subset the annotations
+  sub_tbl = subset_order_tbl(tbl = tbl, col = facet, col_order = facet_order)
 
   ########################################################################
   # Construct the plot
@@ -195,16 +188,16 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
     if(is.null(y)) {
       # Make the base histogram ggplot
       plot =
-        ggplot(data = ungroup(tbl), aes_string(x=x, y='..density..')) +
+        ggplot(data = ungroup(sub_tbl), aes_string(x=x, y='..density..')) +
         geom_histogram(binwidth=bin_width, fill = 'black', alpha = 0.75) +
-        facet_wrap( as.formula(paste("~", facet)) ) +
+        facet_wrap( as.formula(paste("~", facet)) ) + # Over the facets
         geom_histogram(data = select(ungroup(tbl), -matches(facet)),
-          binwidth=bin_width, fill = 'red', alpha = 0.5) +
+          binwidth=bin_width, fill = 'red', alpha = 0.5) + # All the data
         theme_bw() +
         theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
     } else {
       # Make the base scatter ggplot
-      plot = ggplot(tbl, aes_string(x=x, y=y)) +
+      plot = ggplot(sub_tbl, aes_string(x=x, y=y)) +
         geom_point(alpha = 1/8, size = 1) +
         facet_wrap( as.formula(paste("~", facet)) ) +
         theme_bw()
@@ -227,9 +220,9 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 
 #' Visualize names over annotations
 #'
-#' Given a \code{dplyr::grouped_df} of name aggregated annotations (from \code{summarize_categorical()}), visualize the the distribution of \code{fill} in \code{x}. A bar representing the distribution of all \code{fill} in \code{x} will be added according to the contents of \code{fill}. This serves as a background to compare against.
+#' Given a \code{dplyr::tbl_df} of annotated regions (from \code{annotate_regions()}), visualize the the distribution of \code{fill} in \code{x}. A bar representing the distribution of all \code{fill} in \code{x} will be added according to the contents of \code{fill}. This serves as a background to compare against.
 #'
-#' @param summarized_cats The \code{grouped_df} result of \code{summarize_categorical()}.
+#' @param annotated_regions The \code{grouped_df} result of \code{annotated_regions()}.
 #' @param x One of 'annot_type' or 'data_name', indicating whether annotation classes or data classes will appear on the x-axis.
 #' @param fill One of 'annot_type', 'data_name', or \code{NULL}, indicating whether annotation classes or data classes will fill the bars. If \code{NULL} then the bars will be the total counts of the x classes.
 #' @param x_order A character vector that subsets and orders the x classes. Default \code{NULL}, uses existing values.
@@ -259,10 +252,6 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 #'   ignore.strand = TRUE,
 #'   use.score = TRUE)
 #'
-#' dm_sc = summarize_categorical(
-#'   annotated_regions = dm_r,
-#'   by = c('annot_type', 'DM_status'))
-#'
 #' dm_order = c(
 #'   'hyper',
 #'   'hypo',
@@ -276,7 +265,7 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 #'   'hg19_knownGenes_3UTRs')
 #'
 #' dm_vn = visualize_categorical(
-#'   summarized_cats = dm_sc,
+#'   annotated_regions = dm_r,
 #'   x = 'DM_status',
 #'   fill = 'annot_type',
 #'   x_order = dm_order,
@@ -287,27 +276,27 @@ visualize_numerical = function(tbl, x, y=NULL, facet = 'annot_type', facet_order
 #'   y_label = 'Proportion')
 #'
 #' @export
-visualize_categorical = function(summarized_cats, x, fill=NULL, x_order=NULL, fill_order=NULL,
+visualize_categorical = function(annotated_regions, x, fill=NULL, x_order=NULL, fill_order=NULL,
   position = 'stack', plot_title=NULL, legend_title=NULL, x_label=NULL, y_label=NULL) {
 
   ########################################################################
   # Argument parsing and error handling
 
     # Check correct class of input
-    if(class(summarized_cats)[1] != "grouped_df") {
-      stop('Error: summarized_cats must have class grouped_df. The best way to ensure this is to pass the result of summarize_categorical() into this function.')
+    if(class(annotated_regions)[1] != "tbl_df") {
+      stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of summarize_categorical() into this function.')
     }
 
     # Ensure the value of x is a column name in summarized_cats
-    if( !(x %in% colnames(summarized_cats)) ) {
-      stop('The column name used for x does not exist in summarized_cats. Try using "annot_type" or "data_name".')
+    if( !(x %in% colnames(annotated_regions)) ) {
+      stop('The column name used for x does not exist in annotated_regions.')
     }
 
     # Ensure the value of fill is a column name in summarized_cats if it isn't NULL
     # Also ensure fill != x
     if( !is.null(fill) ) {
-      if( !(fill %in% colnames(summarized_cats)) ) {
-        stop('The column name used for fill does not exist in summarized_cats. Try using "annot_type" or "data_name".')
+      if( !(fill %in% colnames(annotated_regions)) ) {
+        stop('The column name used for fill does not exist in annotated_regions.')
       }
       if( x == fill ) {
         stop('Error: x cannot equal fill')
@@ -320,51 +309,24 @@ visualize_categorical = function(summarized_cats, x, fill=NULL, x_order=NULL, fi
     }
 
   ########################################################################
-  # If x_order is NULL, inherit ordering from input summarized_cats
-  # Take the subset of summarized_cats by x_order
-  if(x == 'annot_type' && is.null(x_order)) {
-    x_order = unique(summarized_cats[[x]])
-  }
-  summarized_cats = subset_summary(summary = summarized_cats, col = x, col_order = x_order)
+  # Order and subset based on fill_order
+  annotated_regions = subset_order_tbl(tbl = annotated_regions, col = fill, col_order = fill_order)
 
   ########################################################################
-  # Create an 'all' category representing the counts across each
-  # category in fill if fill is specified.
-
-  if(!is.null(fill)) {
-    all_fills = dplyr::summarize(dplyr::group_by_(summarized_cats, .dots = fill), 'n' = sum(n))
-    if(x == 'annot_type') {
-      # Need to do this dumb thing to make it work with tidy_annotations()
-      all_fills[[x]] = 'genome_placeholder_all'
-      x_order = c(x_order, 'genome_placeholder_all')
-    } else {
-      # If not, can just say 'all'
-      all_fills[[x]] = 'all'
-      x_order = c(x_order, 'all')
-    }
-    summarized_cats = dplyr::bind_rows(summarized_cats, all_fills)
-
-    summarized_cats = order_summary(summary = summarized_cats, col = x, col_order = x_order)
-  } else {
-    # If there is no fill, don't worry about creating an 'all' category
-    summarized_cats = order_summary(summary = summarized_cats, col = x, col_order = x_order)
+  # Order and subset based on x_order
+  if(is.null(x_order)) {
+    x_order = unique(annotated_regions[[x]])
   }
-
-  ########################################################################
-  # Order and subset fill if fill and fill_order are not NULL
-  if(!is.null(fill) && fill == 'annot_type' && is.null(fill_order)) {
-    fill_order = unique(summarized_cats[[fill]])
-  }
-  summarized_cats = subset_summary(summary = summarized_cats, col = fill, col_order = fill_order)
-  summarized_cats = order_summary(summary = summarized_cats, col = fill, col_order = fill_order)
+  sub_annot_regions = subset_order_tbl(tbl = annotated_regions, col = x, col_order = x_order)
 
   ########################################################################
   # Construct the plot
 
     # Make base ggplot
     plot =
-      ggplot(summarized_cats, aes_string(x=x, y='n', fill=fill)) +
-      geom_bar(stat='identity', position=position, aes_string(order = fill), width=0.5) +
+      ggplot(annotated_regions, aes(x='All')) +
+      geom_bar(aes_string(fill=fill), position=position, width=0.5) + # The All bar
+      geom_bar(data = sub_annot_regions, aes_string(x=x, fill=fill), position=position, width=0.5) + # The subsets bars
       theme(axis.text.x = element_text(angle = 30, hjust = 1))
 
     # Change the fill scale and name if legend_title isn't null
@@ -372,6 +334,13 @@ visualize_categorical = function(summarized_cats, x, fill=NULL, x_order=NULL, fi
       plot = plot + scale_fill_brewer(name=legend_title)
     } else {
       plot = plot + scale_fill_brewer()
+    }
+
+    # Deal with the x-axis labels to make sure the order is correct
+    if(x == 'annot_type') {
+      plot = plot + scale_x_discrete(limits = c('All', names(tidy_annotations(x_order))))
+    } else {
+      plot = plot + scale_x_discrete(limits = c('All', x_order))
     }
 
     # Add any user defined labels to the plot if their values are not NULL

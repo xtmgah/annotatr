@@ -9,7 +9,9 @@ annotate_regions(regions, annotations, ignore.strand = TRUE, use.score)
 \arguments{
 \item{regions}{The GRanges object of the user-data returned by read_bed().}
 
-\item{annotations}{A character vector of annotations to overlap with user-data. Valid annotation codes can be found with supported_annotations(). The "basicgenes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailedgenes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basicgenes and detailedgenes annotations cannot be done at the same time, and shortcuts need to be appended by the genome}
+\item{annotations}{A character vector of annotations to overlap with user-data.
+Valid annotation codes can be found with supported_annotations(). The "basicgenes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR, exon, intron, and 3UTR knownGene regions. The "detailedgenes" shortcut annotates regions to the 1-5Kb, promoter, 5UTR exon/intron, CDS exon/intron, and 3UTR exon/intron knownGene regions. The "cpgs" shortcut annotates regions to the CpG islands, shores, shelves, and interCGI regions. NOTE: basicgenes and detailedgenes annotations cannot be done at the same time, and shortcuts need to be appended by the genome.
+Custom annotations whose names are of the form [genome]_custom_[annotation_name] can also be used. Custom annotations should be read in with \code{read_annotations()}. They can be for a \code{supported_genome()}, or for an unsupported genome.}
 
 \item{ignore.strand}{Logical variable indicating whether strandedness should be respected in findOverlaps(). Default FALSE.}
 
@@ -48,6 +50,22 @@ i = annotate_regions(
   annotations = annotations,
   ignore.strand = TRUE,
   use.score = FALSE)
+
+# An example with a combination of custom and built-in annotaitons
+a_file = system.file('extdata', 'test_annotations_3.bed', package='annotatr')
+r_file = system.file('extdata', 'test_read_multiple_data_head.bed', package='annotatr')
+
+r = read_bed(file=r_file, col.names=TRUE, genome='hg19', stranded=FALSE, use.score=FALSE)
+hg19_custom_TFBS = read_annotations(file=a_file, genome='hg19', annotation_name='TFBS')
+
+annotations = c('hg19_custom_TFBS', 'hg19_cpgs')
+
+a = annotate_regions(
+  regions = r,
+  annotations = annotations,
+  ignore.strand = TRUE,
+  use.score = TRUE
+  )
 
 }
 

@@ -128,8 +128,8 @@ Hash: 08eed0c80510af29bb15f840ccfe37ce
 
 Package: digest
 Source: CRAN
-Version: 0.6.8
-Hash: de202f956596a476d09304e3a2ebf1e5
+Version: 0.6.9
+Hash: fd55d5a024f160fc001a5ece1e27782d
 
 Package: dplyr
 Source: CRAN

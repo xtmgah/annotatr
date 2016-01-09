@@ -57,8 +57,8 @@ tidy_annotations = function(annotations) {
       }
     } else if (tokens[2] == 'enhancers') {
       return('enhancers')
-    } else if (tokens[2] == 'placeholder') {
-      return('all')
+    } else if (tokens[2] == 'custom') {
+      return(tokens[3])
     }
   })
 
@@ -70,10 +70,14 @@ tidy_annotations = function(annotations) {
 
 #' Function to check for valid annotations
 #'
-#' Gives errors if any annotations are not in supported_annotations(), basicgenes and detailedgenes are used, or the genome prefixes are not the same for all annotations.
+#' Gives errors if any annotations are not in supported_annotations() (and they are not in the required custom format), basicgenes and detailedgenes are used, or the genome prefixes are not the same for all annotations.
 #'
 #' @param annotations A character vector of annotations possibly using the shortcuts
 check_annotations = function(annotations) {
+  # Pull out any custom annotations before checking
+  custom_annotations = grep('custom', annotations, value=T)
+  annotations = setdiff(annotations, custom_annotations)
+
   # Check that the annotations are supported, tell the user which are unsupported
   if( !all(annotations %in% supported_annotations()) ) {
     unsupported = base::setdiff(annotations, supported_annotations())
@@ -94,11 +98,6 @@ check_annotations = function(annotations) {
   # Check for same genome on all annotations
   if( length(unique(genomes)) != 1 ){
     stop('Error: genome prefix on all annotations must be the same.')
-  } else {
-    # Don't think we'll ever get to this message because it'll be an unsupported annotation.
-    if( !(unique(genomes) %in% supported_genomes()) ) {
-      stop('Error: unsupported genome given. See supported_genomes().')
-    }
   }
 }
 
@@ -141,47 +140,36 @@ expand_annotations = function(annotations) {
 
 #' Function to subset a tbl_df or grouped_df by a column
 #'
-#' @param summary A \code{tbl_df} or \code{grouped_df} result from a \code{summarized} function.
-#' @param col A string indicating which column of of \code{summary} to subset and/or order
+#' @param tbl A \code{tbl_df} or \code{grouped_df}.
+#' @param col A string indicating which column of of \code{tbl} to subset and order
 #' @param col_order A character vector indicating the order of \code{col}.
 #'
 #' @return A modified version of \code{summary} with \code{col} subsetted by \code{col_order}.
-subset_summary = function(summary, col, col_order) {
+subset_order_tbl = function(tbl, col, col_order) {
   if(!is.null(col)) {
-    if(!is.null(col_order)) {
-      # Collect all types in the column
-      all_col_names = unique(summary[[col]])
+    # Collect all types in the column
+    all_col_names = unique(tbl[[col]])
 
-      # Check set equality of col in the summary and the col_order
-      if( !dplyr::setequal(all_col_names, col_order) ) {
-        if( all(col_order %in% all_col_names) ) {
-          summary = subset(summary, summary[[col]] %in% col_order)
-        } else {
-          stop('There are elements in col_order that are not present in the corresponding column. Check for typos, and check that the elements in col_order do not have 0 tallies in the summarization.')
-        }
+    # Inherit col_order from the order in tbl
+    if(is.null(col_order)) {
+      col_order = all_col_names
+    }
+
+    # Check set equality of col in the summary and the col_order
+    if( !dplyr::setequal(all_col_names, col_order) ) {
+      if( all(col_order %in% all_col_names) ) {
+        tbl = subset(tbl, tbl[[col]] %in% col_order)
+      } else {
+        stop('There are elements in col_order that are not present in the corresponding column. Check for typos, and check that the elements in col_order do not have 0 tallies in the summarization.')
       }
     }
-  }
-  return(summary)
-}
 
-#' Function to order a column of a tbl_df or grouped_df
-#'
-#' @param summary A \code{tbl_df} or \code{grouped_df} result from a \code{summarized} function.
-#' @param col A string indicating which column of \code{summary} to order
-#' @param col_order A character vector indicating the order of \code{col}.
-#'
-#' @return A modified version of \code{summary} with \code{col} turned into a factor with levels ordered by \code{col_order}.
-order_summary = function(summary, col, col_order) {
-  if(!is.null(col)) {
-    if(!is.null(col_order)) {
-      # Convert fill to factor with levels in the correct order
-      # Also convert the levels to tidy names if fill is annotations
-      summary[[col]] = factor(summary[[col]], levels = col_order)
-      if(col == 'annot_type') {
-        levels(summary[[col]]) = tidy_annotations(col_order)
-      }
+    # Convert fill to factor with levels in the correct order
+    tbl[[col]] = factor(tbl[[col]], levels = col_order)
+    # Also convert the levels to tidy names if fill is annotations
+    if(col == 'annot_type') {
+      levels(tbl[[col]]) = tidy_annotations(col_order)
     }
   }
-  return(summary)
+  return(tbl)
 }

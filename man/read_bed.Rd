@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{read_bed}
 \alias{read_bed}
-\title{Convert a bed file into a GenomicRanges object}
+\title{Convert a BED file into a GenomicRanges object}
 \usage{
 read_bed(file, col.names = FALSE, genome, stranded = FALSE,
   use.score = FALSE)
@@ -27,6 +27,11 @@ A GenomicRanges object with ranges limited by genome and BED file. The GenomicRa
 \examples{
 file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
 read_bed(file = file, genome = 'hg19', stranded = FALSE, use.score = FALSE)
+
+file = system.file('extdata', 'test_read_multiple_data_nohead.bed', package = 'annotatr')
+read_bed(file = file,
+  col.names = c('chrom','start','end','name','score','strand','pval','mu1','mu0','diff_exp'),
+  genome = 'hg19', stranded = FALSE, use.score = TRUE)
 
 }
 

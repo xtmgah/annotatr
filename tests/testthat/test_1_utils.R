@@ -2,13 +2,16 @@ context('Test utility functions')
 
 test_that('Test tidy_annotations()', {
   hg19_annots = c('hg19_cpg_islands','hg19_knownGenes_promoters','hg19_cpg_inter')
-  mm9_annots = annots = c('mm9_cpg_islands','mm9_knownGenes_exonsCDSs','mm9_cpg_inter')
+  mm9_annots = c('mm9_cpg_islands','mm9_knownGenes_exonsCDSs','mm9_cpg_inter')
+  rn4_custom_annots = c('rn4_custom_cpgislands','rn4_custom_TFBS')
 
   hg19_tidy_annots = tidy_annotations(hg19_annots)
   mm9_tidy_annots = tidy_annotations(mm9_annots)
+  rn4_tidy_annots = tidy_annotations(rn4_custom_annots)
 
   expect_equal( all(names(hg19_tidy_annots) == c('CpG islands', 'promoters', 'interCGI')), expected = TRUE)
   expect_equal( all(names(mm9_tidy_annots) == c('CpG islands', 'exonsCDSs', 'interCGI')), expected = TRUE)
+  expect_equal( all(names(rn4_tidy_annots) == c('cpgislands', 'TFBS')), expected = TRUE)
 })
 
 test_that('Test check_annotations()', {
