@@ -26,7 +26,7 @@ context('Test visualization module')
 # Setup objects for visualize_categorical()
 
   dm = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr9.txt.gz', package = 'annotatr')
-  annotations = c('hg19_basicgenes','hg19_cpgs')
+  annotations = c('hg19_basicgenes','hg19_cpgs','hg19_enhancers_fantom')
 
   dm_d = read_bed(
     file = dm,
@@ -61,6 +61,7 @@ context('Test visualization module')
     'hg19_cpg_shores',
     'hg19_cpg_shelves',
     'hg19_cpg_inter',
+    'hg19_enhancers_fantom',
     'hg19_knownGenes_1to5kb',
     'hg19_knownGenes_promoters',
     'hg19_knownGenes_5UTRs',
@@ -68,6 +69,7 @@ context('Test visualization module')
     'hg19_knownGenes_introns',
     'hg19_knownGenes_3UTRs')
   cpgs_order = c(
+    'hg19_enhancers_fantom',
     'hg19_cpg_islands',
     'hg19_cpg_shores',
     'hg19_cpg_shelves',
@@ -101,11 +103,25 @@ context('Test visualization module')
 
     chip_va = visualize_annotation(
       annotated_regions = chip_r,
-      annotation_order = all_order,
+      annotation_order = genes_order,
       plot_title = 'Testing plot title')
 
     expect_equal( dplyr::setequal(class(chip_va_min), c('gg','ggplot')), expected = TRUE)
     expect_equal( dplyr::setequal(class(chip_va), c('gg','ggplot')), expected = TRUE)
+  })
+
+################################################################################
+# Test visualize_coannotations()
+
+  test_that('Test visualize_coannotations() success', {
+
+    chip_vcas = visualize_coannotations(
+      annotated_regions = dm_r,
+      annotation_order = all_order,
+      axes_label = 'Annotations',
+      plot_title = 'Co-occurrence of Annotations')
+
+    expect_equal( dplyr::setequal(class(chip_vcas), c('gg','ggplot')), expected = TRUE)
   })
 
 ################################################################################

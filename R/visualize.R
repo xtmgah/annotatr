@@ -77,6 +77,99 @@ visualize_annotation = function(annotated_regions, annotation_order=NULL,
   return(plot)
 }
 
+#' Visualize pair-wise annotations across regions
+#'
+#' All co-occurring annotations associated with a region are computed and displayed as a heatmap.
+#'
+#' @param annotated_regions The \code{tbl_df} result of \code{annotate_regions()}.
+#' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering. If \code{NULL}, all annotations are displayed.
+#' @param plot_title A string used for the title of the plot. Default \code{NULL}, no title is displayed.
+#' @param axes_label A string used for the axis labels. Default \code{NULL}, corresponding variable name used.
+#'
+#' @return A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
+#'
+#' dm = system.file('extdata', 'IDH2mut_v_NBM_multi_data_chr9.txt.gz', package = 'annotatr')
+#' annotations = c('hg19_basicgenes','hg19_cpgs','hg19_enhancers_fantom')
+#'
+#' dm_d = read_bed(
+#'   file = dm,
+#'   col.names=c('chr','start','end','DM_status','pval','strand','diff_meth','mu1','mu0'),
+#'   genome = 'hg19',
+#'   stranded = FALSE,
+#'   use.score = TRUE)
+#'
+#' dm_r = annotate_regions(
+#'   regions = dm_d,
+#'   annotations = annotations,
+#'   ignore.strand = TRUE,
+#'   use.score = TRUE)
+#'
+#' all_order = c(
+#'   'hg19_cpg_islands',
+#'   'hg19_cpg_shores',
+#'   'hg19_cpg_shelves',
+#'   'hg19_cpg_inter',
+#'   'hg19_enhancers_fantom',
+#'   'hg19_knownGenes_1to5kb',
+#'   'hg19_knownGenes_promoters',
+#'   'hg19_knownGenes_5UTRs',
+#'   'hg19_knownGenes_exons',
+#'   'hg19_knownGenes_introns',
+#'   'hg19_knownGenes_3UTRs')
+#'
+#' chip_vcas = visualize_coannotations(
+#'   annotated_regions = dm_r,
+#'   annotation_order = all_order,
+#'   axes_label = 'Annotations',
+#'   plot_title = 'Co-occurrence of Annotations')
+#'
+#' @export
+visualize_coannotations = function(annotated_regions, annotation_order=NULL,
+  plot_title=NULL, axes_label=NULL) {
+
+  ########################################################################
+  # Argument parsing and error handling
+
+    if(class(annotated_regions)[1] != "tbl_df") {
+      stop('Error: annotated_regions must have class tbl_df. The best way to ensure this is to pass the result of annotate_regions() into this function.')
+    }
+
+  ########################################################################
+  # Order and subset the annotations
+  annotated_regions = subset_order_tbl(tbl = annotated_regions, col='annot_type', col_order=annotation_order)
+
+  ########################################################################
+  # Construct the plot
+
+  annotation_pairs_by_region = dplyr::do(
+    dplyr::group_by(annotated_regions, data_chrom, data_start, data_end),
+    expand.grid(.$annot_type, .$annot_type, stringsAsFactors=F))
+
+  pairwise_annotation_counts = table(annotation_pairs_by_region[['Var1']], annotation_pairs_by_region[['Var2']])
+
+  pac_m = reshape2::melt(pairwise_annotation_counts, value.name = 'Counts')
+
+    # Make the base ggplot
+    # NOTE: binwidth may need to be a parameter
+    plot = ggplot(pac_m, aes(Var1, Var2)) +
+      geom_raster(aes(fill = Counts)) +
+      geom_text(aes(fill = Counts, label = Counts)) +
+      scale_fill_gradient(low = "white", high = "steelblue") +
+      theme(axis.text.x = element_text(angle = 30, hjust = 1), axis.text.y = element_text(angle = 30, hjust = 1))
+
+    # Add any user defined labels to the plot if their values are not NULL
+    # if they are NULL, ggplot() will use defaults
+    if(!is.null(plot_title)) {
+      plot = plot + ggtitle(plot_title)
+    }
+    if(!is.null(axes_label)) {
+      plot = plot + xlab(axes_label)
+      plot = plot + ylab(axes_label)
+    }
+
+  return(plot)
+}
+
 #' Visualize numerical data over regions or regions summarized over annotations
 #'
 #' The \code{facet_order} vector also determines the categories used to create the background distribution that appears overlayed in red in each facet.
