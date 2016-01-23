@@ -219,6 +219,8 @@ dm_vs_kg_annotations = visualize_annotation(
 print(dm_vs_kg_annotations)
 ```
 
+![Number of DM regions per annotation.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.1.png)
+
 ### Visualizing Regions Occurring in Pairs of Annotations
 
 ```{r, fig.align='center', fig.cap='Number of DM regions per pair of annotations.', fig.height=7, fig.width=7, fig.show = 'hold'}
@@ -242,6 +244,8 @@ dm_vs_coannotations = visualize_coannotations(
 print(dm_vs_coannotations)
 ```
 
+![Number of DM regions per pair of annotations.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.2.png)
+
 ### Visualizing Numerical Data Over Regions
 
 With numerical data, the `visualize_numerical()` function allows for the plotting of a single variable (histogram) or of two variables (scatterplot) at the region level, faceting over the annotations, rather than summarizing over them. Note, when the plot is a histogram, the background distribution (red overlay histogram is the distribution of the quantity among all annotations used in `annotate_regions()`) is plotted within each facet.
@@ -259,6 +263,8 @@ dm_vs_regions_annot = visualize_numerical(
 print(dm_vs_regions_annot)
 ```
 
+![Methylation Rates in Regions Over Gene Features in Control Group.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.3.1.png)
+
 ```{r, fig.align='center', fig.cap='Methylation Rates in Regions Over DM Status in Group 0 vs Group 1.', fig.height=3, fig.width=8, fig.show='hold'}
 dm_vs_regions_name = visualize_numerical(
   tbl = dm_annotated,
@@ -271,6 +277,8 @@ dm_vs_regions_name = visualize_numerical(
   y_label = 'Group 1')
 print(dm_vs_regions_name)
 ```
+
+![Methylation Rates in Regions Over DM Status in Group 0 vs Group 1.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.3.2.png)
 
 It is also possible to visualize joint and marginal numerical distributions with respect to annotation type with `visualize_numerical_coannotations()`. For example, the following example demonstrates CpG methylation rates for CpGs occurring in just promoters, just CpG islands, and both promoters and CpG islands.
 
@@ -285,6 +293,8 @@ dm_vs_num_co = visualize_numerical_coannotations(
   x_label = 'Percent Methylation')
 print(dm_vs_num_co)
 ```
+
+![Group 0 methylation Rates in Regions in promoters, CpG islands, and both.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.3.3.png)
 
 ### Visualizing Summarized Numerical Data
 
@@ -309,6 +319,8 @@ dm_vs_cpg_num = visualize_numerical(
   x_label = 'Mean Diff. in Meth. Over Annotations')
 print(dm_vs_cpg_num)
 ```
+
+![Methylation difference distributions across the CpG annotations.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.4.png)
 
 ### Visualizing Categorical Data
 
@@ -339,6 +351,8 @@ dm_vs_cpg_cat1 = visualize_categorical(
 print(dm_vs_cpg_cat1)
 ```
 
+![Differential methylation classification with counts of CpG annotations.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.5.1.png)
+
 ```{r, fig.align='center', fig.cap='Differential methylation classification with proportion of CpG annotations.', fig.height=6, fig.width=6, fig.show='hold'}
 # Use the same order vectors as the previous code block,
 # but use proportional fill instead of counts.
@@ -354,6 +368,8 @@ dm_vs_cpg_cat2 = visualize_categorical(
   y_label = 'Proportion')
 print(dm_vs_cpg_cat2)
 ```
+
+![Differential methylation classification with proportion of CpG annotations.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.5.2.png)
 
 ```{r, fig.align='center', fig.cap='Basic gene annotations with proportions of DM classification.', fig.height=6, fig.width=6, fig.show='hold'}
 # View the proportions of data classes in knownGene annotations
@@ -381,3 +397,5 @@ dm_vs_kg_cat = visualize_categorical(
   y_label = 'Proportion')
 print(dm_vs_kg_cat)
 ```
+
+![Basic gene annotations with proportions of DM classification.](https://github.com/rcavalcante/annotatr/blob/v0.5.0/vignettes/4.4.5.3.png)
