@@ -32,13 +32,13 @@ context('Test visualization module')
     file = dm,
     col.names=c('chr','start','end','DM_status','pval','strand','diff_meth','mu1','mu0'),
     genome = 'hg19',
-    stranded = F,
+    stranded = FALSE,
     use.score = TRUE)
 
   dm_r = annotate_regions(
     regions = dm_d,
     annotations = annotations,
-    ignore.strand = T,
+    ignore.strand = TRUE,
     use.score = TRUE)
 
   dm_sn = summarize_numerical(
@@ -115,13 +115,13 @@ context('Test visualization module')
 
   test_that('Test visualize_coannotations() success', {
 
-    chip_vcas = visualize_coannotations(
+    dm_vs_ca = visualize_coannotations(
       annotated_regions = dm_r,
       annotation_order = all_order,
       axes_label = 'Annotations',
       plot_title = 'Co-occurrence of Annotations')
 
-    expect_equal( dplyr::setequal(class(chip_vcas), c('gg','ggplot')), expected = TRUE)
+    expect_equal( dplyr::setequal(class(dm_vs_ca), c('gg','ggplot')), expected = TRUE)
   })
 
 ################################################################################
@@ -194,6 +194,34 @@ context('Test visualization module')
     expect_equal( dplyr::setequal(class(dm_vs_regions_name), c('gg','ggplot')), expected = TRUE)
     expect_equal( dplyr::setequal(class(dm_vs_sumnum), c('gg','ggplot')), expected = TRUE)
   })
+
+################################################################################
+# Test visualize_numerical_coannotations()
+
+test_that('Test visualize_numerical_coannotations()', {
+  dm_vs_num_co1 = visualize_numerical_coannotations(
+    tbl = dm_r,
+    x = 'mu0',
+    annot1 = 'hg19_cpg_islands',
+    annot2 = 'hg19_knownGenes_promoters',
+    bin_width = 5,
+    plot_title = 'Group 0 Perc. Meth. in CpG Islands and Promoters',
+    x_label = 'Percent Methylation')
+
+  dm_vs_num_co2 = visualize_numerical_coannotations(
+    tbl = dm_r,
+    x = 'mu0',
+    y = 'mu1',
+    annot1 = 'hg19_cpg_islands',
+    annot2 = 'hg19_knownGenes_promoters',
+    bin_width = 5,
+    plot_title = 'Group 0 Perc. Meth. in CpG Islands and Promoters',
+    x_label = 'Percent Methylation',
+    y_label = 'Percent Methylation')
+
+  expect_equal( dplyr::setequal(class(dm_vs_num_co1), c('gg','ggplot')), expected = TRUE)
+  expect_equal( dplyr::setequal(class(dm_vs_num_co2), c('gg','ggplot')), expected = TRUE)
+})
 
 ################################################################################
 # Test visualize_categorical()
