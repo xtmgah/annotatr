@@ -272,7 +272,7 @@ dm_vs_regions_name = visualize_numerical(
 print(dm_vs_regions_name)
 ```
 
-It is also possible to visualize joint and marginal numerical distributions according with respect to annotation type. For example, the following example demonstrates CpG methylation rates for CpGs occurring in just promoters, just CpG islands, and both promoters and CpG islands.
+It is also possible to visualize joint and marginal numerical distributions with respect to annotation type with `visualize_numerical_coannotations()`. For example, the following example demonstrates CpG methylation rates for CpGs occurring in just promoters, just CpG islands, and both promoters and CpG islands.
 
 ```{r, fig.align='center', fig.cap='Group 0 methylation Rates in Regions in promoters, CpG islands, and both.', fig.height=7, fig.width=7, fig.show='hold'}
 dm_vs_num_co = visualize_numerical_coannotations(
