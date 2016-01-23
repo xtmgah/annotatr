@@ -22,7 +22,7 @@ visualize_annotation(annotated_regions, annotation_order = NULL,
 A \code{ggplot} object which can be viewed by calling it, or saved with \code{ggplot2::ggsave}.
 }
 \description{
-Given a \code{dplyr::tbl_df} of counts of regions per annotation (from \code{summarize_annotations()}), visualize the counts per annotation as a bar graph.
+Given a \code{dplyr::tbl_df} of annotated regions. Result is a bar graph.
 }
 \examples{
 ########################################################################

@@ -1,6 +1,6 @@
 #' Visualize the number of regions per annotation
 #'
-#' Given a \code{dplyr::tbl_df} of counts of regions per annotation (from \code{summarize_annotations()}), visualize the counts per annotation as a bar graph.
+#' Given a \code{dplyr::tbl_df} of annotated regions. Result is a bar graph.
 #'
 #' @param annotated_regions The \code{tbl_df} result of \code{annotate_regions()}.
 #' @param annotation_order A character vector which doubles as the subset of annotations desired for visualization as well as the ordering. If \code{NULL}, all annotations are displayed.
@@ -117,7 +117,7 @@ visualize_annotation = function(annotated_regions, annotation_order=NULL,
 #'   'hg19_knownGenes_introns',
 #'   'hg19_knownGenes_3UTRs')
 #'
-#' chip_vcas = visualize_coannotations(
+#' dm_vs_ca = visualize_coannotations(
 #'   annotated_regions = dm_r,
 #'   annotation_order = all_order,
 #'   axes_label = 'Annotations',

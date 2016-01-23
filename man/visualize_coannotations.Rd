@@ -48,7 +48,7 @@ all_order = c(
   'hg19_knownGenes_introns',
   'hg19_knownGenes_3UTRs')
 
-chip_vcas = visualize_coannotations(
+dm_vs_ca = visualize_coannotations(
   annotated_regions = dm_r,
   annotation_order = all_order,
   axes_label = 'Annotations',
