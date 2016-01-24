@@ -33,10 +33,6 @@ Genomic regions resulting from next-generation sequencing experiments and bioinf
 devtools::install_github('rcavalcante/annotatr')
 ```
 
-```{r, echo=FALSE}
-suppressWarnings(suppressMessages(suppressPackageStartupMessages(devtools::load_all())))
-```
-
 # Annotations
 
 We provide a number of pre-built annotations for human (hg19 and hg38) and mouse (mm9 and mm10) genomes. The `supported_annotations()` function lists pre-built annotations. Custom annotations are also supported via the `read_annotations()` function.
