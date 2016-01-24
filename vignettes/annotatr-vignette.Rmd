@@ -98,7 +98,7 @@ print(dm_regions)
 
 Users may select annotations a la carte via the accessors listed with `supported_annotations()`, or via shortcuts. The `hg19_cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `hg19_basicgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `hg19_detailedgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `hg19_basicgenes` and `hg19_detailedgenes` shortcuts may not be used at the same time. Shortcuts for other `supported_genomes()` are accessed in the same way, replacing `hg19` with one of `hg38`, `mm9`, or `mm10`.
 
-`annotate_regions()` requires a `GRanges` object (either the result of `read_bed()` or an existing object), a character vector indicating the `annotations` to annotate the regions with, the `genome` as above, a logical value indicating whether to `ignore.strand` when calling `GenomicRanges::findOverlaps()`, and a logical value indicating whether to `use.score`.
+`annotate_regions()` requires a `GRanges` object (either the result of `read_bed()` or an existing object), a character vector indicating the `annotations` to annotate the regions with, a logical value indicating whether to `ignore.strand` when calling `GenomicRanges::findOverlaps()`, and a logical value indicating whether to `use.score`.
 
 ```{r}
 
@@ -121,9 +121,7 @@ print(dm_annotated)
 
 ## Summarizing Over Annotations
 
-The dataset used in the running example has a class (differential methylation status: hyper, hypo, none) and a score (methylation difference between two groups) associated with each region. We will employ all three summarization functions in preparation for visualization.
-
-The three summarization functions -- `summarize_annotations()`, `summarize_numerical()`, and `summarize_categorical()` -- all take the `tbl_df` objects output from `annotate_regions()` as their input, and output either a `dplyr::tbl_df` (for `summarize_annotations()`) or `dplyr::grouped_df` (for the others).
+The three summarization functions -- `summarize_annotations()`, `summarize_numerical()`, and `summarize_categorical()` -- all take the `dplyr::tbl_df` objects output from `annotate_regions()` as their input, and output either a `dplyr::tbl_df` (for `summarize_annotations()`) or `dplyr::grouped_df` (for the others).
 
 ```{r, eval=FALSE}
 # Usage of summarize functions with defaults
@@ -139,14 +137,14 @@ summarize_categorical(
   by = c("annot_type", "annot_id"))
 ```
 
-When there is no class (`name` column) or score (`score` column) information associated with the regions, `summarize_annotations()` is the only possible function to use. It gives the counts of regions in each annotation type (see example below). If there is class and/or score information, then `summarize_numerical()` and/or `summarize_categorical()` may be used.
+When there is no categorical (`name` column) or numerical (`score` column) information associated with the regions, `summarize_annotations()` is the only possible function to use. It gives the counts of regions in each annotation type (see example below). If there is categorical and/or numerical information, then `summarize_numerical()` and/or `summarize_categorical()` may be used.
 
 ```{r}
 # Find the number of regions per annotation type
 dm_annsum = summarize_annotations(annotated_regions = dm_annotated)
 print(dm_annsum)
 
-# Take the mean of the score column across all regions
+# Take the mean of the diff_meth column across all regions
 # occurring in an annotation.
 dm_numsum = summarize_numerical(
   annotated_regions = dm_annotated,
@@ -154,7 +152,7 @@ dm_numsum = summarize_numerical(
   over = c('diff_meth'))
 print(dm_numsum)
 
-# Count the occurrences of classifications in the name
+# Count the occurrences of classifications in the DM_status
 # column across the annotation types.
 dm_catsum = summarize_categorical(
   annotated_regions = dm_annotated,
@@ -164,7 +162,7 @@ print(dm_catsum)
 
 ## Visualizing
 
-`annotatr` has four visualization functions (`visualize_annotation()`, `visualize_coannotations()`, `visualize_numerical()` and `visualize_categorical()`) to be used on the object returned by `annotate_regions()`. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
+`annotatr` has 5 visualization functions (`visualize_annotation()`, `visualize_coannotations()`, `visualize_numerical()`, `visualize_numerical_coannotations()`, and `visualize_categorical()`) to be used on the object returned by `annotate_regions()`. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
 
 ```{r, eval=FALSE}
 # Usage of visualization functions with defaults
@@ -178,6 +176,9 @@ visualize_coannotations(annotated_regions, annotation_order = NULL,
 visualize_numerical(tbl, x, y = NULL, facet = "annot_type",
   facet_order = NULL, bin_width = 10, plot_title = NULL, x_label = NULL,
   y_label = NULL)
+
+visualize_numerical_coannotations(tbl, x, y = NULL, annot1, annot2,
+  bin_width = 10, plot_title = NULL, x_label = NULL, y_label = NULL)
 
 visualize_categorical(annotated_regions, x, fill = NULL, x_order = NULL,
   fill_order = NULL, position = "stack", plot_title = NULL,
@@ -235,7 +236,7 @@ print(dm_vs_coannotations)
 
 ### Visualizing Numerical Data Over Regions
 
-With numerical data, the `visualize_numerical()` function allows for the plotting of a single variable (histogram) or of two variables (scatterplot) at the region level, faceting over the annotations, rather than summarizing over them. Note, when the plot is a histogram, the background distribution (red overlay histogram is the distribution of the quantity among all annotations used in `annotate_regions()`) is plotted within each facet.
+With numerical data, the `visualize_numerical()` function allows for the plotting of a single variable (histogram) or of two variables (scatterplot) at the region level, faceting over the annotations. Note, when the plot is a histogram, the background distribution (red overlay histogram is the distribution of the quantity among all annotations used in `annotate_regions()`) is plotted within each facet.
 
 ```{r, fig.align='center', fig.cap='Methylation Rates in Regions Over Gene Features in Control Group.', fig.height=6, fig.width=8, fig.show='hold'}
 dm_vs_regions_annot = visualize_numerical(
@@ -263,7 +264,7 @@ dm_vs_regions_name = visualize_numerical(
 print(dm_vs_regions_name)
 ```
 
-It is also possible to visualize joint and marginal numerical distributions with respect to annotation type with `visualize_numerical_coannotations()`. For example, the following example demonstrates CpG methylation rates for CpGs occurring in just promoters, just CpG islands, and both promoters and CpG islands.
+It is also possible to visualize joint and marginal distributions of numerical data with respect to annotation type with `visualize_numerical_coannotations()`. For example, the following example shows CpG methylation rates for CpGs occurring in just promoters, just CpG islands, and both promoters and CpG islands.
 
 ```{r, fig.align='center', fig.cap='Group 0 methylation Rates in Regions in promoters, CpG islands, and both.', fig.height=7, fig.width=7, fig.show='hold'}
 dm_vs_num_co = visualize_numerical_coannotations(
