@@ -70,9 +70,11 @@ The following example is based on the results of testing for differential methyl
 
 ## Reading Genomic Regions
 
-`annotatr` reads in genomic regions of interest as [BED6](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) files using the `read_bed()` function. The `name` and `score` columns specified in the BED specification can be used to store categorical and numerical data, respectively. Additional data columns can be provided in columns 7 and above.
+`annotatr` reads in genomic regions of interest as [BED6](https://genome.ucsc.edu/FAQ/FAQformat.html#format1) files using the `read_bed()` and `read_df()` functions. The `name` and `score` columns specified in the BED specification can be used to store categorical and numerical data, respectively. Additional data columns can be provided in columns 7 and above.
 
 `read_bed()` requires the `file` path to be read, a `genome` (e.g., hg19, hg38, mm9, or mm10), a logical value indicating whether the data is `stranded`, and a logical value indicating whether the `score` column should be used. The `col.names` parameter can either be a character vector of the column names, `TRUE` to indicate that the file contains a header row, or `FALSE` to indicate neither. See [readr::read_tsv](https://cran.r-project.org/web/packages/readr/readr.pdf) documentation for details on this parameter.
+
+`read_df()` takes a `data.frame` that exists in the current workspace and converts it into a `GenomicRanges` object for annotation. The restrictions on the `data.frame` are the same as on the file used in `read_bed()`.
 
 ```{r}
 # This file in inst/extdata represents regions tested for differential

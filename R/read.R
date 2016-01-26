@@ -1,14 +1,14 @@
 #' Convert a BED file into a GenomicRanges object
 #'
-#' \code{read_bed} reads in data from a BED6 file, checks to see if it follows the appropriate BED (Browser Extensible Data) format, and checks validity of genome. If valid, reads file data into a GenomicRanges object. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
+#' \code{read_bed} reads in data from a BED6 file, checks to see if it follows the appropriate BED6+ (Browser Extensible Data) format, and checks validity of genome. If valid, reads file data into a GenomicRanges object. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
 #'
-#' @param file Path to the file with data. File must exist and be in correct format.
+#' @param file Path to the file with data. File should be in BED6 format with possibly additional data columns.
 #' @param col.names Either \code{TRUE} (column names are given in the first row of the file), \code{FALSE} (the first row does not have column names), or a character vector of column names (the first row is assumed to not be column names, and the values of the character vector will be the resulting column names in the returned \code{GRanges} object). If \code{FALSE} and the file is not BED6, a warning will indicate that downstream functions may behave unexpectedly.
-#' @param genome Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'
+#' @param genome Gives the genome assembly (human or mouse). Can be one of 'hg19', 'hg38', 'mm9' or 'mm10' in order to use built-in annotations. Can be any genome if custom annotations are used.
 #' @param stranded Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file. Default \code{FALSE}
 #' @param use.score Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file. Default \code{FALSE}
 #'
-#' @return A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{name} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
+#' @return A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique.
 #'
 #' @examples
 #' file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
@@ -23,82 +23,116 @@
 read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score = FALSE) {
   # Error checking pre-read
     if(!file.exists(file)) {
-      stop(sprintf('Error: File, %s, not found.', file))
+      stop(sprintf('File, %s, not found.', file))
     }
     if(! genome %in% supported_genomes()) {
       warning('Warning: %s is not a supported genome. In order to annotate regions, make sure to load custom annotations with read_annotations()', genome)
     }
 
   # Read
-  bed <- readr::read_tsv(file = file, col_names = col.names)
-
-  # Error checking post-read
-    if(!all(grepl("chr", bed[[1]]))) {
-      stop('Error: First column of BED file does not appear to be chromosome.')
-    }
-    if(typeof(head(bed[[2]])) != "integer") {
-        stop('Error: Second column of BED file must be integer valued.')
-    }
-    if(typeof(head(bed[[3]]))!= "integer") {
-        stop('Error: Third column of BED file must be integer valued.')
-    }
+  bed = readr::read_tsv(file = file, col_names = col.names)
 
   # Deal with column names
     if(class(col.names) != 'character' && col.names == FALSE) {
       if(ncol(bed) == 6) {
         colnames(bed) = c('chr','start','end','name','score','strand')
       } else {
-        warning('Warning: Input file is not BED6, and no column names were given. Downstream functions may behave oddly.')
+        warning('Warning: Input is not BED6, and no column names were given. Downstream functions may behave oddly.')
       }
+    }
+
+  gr = read_df(df = bed, genome = genome, stranded = stranded, use.score = use.score)
+
+  return(gr)
+}
+
+#' Convert a data.frame into a GenomicRanges object
+#'
+#' \code{read_bed} converts a \code{data.frame} into a \code{GenomicRanges} object. It checks to see if it follows the appropriate BED6+ (Browser Extensible Data) format, and checks validity of genome. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
+#'
+#' @param df A \code{data.frame} following the BED6 format with possibly additional data columns.
+#' @param genome Gives the genome assembly (human or mouse). Can be one of 'hg19', 'hg38', 'mm9' or 'mm10' in order to use built-in annotations. Can be any genome if custom annotations are used.
+#' @param stranded Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file. Default \code{FALSE}
+#' @param use.score Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file. Default \code{FALSE}
+#'
+#' @return A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique.
+#'
+#' @examples
+#' # Convert an existing data.frame into GRanges for annotation
+#' df = data.frame(
+#'   chr = c('chr1','chr1','chr1','chr1'),
+#'   start = c(10800, 11000, 27800, 29000),
+#'   end = c(10900, 11100, 28800, 29300),
+#'   name = c('A','A','B','B'),
+#'   score = c(87, 45, 34, 62),
+#'   strand = c('*','*','*','*'),
+#'   stringsAsFactors=FALSE)
+#'
+#' gr = read_df(
+#'   df = df,
+#'   genome = 'hg19',
+#'   stranded = FALSE,
+#'   use.score=TRUE)
+#'
+#' @export
+read_df = function(df, genome, stranded = FALSE, use.score = FALSE) {
+  # Convert the data.frame to a dplyr::tbl_df
+  if(class(df)[1] == 'data.frame') {
+    df = dplyr::tbl_df(df)
+  }
+
+  # Error checking post-read
+    if(!all(grepl("chr", df[[1]]))) {
+      stop('First column does not appear to be chromosome.')
     }
 
   # Construct the appropriate strand vector
   if(stranded) {
-    if(length(base::setdiff( unique(bed[[6]]), c("+","-") ) > 0)) {
-      stop("Error: When stranded = T, strand column should contain +/- only.")
+    if(length(base::setdiff( unique(df[[6]]), c("+","-") ) > 0)) {
+      stop("When stranded = TRUE, strand column should contain +/- only.")
     }
-    strand = bed[[6]]
+    strand = df[[6]]
   } else {
-    strand = rep.int('*', nrow(bed))
+    strand = rep.int('*', nrow(df))
   }
 
   # Construct the appropriate mcols data.frame
-  if(use.score && ncol(bed) == 6) {
+  if(use.score && ncol(df) == 6) {
     # This is the vanilla use.score case. This overwrites column name information.
-    mcols = data.frame(name = bed[[4]], score = bed[[5]], stringsAsFactors=F)
-  } else if(!use.score && ncol(bed) == 6) {
+    mcols = data.frame(name = df[[4]], score = df[[5]], stringsAsFactors=F)
+  } else if(!use.score && ncol(df) == 6) {
     # This is the !use.score case.
-    mcols = data.frame(name = bed[[4]], stringsAsFactors=F)
-  } else if(!use.score && ncol(bed) < 6) {
-    # Shrink to BED3 case
+    mcols = data.frame(name = df[[4]], stringsAsFactors=F)
+  } else if(!use.score && ncol(df) < 6) {
+    # Shrink to df3 case
     mcols = NULL
-  } else if(use.score && ncol(bed) > 6) {
+  } else if(use.score && ncol(df) > 6) {
     # This is the multiple data column case.
     # We are expecting the user to name their columns, otherwise we
     # won't possibly know what to do in summarize and visualize.
-    mcols = data.frame(bed[c(4:5,7:ncol(bed))], stringsAsFactors=F)
-  } else if(!use.score && ncol(bed) > 6) {
+    mcols = data.frame(df[c(4:5,7:ncol(df))], stringsAsFactors=F)
+  } else if(!use.score && ncol(df) > 6) {
     # This is the multiple data column case.
     # It is conceivable that the user may just tack on data columns to an
-    # existing BED file, hence skipping over column 5 (score)
+    # existing df file, hence skipping over column 5 (score)
     # if it's all 1000s like in a narrowPeak.
-    mcols = data.frame(bed[c(4,7:ncol(bed))], stringsAsFactors=F)
+    mcols = data.frame(df[c(4,7:ncol(df))], stringsAsFactors=F)
   } else {
-    # Shrink to BED3 case
+    # Shrink to df3 case
     mcols = NULL
   }
 
   # Construct the GRanges object
   if(!is.null(mcols)) {
     gr <- GenomicRanges::GRanges(
-        seqnames = bed[[1]],
-        ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
+        seqnames = df[[1]],
+        ranges = IRanges::IRanges(start = df[[2]], end = df[[3]]),
         strand = strand)
     GenomicRanges::mcols(gr) = mcols
   } else {
     gr <- GenomicRanges::GRanges(
-        seqnames = bed[[1]],
-        ranges = IRanges::IRanges(start = bed[[2]], end = bed[[3]]),
+        seqnames = df[[1]],
+        ranges = IRanges::IRanges(start = df[[2]], end = df[[3]]),
         strand = strand)
   }
 
@@ -129,7 +163,7 @@ read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score =
   # Enforce uniqueness of regions
   gr <- unique(gr)
 
-  gr
+  return(gr)
 }
 
 #' Convert a BED file into annotations
@@ -139,7 +173,7 @@ read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score =
 #' If the names for the annotations are not unique, they will be renamed in the form \code{annotation_name:n}.
 #'
 #' @param file Path to the file with annotations. This file can be either BED3, BED4, or BED5. If BED3, the assumption is that the annotations are not stranded and not named; if BED4,
-#' @param genome Gives the genome assembly. The genome may be one of hg19, hg38, mm9, or mm10, in which case the user can also annotate regions with built-in annotations. Otherwise, the user may only annotate regions with their custom annotations.
+#' @param genome Gives the genome assembly. The genome may be one of hg19, hg38, mm9, or mm10, in which case the user can  annotate regions with built-in annotations. Otherwise, the user may only annotate regions with their custom annotations.
 #' @param annotation_name A description of the types of annotations present in \code{file}.
 #'
 #' @return A GenomicRanges object with the name \code{[genome]_custom_[annotation_name]} for use in the \code{annotations} parameter in \code{annotate_regions()} along with built-in annotations.
@@ -158,10 +192,10 @@ read_bed = function(file, col.names=FALSE, genome, stranded = FALSE, use.score =
 read_annotations = function(file, genome, annotation_name) {
   # Error checking pre-read
     if(!file.exists(file)) {
-      stop(sprintf('Error: File, %s, not found.', file))
+      stop(sprintf('File, %s, not found.', file))
     }
     if(is.null(genome)) {
-      stop('Error: A genome must be specified.')
+      stop('A genome must be specified.')
     }
 
   # Read
@@ -170,14 +204,9 @@ read_annotations = function(file, genome, annotation_name) {
 
   # Error checking post-read
     if(!all(grepl('chr', bed[[1]]))) {
-      stop('Error: First column of annotation file does not appear to be chromosome.')
+      stop('First column of annotation file does not appear to be chromosome.')
     }
-    if(class(bed[[2]]) != 'integer') {
-      stop('Error: Second column of annotation file must be integer valued.')
-    }
-    if(class(bed[[3]]) != 'integer') {
-      stop('Error: Third column of annotation file must be integer valued.')
-    }
+
     if(ncol(bed) > 3) {
       if(any(duplicated(bed[[4]]))) {
         rename = TRUE
@@ -186,7 +215,7 @@ read_annotations = function(file, genome, annotation_name) {
     }
     if(ncol(bed) == 5) {
       if(length(base::setdiff( unique(bed[[5]]), c("+","-","*") ) > 0)) {
-        stop('Error: Strand column should contain only "+", "-", or "*"')
+        stop('Strand column should contain only "+", "-", or "*"')
       }
     }
 
@@ -226,7 +255,7 @@ read_annotations = function(file, genome, annotation_name) {
           ID = bed[[4]])
     }
   } else {
-    stop('Error: The file used to create custom annotations must have 3, 4, or 5 columns.')
+    stop('The file used to create custom annotations must have 3, 4, or 5 columns.')
   }
 
   # Give the GenomicRanges object the genome annotation

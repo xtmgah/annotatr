@@ -21,17 +21,7 @@ context('Test read module')
     file = system.file('extdata', 'test_read_error_chr.bed', package = 'annotatr')
 
     expect_error(read_bed(file, genome = 'hg19', stranded = TRUE, use.score = TRUE),
-      'First column of BED file does not appear to be chromosome')
-  })
-
-  test_that('Test integer column errors' , {
-    file1 = system.file('extdata', 'test_read_error_int1.bed', package = 'annotatr')
-    file2 = system.file('extdata', 'test_read_error_int2.bed', package = 'annotatr')
-
-    expect_error(read_bed(file1, genome = 'hg19', stranded = TRUE, use.score = TRUE),
-      'Second column of BED file must be integer valued')
-    expect_error(read_bed(file2, genome = 'hg19', stranded = TRUE, use.score = TRUE),
-      'Third column of BED file must be integer valued')
+      'First column does not appear to be chromosome')
   })
 
   test_that('Test stranded argument throws error' , {
@@ -49,7 +39,7 @@ context('Test read module')
     gr = read_bed(file, col.names = FALSE, genome = 'hg19', stranded = FALSE, use.score = FALSE)
 
     expect_warning( read_bed(file, col.names = FALSE, genome = 'hg19', stranded = FALSE, use.score = FALSE),
-      'Input file is not BED6, and no column names were given')
+      'Input is not BED6, and no column names were given')
     expect_equal( dplyr::setequal(dim(GenomicRanges::mcols(gr)), c(3,0)), expected = TRUE )
   })
 
@@ -121,6 +111,29 @@ context('Test read module')
   })
 
 ################################################################################
+# Test read_df()
+
+  test_that('Test read_df() works', {
+    df = data.frame(
+      chr = c('chr1','chr1','chr1','chr1'),
+      start = c(10800, 11000, 27800, 29000),
+      end = c(10900, 11100, 28800, 29300),
+      name = c('A','A','B','B'),
+      score = c(87, 45, 34, 62),
+      strand = c('*','*','*','*'),
+      stringsAsFactors=F)
+
+    gr = read_df(
+      df = df,
+      genome = 'hg19',
+      stranded = FALSE,
+      use.score=TRUE)
+
+    expect_equal(class(gr)[1], expected = 'GRanges')
+    expect_equal(gr[1]$name, expected = 'A')
+  })
+
+################################################################################
 # Test pre-read errors in read_annotations()
 
   test_that('Test error for file does not exist',{
@@ -148,24 +161,6 @@ context('Test read module')
     expect_error(
       read_annotations(file = file, genome = 'hg19', annotation_name = 'custom'),
       'First column of annotation file does not appear'
-    )
-  })
-
-  test_that('Test integer column 1 error',{
-    file = system.file('extdata', 'test_annotations_3_error_int1.bed', package='annotatr')
-
-    expect_error(
-      read_annotations(file = file, genome = 'hg19', annotation_name = 'custom'),
-      'Second column of annotation file must'
-    )
-  })
-
-  test_that('Test integer column 2 error',{
-    file = system.file('extdata', 'test_annotations_3_error_int2.bed', package='annotatr')
-
-    expect_error(
-      read_annotations(file = file, genome = 'hg19', annotation_name = 'custom'),
-      'Third column of annotation file must'
     )
   })
 

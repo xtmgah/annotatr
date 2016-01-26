@@ -3,6 +3,7 @@
 export(annotate_regions)
 export(read_annotations)
 export(read_bed)
+export(read_df)
 export(summarize_annotations)
 export(summarize_categorical)
 export(summarize_numerical)
