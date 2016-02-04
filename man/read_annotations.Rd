@@ -9,7 +9,7 @@ read_annotations(file, genome, annotation_name)
 \arguments{
 \item{file}{Path to the file with annotations. This file can be either BED3, BED4, or BED5. If BED3, the assumption is that the annotations are not stranded and not named; if BED4,}
 
-\item{genome}{Gives the genome assembly. The genome may be one of hg19, hg38, mm9, or mm10, in which case the user can also annotate regions with built-in annotations. Otherwise, the user may only annotate regions with their custom annotations.}
+\item{genome}{Gives the genome assembly. The genome may be one of hg19, hg38, mm9, or mm10, in which case the user can  annotate regions with built-in annotations. Otherwise, the user may only annotate regions with their custom annotations.}
 
 \item{annotation_name}{A description of the types of annotations present in \code{file}.}
 }

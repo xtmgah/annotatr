@@ -8,21 +8,21 @@ read_bed(file, col.names = FALSE, genome, stranded = FALSE,
   use.score = FALSE)
 }
 \arguments{
-\item{file}{Path to the file with data. File must exist and be in correct format.}
+\item{file}{Path to the file with data. File should be in BED6 format with possibly additional data columns.}
 
 \item{col.names}{Either \code{TRUE} (column names are given in the first row of the file), \code{FALSE} (the first row does not have column names), or a character vector of column names (the first row is assumed to not be column names, and the values of the character vector will be the resulting column names in the returned \code{GRanges} object). If \code{FALSE} and the file is not BED6, a warning will indicate that downstream functions may behave unexpectedly.}
 
-\item{genome}{Gives the genome assembly (human or mouse). Must be one of 'hg19', 'hg38', 'mm9' or 'mm10'}
+\item{genome}{Gives the genome assembly (human or mouse). Can be one of 'hg19', 'hg38', 'mm9' or 'mm10' in order to use built-in annotations. Can be any genome if custom annotations are used.}
 
 \item{stranded}{Logical variable. If TRUE, strand attribute of GenomicRanges object is drawn from 6th column of BED file. Default \code{FALSE}}
 
 \item{use.score}{Logical variable. If TRUE, score attribute of GenomicRanges object is drawn from 5th column of BED file. Default \code{FALSE}}
 }
 \value{
-A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique. The name column (4th) in the BED file is \code{name} attribute and the score column (5th) in the BED file is the \code{score} attribute in the returned GenomicRanges object.
+A GenomicRanges object with ranges limited by genome and BED file. The GenomicRanges object is sorted if it is detected to be unsorted, and the regions are unique.
 }
 \description{
-\code{read_bed} reads in data from a BED6 file, checks to see if it follows the appropriate BED (Browser Extensible Data) format, and checks validity of genome. If valid, reads file data into a GenomicRanges object. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
+\code{read_bed} reads in data from a BED6 file, checks to see if it follows the appropriate BED6+ (Browser Extensible Data) format, and checks validity of genome. If valid, reads file data into a GenomicRanges object. Unlike in the BED specification, the score column can be continuously valued. The names need not be unique.
 }
 \examples{
 file = system.file('extdata', 'K562_Cjun.narrowPeak.gz', package = 'annotatr')
