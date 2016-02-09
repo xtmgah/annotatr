@@ -209,6 +209,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_1to5kb
 #' @keywords datasets
@@ -221,6 +223,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_3UTRs
@@ -235,6 +239,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_5UTRs
 #' @keywords datasets
@@ -247,6 +253,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_CDSs
@@ -261,6 +269,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_exons
 #' @keywords datasets
@@ -273,6 +283,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_exons3UTRs
@@ -287,6 +299,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_exons5UTRs
 #' @keywords datasets
@@ -299,6 +313,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_exonsCDSs
@@ -313,6 +329,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_firstexons
 #' @keywords datasets
@@ -326,10 +344,27 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_firstintrons
 #' @keywords datasets
 #' @usage data(hg19_knownGenes_firstintrons)
+NULL
+
+#' hg19_knownGenes_intergenic
+#' 
+#' A GenomicRanges object for hg19_knownGenes_intergenic annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
+#' @format A GenomicRanges object.
+#' @name hg19_knownGenes_intergenic
+#' @keywords datasets
+#' @usage data(hg19_knownGenes_intergenic)
 NULL
 
 #' hg19_knownGenes_introns
@@ -338,6 +373,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_introns
@@ -352,6 +389,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_introns3UTRs
 #' @keywords datasets
@@ -364,6 +403,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_introns5UTRs
@@ -378,6 +419,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_intronsCDSs
 #' @keywords datasets
@@ -390,6 +433,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg19_knownGenes_promoters
@@ -404,6 +449,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_1to5kb
 #' @keywords datasets
@@ -416,6 +463,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_3UTRs
@@ -430,6 +479,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_5UTRs
 #' @keywords datasets
@@ -442,6 +493,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_CDSs
@@ -456,6 +509,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_exons
 #' @keywords datasets
@@ -468,6 +523,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_exons3UTRs
@@ -482,6 +539,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_exons5UTRs
 #' @keywords datasets
@@ -494,6 +553,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_exonsCDSs
@@ -508,6 +569,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_firstexons
 #' @keywords datasets
@@ -521,10 +584,27 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_firstintrons
 #' @keywords datasets
 #' @usage data(hg38_knownGenes_firstintrons)
+NULL
+
+#' hg38_knownGenes_intergenic
+#' 
+#' A GenomicRanges object for hg38_knownGenes_intergenic annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
+#' @format A GenomicRanges object.
+#' @name hg38_knownGenes_intergenic
+#' @keywords datasets
+#' @usage data(hg38_knownGenes_intergenic)
 NULL
 
 #' hg38_knownGenes_introns
@@ -533,6 +613,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_introns
@@ -547,6 +629,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_introns3UTRs
 #' @keywords datasets
@@ -559,6 +643,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_introns5UTRs
@@ -573,6 +659,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_intronsCDSs
 #' @keywords datasets
@@ -585,6 +673,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name hg38_knownGenes_promoters
@@ -599,6 +689,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_1to5kb
 #' @keywords datasets
@@ -611,6 +703,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_3UTRs
@@ -625,6 +719,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_5UTRs
 #' @keywords datasets
@@ -637,6 +733,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_CDSs
@@ -651,6 +749,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_exons
 #' @keywords datasets
@@ -663,6 +763,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_exons3UTRs
@@ -677,6 +779,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_exons5UTRs
 #' @keywords datasets
@@ -689,6 +793,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_exonsCDSs
@@ -703,6 +809,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_firstexons
 #' @keywords datasets
@@ -716,10 +824,27 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_firstintrons
 #' @keywords datasets
 #' @usage data(mm10_knownGenes_firstintrons)
+NULL
+
+#' mm10_knownGenes_intergenic
+#' 
+#' A GenomicRanges object for mm10_knownGenes_intergenic annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
+#' @format A GenomicRanges object.
+#' @name mm10_knownGenes_intergenic
+#' @keywords datasets
+#' @usage data(mm10_knownGenes_intergenic)
 NULL
 
 #' mm10_knownGenes_introns
@@ -728,6 +853,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_introns
@@ -742,6 +869,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_introns3UTRs
 #' @keywords datasets
@@ -754,6 +883,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_introns5UTRs
@@ -768,6 +899,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_intronsCDSs
 #' @keywords datasets
@@ -780,6 +913,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm10_knownGenes_promoters
@@ -794,6 +929,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_1to5kb
 #' @keywords datasets
@@ -806,6 +943,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_3UTRs
@@ -820,6 +959,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_5UTRs
 #' @keywords datasets
@@ -832,6 +973,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_CDSs
@@ -846,6 +989,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_exons
 #' @keywords datasets
@@ -858,6 +1003,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_exons3UTRs
@@ -872,6 +1019,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_exons5UTRs
 #' @keywords datasets
@@ -884,6 +1033,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_exonsCDSs
@@ -898,6 +1049,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_firstexons
 #' @keywords datasets
@@ -911,10 +1064,27 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_firstintrons
 #' @keywords datasets
 #' @usage data(mm9_knownGenes_firstintrons)
+NULL
+
+#' mm9_knownGenes_intergenic
+#' 
+#' A GenomicRanges object for mm9_knownGenes_intergenic annotations. KnownGenes are taken from the Genes group, UCSC Genes track, and knownGenes table of the UCSC Table Browser.
+#' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
+#' 
+#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
+#' @format A GenomicRanges object.
+#' @name mm9_knownGenes_intergenic
+#' @keywords datasets
+#' @usage data(mm9_knownGenes_intergenic)
 NULL
 
 #' mm9_knownGenes_introns
@@ -923,6 +1093,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_introns
@@ -937,6 +1109,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_introns3UTRs
 #' @keywords datasets
@@ -949,6 +1123,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_introns5UTRs
@@ -963,6 +1139,8 @@ NULL
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
 #' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
+#' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_intronsCDSs
 #' @keywords datasets
@@ -975,6 +1153,8 @@ NULL
 #' Promoter sequence is defined as <1Kb upstream of a transcription start site (TSS, txStart). 1-5Kb upstream sequence is exactly that, upstream of the promoter sequence. 5-prime UTR sequence is defined as the txStart to the cdsStart. Coding sequence (CDS) is defined as cdsStart to cdsEnd. Exons are defined as the matching intervals of exonStarts to exonEnds. Introns are defined as filling the space beween the exons. 3-prime UTR sequence is defined as cdsEnd to txEnd.
 #' 
 #' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.
+#' 
+#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.
 #' 
 #' @format A GenomicRanges object.
 #' @name mm9_knownGenes_promoters
