@@ -13,6 +13,9 @@ env:
  global:
    - CRAN: http://cran.rstudio.com
 
+r_packages:
+  - knitr
+
 r_github_packages:
   - jimhester/covr
 
