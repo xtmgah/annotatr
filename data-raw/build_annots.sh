@@ -232,7 +232,7 @@ done
 
 # Combine and sort strand annotations
 for genome in {'hg19','hg38','mm9','mm10'}
-  do
+do
   for annot in {'1to5kb','promoters','5UTRs','exons5UTRs','introns5UTRs','exonsCDSs','intronsCDSs','CDSs','firstexons','exons','firstintrons','introns','3UTRs','exons3UTRs','introns3UTRs'}
   do
     echo Combining ${genome} ${annot} across strands
@@ -256,6 +256,32 @@ for genome in {'hg19','hg38','mm9','mm10'}
     > rkgtmp_${genome}_knownGenes_${annot}.txt
     rm tmp_${genome}_${annot}_{pos,neg}_strand_knownGenes.txt
   done
+done
+
+# Create intergenic annotations as the complement of existing knownGenes
+# annotations + gaps
+for genome in {'hg19','hg38','mm9','mm10'}
+do
+  echo Formatting ${genome} gaps
+  awk -v OFS='\t' 'NR > 1 { print $2, $3, $4, "*", "gap:"NR }' <(gunzip -c ${genome}_gaps.txt.gz) > tmp_${genome}_gaps.txt
+
+  echo Concatenating and sorting all knownGenes annotations
+  cat tmp_${genome}_gaps.txt rkgtmp_${genome}_knownGenes_*.txt \
+  | sort -T . -k1,1 -k2,2n \
+  > tmp_${genome}_knownGenes_all.txt
+  rm tmp_${genome}_gaps.txt
+
+  echo Merging all knownGenes annotations
+  bedtools merge -d 5 -i tmp_${genome}_knownGenes_all.txt \
+  | sort -k1,1 -k2,2n > tmp_${genome}_knownGenes_merged.txt
+  rm tmp_${genome}_knownGenes_all.txt
+
+  echo Building ${genome} intergenic annotations
+  bedtools subtract -a <(awk -v OFS='\t' '{ print $1, "0", $2 }' ${genome}.chrom.sizes.txt) -b tmp_${genome}_knownGenes_merged.txt \
+  | sort -T . -k1,1 -k2,2n \
+  | awk -v OFS='\t' '$2 < $3 { print $1, $2, $3, "*", "intergenic:"NR }' \
+  > rkgtmp_${genome}_knownGenes_intergenic.txt
+  rm tmp_${genome}_knownGenes_merged.txt
 done
 
 # Remove the coding tmp files

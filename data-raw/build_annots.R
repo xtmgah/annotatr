@@ -194,6 +194,8 @@ for(file in kg_files) {
     "#' ",
     "#' More fine-grained definitions include exons and introns that occur in 5-prime UTR, CDS, and 3-prime UTR sequence. First exons and introns are exactly that, while respecting strandedness.",
     "#' ",
+    "#' Intergenic annotations are the complement of the union of UCSC Genome Browser gap tracks and knownGene annotation tracks.",
+    "#' ",
     "#' @format A GenomicRanges object.",
     sprintf("#' @name %s", prefix),
     "#' @keywords datasets",
