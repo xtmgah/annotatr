@@ -3,12 +3,11 @@
 language: R
 warnings_are_errors: false
 sudo: required
+
+install:
+  Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocStyle','GenomeInfoDb','IRanges','GenomicRanges'));"
+
 bioc_required: true
-bioc_packages:
-  - BiocStyle
-  - GenomeInfoDb
-  - IRanges
-  - GenomicRanges
 
 env:
  global:
