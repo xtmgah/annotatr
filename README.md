@@ -111,7 +111,7 @@ Users may select annotations a la carte via the accessors listed with `supported
 
 # Select annotations for intersection with regions
 # Note inclusion of custom annotation, and use of shortcuts
-annots = c('hg19_cpgs', 'hg19_basicgenes',
+annots = c('hg19_cpgs', 'hg19_basicgenes', 'hg19_knownGenes_intergenic',
   'hg19_enhancers_fantom', 'hg19_knownGenes_firstexons',
   'hg19_knownGenes_firstintrons', 'hg19_custom_ezh2')
 # Intersect the regions we read in with the annotations
@@ -208,7 +208,8 @@ annots_order = c(
   'hg19_knownGenes_exons',
   'hg19_knownGenes_firstintrons',
   'hg19_knownGenes_introns',
-  'hg19_knownGenes_3UTRs')
+  'hg19_knownGenes_3UTRs',
+  'hg19_knownGenes_intergenic')
 dm_vs_kg_annotations = visualize_annotation(
   annotated_regions = dm_annotated,
   annotation_order = annots_order,
@@ -234,7 +235,8 @@ annots_order = c(
   'hg19_knownGenes_exons',
   'hg19_knownGenes_firstintrons',
   'hg19_knownGenes_introns',
-  'hg19_knownGenes_3UTRs')
+  'hg19_knownGenes_3UTRs',
+  'hg19_knownGenes_intergenic')
 dm_vs_coannotations = visualize_coannotations(
   annotated_regions = dm_annotated,
   annotation_order = annots_order,
@@ -255,7 +257,8 @@ dm_vs_regions_annot = visualize_numerical(
   x = 'mu0',
   facet = 'annot_type',
   facet_order = c('hg19_knownGenes_1to5kb','hg19_knownGenes_promoters',
-    'hg19_knownGenes_5UTRs','hg19_knownGenes_3UTRs', 'hg19_custom_ezh2'),
+    'hg19_knownGenes_5UTRs','hg19_knownGenes_3UTRs', 'hg19_custom_ezh2',
+    'hg19_knownGenes_intergenic'),
   bin_width = 5,
   plot_title = 'Group 0 Region Methylation In Genes',
   x_label = 'Group 0')
@@ -382,7 +385,8 @@ x_order = c(
   'hg19_knownGenes_5UTRs',
   'hg19_knownGenes_exons',
   'hg19_knownGenes_introns',
-  'hg19_knownGenes_3UTRs')
+  'hg19_knownGenes_3UTRs',
+  'hg19_knownGenes_intergenic')
 # The orders for the fill labels.
 fill_order = c(
   'hyper',
