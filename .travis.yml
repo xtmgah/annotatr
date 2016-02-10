@@ -9,12 +9,6 @@ env:
  global:
    - CRAN: http://cran.rstudio.com
 
-bioc_packages:
-  - GenomeInfoDb
-  - IRanges
-  - GenomicRanges
-  - BiocStyle
-
 r_github_packages:
   - jimhester/covr
 
