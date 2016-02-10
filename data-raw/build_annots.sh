@@ -284,8 +284,8 @@ do
   rm tmp_${genome}_knownGenes_merged.txt
 done
 
-# # Remove the coding tmp files
-# find . -name '*coding*' | xargs rm
-#
-# # After pre-processing, run R to convert objects to GRanges
-# Rscript build_annots.R
+# Remove the coding tmp files
+find . -name '*coding*' | xargs rm
+
+# After pre-processing, run R to convert objects to GRanges
+Rscript build_annots.R
