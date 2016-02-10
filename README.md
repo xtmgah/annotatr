@@ -30,6 +30,11 @@ Genomic regions resulting from next-generation sequencing experiments and bioinf
 `annotatr` package source is available at [http://www.github.com/rcavalcante/annotatr](http://www.github.com/rcavalcante/annotatr). The package can be installed directly from GitHub with the [`devtools`](https://cran.r-project.org/web/packages/devtools/index.html) package.
 
 ```{r, eval=FALSE}
+# Install BiocStyle, GenomeInfoDb, IRanges, and GenomicRanges first
+# install_github() does not support installation of Bioconductor dependencies
+source("https://bioconductor.org/biocLite.R")
+biocLite(c("BiocStyle","GenomeInfoDb","IRanges","GenomicRanges"))
+
 devtools::install_github('rcavalcante/annotatr')
 ```
 
