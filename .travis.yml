@@ -4,6 +4,11 @@ language: r
 warnings_are_errors: false
 sudo: required
 bioc_required: true
+bioc_packages:
+  - GenomeInfoDb
+  - IRanges
+  - GenomicRanges
+  - BiocStyle
 
 env:
  global:
