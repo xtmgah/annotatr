@@ -4,17 +4,15 @@ language: R
 warnings_are_errors: false
 sudo: required
 
-install:
-  Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocStyle','GenomeInfoDb','IRanges','GenomicRanges'));"
-
 bioc_required: true
 
 env:
  global:
    - CRAN: http://cran.rstudio.com
 
-r_packages:
-  - knitr
+install:
+  Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocStyle','GenomeInfoDb','IRanges','GenomicRanges'));"
+  Rscript -e "install.packages('knitr')"
 
 r_github_packages:
   - jimhester/covr
