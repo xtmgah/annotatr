@@ -11,8 +11,9 @@ env:
    - CRAN: http://cran.rstudio.com
 
 install:
+  Rscript -e "install.packages('knitr', repos='http://cran.rstudio.com')"
   Rscript -e "source('https://bioconductor.org/biocLite.R');biocLite(c('BiocStyle','GenomeInfoDb','IRanges','GenomicRanges'));"
-  Rscript -e "install.packages('knitr')"
+
 
 r_github_packages:
   - jimhester/covr
