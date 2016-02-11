@@ -3,16 +3,11 @@
 language: R
 warnings_are_errors: false
 sudo: required
+bioc_required: true
 
 env:
  global:
    - CRAN: http://cran.rstudio.com
-
-bioc_packages:
-  - BiocStyle
-  - GenomeInfoDb
-  - IRanges
-  - GenomicRanges
 
 r_github_packages:
   - jimhester/covr
