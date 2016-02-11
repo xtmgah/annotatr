@@ -41,6 +41,8 @@ We provide a number of pre-built annotations for human (hg19 and hg38) and mouse
 
 The base CpG island (CGI) track from the UCSC Genome Browser serves as our CpG island annotations. CpG shores are defined as 2Kb upstream/downstream from the ends of the CpG islands, less the CpG islands. CpG shelves are defined as another 2Kb upstream/downstream of the farthest upstream/downstream limits of the CpG shores, less the CpG islands and CpG shores. The remaining genomic regions make up the inter-CGI annotation.
 
+![Schematic of CpG annotations.](annotatr_cpgs.jpeg)
+
 ## UCSC knownGenes
 
 The UCSC knownGenes tracks were downloaded from the UCSC Genome Browser. KnownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, first exons, exons, first introns, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, 3'UTR introns, and intergenic regions (the intergenic regions exclude the previous list of annotations in addition to the gap segments of each supported genome). The schematic below gives an idea of how the location coordinates in the knownGene files are used to determine the annotations.
