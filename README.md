@@ -50,7 +50,7 @@ The base CpG island (CGI) track from the UCSC Genome Browser serves as our CpG i
 
 ## UCSC knownGenes
 
-The UCSC knownGenes tracks were downloaded from the UCSC Genome Browser. KnownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, first exons, exons, first introns, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, 3'UTR introns, and intergenic regions (the intergenic regions exclude the previous list of annotations in addition to the gap segments of each supported genome).. The schematic below gives an idea of how the location coordinates in the knownGene files are used to determine the annotations.
+The UCSC knownGenes tracks were downloaded from the UCSC Genome Browser. KnownGenes annotations include 1-5Kb upstream of the TSS, the promoter (<1Kb upstream of the TSS), 5'UTR, first exons, exons, first introns, introns, CDS, 3'UTR, and 5'UTR exons, 5'UTR introns, 3'UTR exons, 3'UTR introns, and intergenic regions (the intergenic regions exclude the previous list of annotations in addition to the gap segments of each supported genome). The schematic below gives an idea of how the location coordinates in the knownGene files are used to determine the annotations.
 
 ![Schematic of knownGene annotations.](https://github.com/rcavalcante/annotatr/blob/master/vignettes/annotatr_knownGenes.jpeg)
 
@@ -110,7 +110,7 @@ print(dm_regions)
 
 ## Annotating Regions
 
-Users may select annotations a la carte via the accessors listed with `supported_annotations()`, or via shortcuts. The `hg19_cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `hg19_basicgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `hg19_detailedgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `hg19_basicgenes` and `hg19_detailedgenes` shortcuts may not be used at the same time. Shortcuts for other `supported_genomes()` are accessed in the same way, replacing `hg19` with one of `hg38`, `mm9`, or `mm10`.
+Users may select annotations a la carte via the accessors listed with `supported_annotations()`, shortcuts, or use custom annotations as described above. The `hg19_cpgs` shortcut annotates regions to CpG islands, CpG shores, CpG shelves, and inter-CGI. The `hg19_basicgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTRs, exons, introns, and 3'UTRs. The `hg19_detailedgenes` shortcut annotates regions to 1-5Kb, promoters, 5'UTR exons, 5'UTR introns, CDS exons, CDS introns, 3'UTR exons, and 3'UTR introns. The `hg19_basicgenes` and `hg19_detailedgenes` shortcuts may not be used at the same time. Shortcuts for other `supported_genomes()` are accessed in the same way, replacing `hg19` with one of `hg38`, `mm9`, or `mm10`.
 
 `annotate_regions()` requires a `GRanges` object (either the result of `read_bed()` or an existing object), a character vector indicating the `annotations` to annotate the regions with, a logical value indicating whether to `ignore.strand` when calling `GenomicRanges::findOverlaps()`, and a logical value indicating whether to `use.score`.
 
@@ -135,7 +135,7 @@ print(dm_annotated)
 
 ## Summarizing Over Annotations
 
-The three summarization functions -- `summarize_annotations()`, `summarize_numerical()`, and `summarize_categorical()` -- all take the `dplyr::tbl_df` objects output from `annotate_regions()` as their input, and output either a `dplyr::tbl_df` (for `summarize_annotations()`) or `dplyr::grouped_df` (for the others).
+The three summarization functions below take the `dplyr::tbl_df` objects output from `annotate_regions()` as their input, and output either a `dplyr::tbl_df` (for `summarize_annotations()`) or `dplyr::grouped_df` (for the others).
 
 ```{r, eval=FALSE}
 # Usage of summarize functions with defaults
@@ -176,7 +176,7 @@ print(dm_catsum)
 
 ## Visualizing
 
-`annotatr` has 5 visualization functions (`visualize_annotation()`, `visualize_coannotations()`, `visualize_numerical()`, `visualize_numerical_coannotations()`, and `visualize_categorical()`) to be used on the object returned by `annotate_regions()`. The visualization functions return an object of type `ggplot` that can be viewed (`print`) and saved (`ggsave`).
+The 5 visualization functions described below are to be used on the object returned by `annotate_regions()`. The visualization functions return an object of type `ggplot` that can be viewed (`print`), saved (`ggsave`), or modified with additional `ggplot2` code.
 
 ```{r, eval=FALSE}
 # Usage of visualization functions with defaults
@@ -289,7 +289,7 @@ print(dm_vs_regions_name)
 
 ![Methylation Rates in Regions Over DM Status in Group 0 vs Group 1.](https://github.com/rcavalcante/annotatr/blob/master/vignettes/4.4.3.2.png)
 
-It is also possible to visualize joint and marginal distributions of numerical data with respect to annotation type with `visualize_numerical_coannotations()`. For example, the following example shows CpG methylation rates for CpGs occurring in just promoters, just CpG islands, and both promoters and CpG islands.
+The `visualize_numerical_coannotations()` shows the distribution of numerical data for regions occurring in any two annotations, as well as in one or the other annotation. For example, the following example shows CpG methylation rates for CpGs occurring in just promoters, just CpG islands, and both promoters and CpG islands.
 
 ```{r, fig.align='center', fig.cap='Group 0 methylation Rates in Regions in promoters, CpG islands, and both.', fig.height=7, fig.width=7, fig.show='hold'}
 dm_vs_num_co = visualize_numerical_coannotations(
